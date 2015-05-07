@@ -1,8 +1,6 @@
 package menu;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
-
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,33 +8,34 @@ import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
+
 import org.lwjgl.BufferUtils;
 
 import util.PropertiesManager;
 
 
+public class Button {
 
-public class Menu {
-
-	private int posX;
+    private int posX;
     private int posY;
     private int texWid;
     private int texHet;
-	private int imgIdx;
-	private int texIdx;
-	
-	/** 
-     * Load the texture of the main menu.
-     * @throws IOException 
-     */
-	public void loadMenu(String name, int x, int y, int wid, int het) throws IOException
-	{
-		posX = x;
+    private int imgIdx;
+    private int texIdx;
+    
+    private boolean isClicked = false;
+
+
+    public void loadButton(String name, int x, int y, int wid, int het) throws IOException
+    {
+    	posX = x;
     	posY = y;
     	texWid = wid;
     	texHet = het;
-		
-		BufferedImage img = ImageIO.read(new File("res/"+ name +".png"));
+    	
+    	BufferedImage img = ImageIO.read(new File("res/"+ name +".png"));
     	int width = img.getWidth();
     	int height = img.getHeight();
     	int[] pixels = new int[width * height];
@@ -71,11 +70,11 @@ public class Menu {
 	    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 	    
 	    initialize();
-	}
-	
-	public void initialize()
-	{
-		texIdx = glGenLists(1);
+    }
+
+    public void initialize()
+    {	       
+    	texIdx = glGenLists(1);
 		glNewList(texIdx, GL_COMPILE);
 		{
 			glBindTexture(GL_TEXTURE_2D, texIdx);
@@ -93,11 +92,13 @@ public class Menu {
 		    glEnd();
 		}
 	    glEndList();
-	}
-	
-	public void draw()
+	    
+       	
+    }
+    
+    public void draw()
 	{
-		glMatrixMode(GL_PROJECTION);
+    	glMatrixMode(GL_PROJECTION);
 		
 		glLoadIdentity();
         glOrtho(0, PropertiesManager.getDefaultWidth(), PropertiesManager.getDefaultHeight(), 0, 1, -1);
@@ -108,52 +109,4 @@ public class Menu {
 		glDisable(GL_TEXTURE_2D);
 	}
 
-	public int getPosX() {
-		return posX;
-	}
-
-	public void setPosX(int posX) {
-		this.posX = posX;
-	}
-
-	public int getPosY() {
-		return posY;
-	}
-
-	public void setPosY(int posY) {
-		this.posY = posY;
-	}
-
-	public int getTexWid() {
-		return texWid;
-	}
-
-	public void setTexWid(int texWid) {
-		this.texWid = texWid;
-	}
-
-	public int getTexHet() {
-		return texHet;
-	}
-
-	public void setTexHet(int texHet) {
-		this.texHet = texHet;
-	}
-
-	public int getImgIdx() {
-		return imgIdx;
-	}
-
-	public void setImgIdx(int imgIdx) {
-		this.imgIdx = imgIdx;
-	}
-
-	public int getTexIdx() {
-		return texIdx;
-	}
-
-	public void setTexIdx(int texIdx) {
-		this.texIdx = texIdx;
-	}
-	
 }

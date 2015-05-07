@@ -35,6 +35,7 @@ import render.Background;
 import render.Map;
 import render.Model;
 import control.Camera;
+import menu.Button;
 import menu.Menu;
 import util.PropertiesManager;
 
@@ -51,7 +52,6 @@ public class Main {
     private boolean fullscreen = false;
     private boolean closeRequested = false;
     private long lastFrameTime;
-    private int default_width = 960, default_height = 540;
 	private DisplayMode window, lastWindow;
 	
 	/** 
@@ -59,11 +59,21 @@ public class Main {
      */
     private State state = State.LOADING;
     private Camera camera = new Camera();
+    
+    
     private Menu loading = new Menu();
     private Menu mainMenu = new Menu(); 
+    private Menu title = new Menu();
     private Menu game = new Menu();
     private Menu team = new Menu();
     private Menu pause = new Menu();
+    
+    
+    private Button playGame = new Button();
+    private Button museMusic = new Button();
+    private Button quitGame = new Button();
+    
+    
     private Music gameMusic;
     private Background skybox;
     private Map terrain;
@@ -103,13 +113,13 @@ public class Main {
         try {
         	Display.setFullscreen(false);
         	Display.setResizable(true);
-        	window = new DisplayMode(default_width, default_height);
+        	window = new DisplayMode(PropertiesManager.getDefaultWidth(), PropertiesManager.getDefaultHeight());
             
             Display.setDisplayMode(window);
             Display.setTitle(windowTitle);
             Display.setVSyncEnabled(true);
             Display.create();
-            Mouse.setGrabbed(true);
+            Mouse.setGrabbed(false);
             
         } catch (LWJGLException e) {
             Sys.alert("Error", "Initialization failed!\n\n" + e.getMessage());
@@ -141,8 +151,13 @@ public class Main {
     	//gameMusic = new Music("res/autumn.ogg");
     	//gameMusic.loop(1.0f, 0.1f);
     	initGL();
-    	loading.loadMenu("load");
-    	mainMenu.loadMenu("mainMenu");
+    	loading.loadMenu("load", 0, 0, window.getWidth(), window.getHeight());
+    	mainMenu.loadMenu("mainMenu", 0, 0, window.getWidth(), window.getHeight());
+    	title.loadMenu("title", 232, 50, 496, 172);
+    	
+    	playGame.loadButton("button1", 355, 270, 250, 90);
+    	museMusic.loadButton("button1", 355, 350, 250, 90);
+    	quitGame.loadButton("button1", 355, 430, 250, 90);
     	
     	/*skybox.loadBackground("day");
     	terrain.loadTerrain("heightMap");
@@ -238,7 +253,7 @@ public class Main {
         
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        gluPerspective(45.0f * height / default_height, ((float) width / (float) height), 0.1f, 100000000.0f);
+        gluPerspective(45.0f * height / PropertiesManager.getDefaultHeight(), ((float) width / (float) height), 0.1f, 100000000.0f);
             
         glGetFloat(GL_PROJECTION_MATRIX, perspectiveMatrix);
         glMatrixMode(GL_PROJECTION);
@@ -417,13 +432,17 @@ public class Main {
     		break;
     	case MAIN_MENU:   			
     		mainMenu.draw();
+    		title.draw();
+    		playGame.draw();
+    		museMusic.draw();
+    		quitGame.draw();
     		break;
     	case GAME:
     		//reinitGL();
     		loading.draw();
     		break;
     	case TEAM:   			
-    		
+    		team.draw();
     		break;
     	case PAUSE:   			
     		
