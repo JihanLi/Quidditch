@@ -24,6 +24,8 @@ public class PropertiesManager {
 	private static PropertiesManager m_instance = null;
 	private static Properties properties;
 	private String propertiesFileName = "/configuration.properties";
+	
+    private static int default_width = 960, default_height = 540;
     
 	public static PropertiesManager getInstance() throws IOException {
 		if (m_instance == null) {
@@ -37,5 +39,21 @@ public class PropertiesManager {
 		InputStream in = this.getClass().getResourceAsStream(propertiesFileName);
 		properties.load(in);
 		in.close();
+	}
+
+	public static int getDefaultWidth() {
+		return default_width;
+	}
+
+	public static void setDefaultWidth(int width) {
+		default_width = width;
+	}
+
+	public static int getDefaultHeight() {
+		return default_height;
+	}
+
+	public static void setDefaultHeight(int height) {
+		default_height = height;
 	}
 }
