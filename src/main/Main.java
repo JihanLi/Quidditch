@@ -57,7 +57,7 @@ public class Main {
 	/** 
      * There is a game interface, a camera, background music, a sky box, terrain, and a set of models.
      */
-    private State state = State.MAIN_MENU;
+    private State state = State.LOADING;
     private Camera camera;
     private Menu gameMenu;
     private Music gameMusic;
