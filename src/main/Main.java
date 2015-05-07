@@ -44,7 +44,7 @@ public class Main {
 	
 	private static enum State
 	{
-		MAIN_MENU, GAME, PAUSE, LOADING, SETUP, TEAM;
+		LOADING, MAIN_MENU, GAME, PAUSE, TEAM;
 	}
 
     String windowTitle = "Quidditch World Cup";
@@ -58,8 +58,12 @@ public class Main {
      * There is a game interface, a camera, background music, a sky box, terrain, and a set of models.
      */
     private State state = State.LOADING;
-    private Camera camera;
-    private Menu gameMenu;
+    private Camera camera = new Camera();
+    private Menu loading = new Menu();
+    private Menu mainMenu = new Menu(); 
+    private Menu game = new Menu();
+    private Menu team = new Menu();
+    private Menu pause = new Menu();
     private Music gameMusic;
     private Background skybox;
     private Map terrain;
@@ -134,11 +138,13 @@ public class Main {
      */
     public void initGame() throws LWJGLException, SlickException, FileNotFoundException, IOException 
     {   	
-    	gameMusic = new Music("res/autumn.ogg");
-    	gameMusic.loop(1.0f, 0.1f);
+    	//gameMusic = new Music("res/autumn.ogg");
+    	//gameMusic.loop(1.0f, 0.1f);
     	initGL();
-    	gameMenu.loadInterface("mainMenu");
-    	skybox.loadBackground("day");
+    	loading.loadMenu("load");
+    	mainMenu.loadMenu("mainMenu");
+    	
+    	/*skybox.loadBackground("day");
     	terrain.loadTerrain("heightMap");
     	Model model = new Model();
     	model.loadModel("dragon");
@@ -148,7 +154,7 @@ public class Main {
 	    	model = new Model();
 	    	model.loadModel("dragon");
 	    	models.add(model);
-    	}
+    	}*/
 
         camera.create();   
         
@@ -258,6 +264,45 @@ public class Main {
     {
     	switch(state)
     	{
+    	case LOADING:
+    		while (Keyboard.next()) 
+	        {
+	            if (Keyboard.getEventKeyState()) 
+	            {
+		    		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+		    		{
+		    			closeRequested = true;
+		    		}
+		    		else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+		    		{
+		    			state = State.MAIN_MENU;
+		    			camera.setFlag(false);
+		    		}
+		    		else if (Keyboard.getEventKey() == Keyboard.KEY_F)
+	                {
+		    			fullscreen = !fullscreen;
+		    			camera.setFlag(false);
+		    	        
+		    	    	if(fullscreen)
+		    	    	{
+		    	    		lastWindow = new DisplayMode(Display.getWidth(), Display.getHeight());
+		    	    		window = Display.getDesktopDisplayMode();
+		    	    		Display.setDisplayModeAndFullscreen(window);
+		    	    		Display.setResizable(false);
+		    	    	}
+		    	    	else
+		    	    	{
+		    	    		window = lastWindow;
+		    	    		Display.setDisplayMode(window);
+		    	    		Display.setFullscreen(false);
+		    	    		Display.setResizable(true);
+		    	    	}
+		    	    	
+		    	    	reinitGL();
+	                }
+	            }
+	        }
+    		break;
     	case MAIN_MENU:
     		while (Keyboard.next()) 
 	        {
@@ -345,12 +390,12 @@ public class Main {
         	reinitGL();
         }
         if (Display.isActive()) {
-        	if(!gameMusic.playing())
-        		gameMusic.resume();
+        	/*if(!gameMusic.playing())
+        		gameMusic.resume();*/
         }
         else
         {
-        	gameMusic.pause();
+        	//gameMusic.pause();
         }
     }
     
@@ -367,23 +412,20 @@ public class Main {
 		
     	switch(state)
     	{
+    	case LOADING:   			
+    		loading.draw();
+    		break;
     	case MAIN_MENU:   			
-    		
+    		mainMenu.draw();
     		break;
     	case GAME:
-    		reinitGL();
+    		//reinitGL();
+    		loading.draw();
+    		break;
+    	case TEAM:   			
     		
     		break;
     	case PAUSE:   			
-    		
-    		break;
-    	case LOADING:   			
-	
-    		break;
-    	case SETUP:   			
-    		
-    		break;
-    	case TEAM:   			
     		
     		break;
 		default:
@@ -432,11 +474,11 @@ public class Main {
      */
     private void cleanup() 
     {
-    	terrain.getMapShader().destroy();
+    	/*terrain.getMapShader().destroy();
     	for(int i = 0; i < models.size(); i++)
     	{
     		models.get(i).getModelShader().destroy();
-    	}
+    	}*/
         Display.destroy();
         System.exit(1);
     }
@@ -448,7 +490,7 @@ public class Main {
      */
     public static void main(String[] args) throws LWJGLException, FileNotFoundException, IOException, InterruptedException, SlickException 
     {
-    	properties = PropertiesManager.getInstance();
+    	//properties = PropertiesManager.getInstance();
         new Main().run();
     }
     

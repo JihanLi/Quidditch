@@ -1,6 +1,7 @@
 package menu;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 
 
 import java.awt.image.BufferedImage;
@@ -11,20 +12,19 @@ import java.nio.ByteBuffer;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL12;
 
 
 
 public class Menu {
-	
-	private int menuImg;
-	private int mainMenu;
 
+	private int imgIdx;
+	private int texIdx;
+	
 	/** 
      * Load the texture of the main menu.
      * @throws IOException 
      */
-	public void loadInterface(String name) throws IOException
+	public void loadMenu(String name) throws IOException
 	{
 		BufferedImage img = ImageIO.read(new File("res/"+ name +".png"));
     	int width = img.getWidth();
@@ -47,23 +47,28 @@ public class Menu {
 		}
 		
 		buffer.flip();
-		menuImg = glGenTextures();
+		imgIdx = glGenTextures();
 		
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-		glBindTexture(GL_TEXTURE_2D, menuImg);
+		glBindTexture(GL_TEXTURE_2D, imgIdx);
 		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
 	    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 	    
-	    mainMenu = glGenLists(1);
-		glNewList(mainMenu, GL_COMPILE);
+	    initialize();
+	}
+	
+	public void initialize()
+	{
+		texIdx = glGenLists(1);
+		glNewList(texIdx, GL_COMPILE);
 		{
-			glBindTexture(GL_TEXTURE_2D, menuImg);
+			glBindTexture(GL_TEXTURE_2D, texIdx);
 			glBegin(GL_QUADS);
 			{
 				glTexCoord2f(0, 0);
@@ -80,7 +85,7 @@ public class Menu {
 	    glEndList();
 	}
 	
-	public void mainMenu()
+	public void draw()
 	{
 		glMatrixMode(GL_PROJECTION);
 		
@@ -89,7 +94,7 @@ public class Menu {
         glMatrixMode(GL_MODELVIEW);
         
         glEnable(GL_TEXTURE_2D);   
-		glCallList(mainMenu);
+		glCallList(texIdx);
 		glDisable(GL_TEXTURE_2D);
 	}
 	
