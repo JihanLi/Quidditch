@@ -211,8 +211,6 @@ public class Main {
 //    	gameMusic = new Music("res/autumn.ogg");
 //    	gameMusic.loop(1.0f, 0.1f);
     	
-		loadingCount = 40;
-		
 		// Continue rendering loading screen until resources finishing loading.
         while(loadingCount < 100) {
         	if(i < 100) i++;
@@ -234,7 +232,9 @@ public class Main {
     {   
     	initGL();
     	
-    	// New thread for loading resources.
+    	loadingCount = 40;
+		
+		// New thread for loading resources.
     	Thread init = new Thread(new InitThread());
     	init.start();
     	
