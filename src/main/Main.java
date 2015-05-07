@@ -37,6 +37,7 @@ import render.Model;
 import control.Camera;
 import menu.Button;
 import menu.Menu;
+import menu.ProgressBar;
 import util.PropertiesManager;
 
 public class Main {
@@ -68,6 +69,9 @@ public class Main {
     private Menu team = new Menu();
     private Menu pause = new Menu();
     
+    private ProgressBar barBackground = new ProgressBar();
+    private ProgressBar progressing = new ProgressBar();
+    private int loadingCount = 0;
     
     private Button playGame = new Button();
     private Button museMusic = new Button();
@@ -143,41 +147,103 @@ public class Main {
         return delta;
     }
     
-    /** 
-     * Initialize all the objects of the game.
-     */
-    public void initGame() throws LWJGLException, SlickException, FileNotFoundException, IOException 
-    {   	
-    	//gameMusic = new Music("res/autumn.ogg");
-    	//gameMusic.loop(1.0f, 0.1f);
-    	initGL();
-    	loading.loadMenu("load", 0, 0, window.getWidth(), window.getHeight());
-    	mainMenu.loadMenu("mainMenu", 0, 0, window.getWidth(), window.getHeight());
+    /**
+     * Using muti-threads to deal loading screen. */
+    public class InitThread implements Runnable{ 
+        public InitThread() {
+            super();
+        } 
+
+		public void run() {
+	    	
+			// load other resources in another thread.
+	    	/*skybox.loadBackground("day");
+	    	terrain.loadTerrain("heightMap");
+	    	Model model = new Model();
+	    	model.loadModel("dragon");
+	    	models.add(model);
+	    	for(int i = 0; i < 5; i++)
+	    	{
+		    	model = new Model();
+		    	model.loadModel("dragon");
+		    	models.add(model);
+	    	}*/
+
+	        camera.create();   
+
+	    	
+	        Font awtFont = new Font("Calibri", Font.BOLD,18);
+	        font = new UnicodeFont(awtFont);
+	        font.getEffects().add(new ColorEffect(Color.white));
+	        font.addAsciiGlyphs();
+            
+        	loadingCount = 100;
+
+			System.out.println("!!!!RUN INIT!!!!");
+        }
+    }
+    
+    private void startLoading() throws IOException, SlickException {
+    	int i = 0;
+    	
+    	// load resources concerning with loading screen.
+    	loading.loadMenu("loadingGame", 0, 0, window.getWidth(), window.getHeight());
+    	barBackground.loadMenu("progress", (PropertiesManager.getDefaultWidth() - 764)/2, 405, 764, 58);
+    	progressing.loadMenu("bar", 120, 440, PropertiesManager.getDefaultWidth() - 241, 8);
+
+    	// Start rendering loading screen.
+    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    	glLoadIdentity();
+    	loading.draw();
+    	barBackground.draw(100);
+    	progressing.draw(i);
+    	Display.update();
+        Display.sync(60);
+        
+        // load other resources concerning opengl.
+        mainMenu.loadMenu("mainMenu", 0, 0, window.getWidth(), window.getHeight());
     	title.loadMenu("title", 232, 50, 496, 172);
     	
     	playGame.loadButton("button1", "button2", 355, 270, 250, 90);
     	museMusic.loadButton("button1", "button2", 355, 350, 250, 90);
     	quitGame.loadButton("button1", "button2", 355, 430, 250, 90);
-    	
-    	/*skybox.loadBackground("day");
-    	terrain.loadTerrain("heightMap");
-    	Model model = new Model();
-    	model.loadModel("dragon");
-    	models.add(model);
-    	for(int i = 0; i < 5; i++)
-    	{
-	    	model = new Model();
-	    	model.loadModel("dragon");
-	    	models.add(model);
-    	}*/
 
-        camera.create();   
-        
-        Font awtFont = new Font("Calibri", Font.BOLD,18);
-        font = new UnicodeFont(awtFont);
-        font.getEffects().add(new ColorEffect(Color.white));
-        font.addAsciiGlyphs();
-        font.loadGlyphs();
+//    	gameMusic = new Music("res/autumn.ogg");
+//    	gameMusic.loop(1.0f, 0.1f);
+    	
+		loadingCount = 40;
+		
+		// Continue rendering loading screen until resources finishing loading.
+        while(loadingCount < 100) {
+        	if(i < 100) i++;
+        	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        	glLoadIdentity();
+        	loading.draw();
+        	barBackground.draw(100);
+        	progressing.draw(i);
+        	Display.update();
+            Display.sync(60);
+        }
+		
+	}
+    
+    /** 
+     * Initialize all the objects of the game.
+     */
+    public void initGame() throws LWJGLException, SlickException, FileNotFoundException, IOException 
+    {   
+    	initGL();
+    	
+    	// New thread for loading resources.
+    	Thread init = new Thread(new InitThread());
+    	init.start();
+    	
+    	// Loading screen.
+    	startLoading();
+    	
+    	// Load other things.
+    	font.loadGlyphs();
+        state = State.MAIN_MENU;
     }
    
    
