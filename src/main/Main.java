@@ -149,7 +149,7 @@ public class Main {
     
     /**
      * Using muti-threads to deal loading screen. */
-    public class InitThread implements Runnable{ 
+    public class InitThread extends Thread{ 
         public InitThread() {
             super();
         } 
@@ -177,6 +177,21 @@ public class Main {
 	        font.getEffects().add(new ColorEffect(Color.white));
 	        font.addAsciiGlyphs();
             
+	        /* TODO Real loading
+	        while (loadingCount < 100)
+	        {
+	        	loadingCount++;
+	        	try
+				{
+					Thread.sleep(50);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+	        */
         	loadingCount = 100;
 
 			System.out.println("!!!!RUN INIT!!!!");
@@ -235,7 +250,7 @@ public class Main {
     	loadingCount = 40;
 		
 		// New thread for loading resources.
-    	Thread init = new Thread(new InitThread());
+    	Thread init = new InitThread();
     	init.start();
     	
     	// Loading screen.

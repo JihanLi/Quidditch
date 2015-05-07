@@ -12,6 +12,7 @@ import static org.lwjgl.opengl.GL12.*;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 
 import util.PropertiesManager;
 
