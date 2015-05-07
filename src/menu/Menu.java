@@ -70,11 +70,6 @@ public class Menu {
 	
 	    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 	    
-	    initialize();
-	}
-	
-	public void initialize()
-	{
 		texIdx = glGenLists(1);
 		glNewList(texIdx, GL_COMPILE);
 		{
@@ -94,6 +89,7 @@ public class Menu {
 		}
 	    glEndList();
 	}
+	
 	
 	public void draw()
 	{

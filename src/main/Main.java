@@ -155,9 +155,9 @@ public class Main {
     	mainMenu.loadMenu("mainMenu", 0, 0, window.getWidth(), window.getHeight());
     	title.loadMenu("title", 232, 50, 496, 172);
     	
-    	playGame.loadButton("button1", 355, 270, 250, 90);
-    	museMusic.loadButton("button1", 355, 350, 250, 90);
-    	quitGame.loadButton("button1", 355, 430, 250, 90);
+    	playGame.loadButton("button1", "button2", 355, 270, 250, 90);
+    	museMusic.loadButton("button1", "button2", 355, 350, 250, 90);
+    	quitGame.loadButton("button1", "button2", 355, 430, 250, 90);
     	
     	/*skybox.loadBackground("day");
     	terrain.loadTerrain("heightMap");
@@ -433,9 +433,14 @@ public class Main {
     	case MAIN_MENU:   			
     		mainMenu.draw();
     		title.draw();
+    		
     		playGame.draw();
     		museMusic.draw();
     		quitGame.draw();
+    		if(playGame.hasClicked() == 2)
+    			state = State.GAME;
+    		if(quitGame.hasClicked() == 2)
+    			cleanup();
     		break;
     	case GAME:
     		//reinitGL();
