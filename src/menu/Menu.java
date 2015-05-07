@@ -18,12 +18,12 @@ import util.PropertiesManager;
 
 public class Menu {
 
-	private int posX;
-    private int posY;
-    private int texWid;
-    private int texHet;
-	private int imgIdx;
-	private int texIdx;
+	protected int posX;
+	protected int posY;
+	protected int texWid;
+	protected int texHet;
+	protected int imgIdx;
+	protected int texIdx;
 	
 	/** 
      * Load the texture of the main menu.
