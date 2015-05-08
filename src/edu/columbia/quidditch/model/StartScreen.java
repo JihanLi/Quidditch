@@ -13,7 +13,7 @@ import edu.columbia.quidditch.basic.Texture;
  */
 public class StartScreen extends Model
 {
-	private Texture bg;
+	private Texture bg, title;
 	
 	private Button[] buttons;
 
@@ -22,12 +22,13 @@ public class StartScreen extends Model
 		super(game);
 
 		bg = Texture.createFromFile("res/start/main.png");
+		title = Texture.createFromFile("res/title.png");
 		
 		buttons = new Button[3];
 		
-		buttons[0] = new Button(game, 355, 200, "Start!");
-		buttons[1] = new Button(game, 355, 120, "?");
-		buttons[2] = new Button(game, 355, 40, "Quit");
+		buttons[0] = new Button(game, "Green", 355, 200, "Start!");
+		buttons[1] = new Button(game, "Green", 355, 120, "?");
+		buttons[2] = new Button(game, "Green", 355, 40, "Quit");
 	}
 
 	@Override
@@ -38,6 +39,7 @@ public class StartScreen extends Model
 		GL11.glNewList(list, GL11.GL_COMPILE);
 		{
 			bg.drawRectangle(0, 0, 960, 540);
+			title.drawRectangle(232, 318, 496, 172);
 		}
 		GL11.glEndList();
 	}

@@ -101,20 +101,7 @@ public class InputChecker
 					game.toggleFullscreen();
 					break;
 				case Keyboard.KEY_RETURN:
-					// Key Enter can start the game, close the window or let
-					// myself to attack in different statuses
-					if (game.isBeginning())
-					{
-						game.startGame();
-					}
-					else if (game.isEnded())
-					{
-						game.requestClose();
-					}
-					else if (game.isRunning())
-					{
 
-					}
 					break;
 				}
 			}
@@ -151,13 +138,16 @@ public class InputChecker
 			{
 				if (!Mouse.getEventButtonState() && Mouse.getEventButton() == 0)
 				{
-					if (game.isBeginning())
+					if (game.isShowingModal())
 					{
-						game.getStartScreen().checkMouseInput();
+						game.getModal().checkMouseInput();
 					}
-					else if (game.isEnded())
+					else
 					{
-						game.requestClose();
+						if (game.isBeginning())
+						{
+							game.getStartScreen().checkMouseInput();
+						}
 					}
 				}
 			}

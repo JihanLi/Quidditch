@@ -2,10 +2,6 @@ package edu.columbia.quidditch;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.text.DecimalFormat;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
@@ -15,8 +11,6 @@ import javax.imageio.ImageIO;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.Drawable;
@@ -25,11 +19,11 @@ import org.lwjgl.opengl.SharedDrawable;
 import org.lwjgl.util.glu.GLU;
 
 import edu.columbia.quidditch.basic.Camera;
-import edu.columbia.quidditch.basic.Texture;
 import edu.columbia.quidditch.model.LoadingScreen;
-import edu.columbia.quidditch.model.Model;
+import edu.columbia.quidditch.model.Modal;
 import edu.columbia.quidditch.model.StartScreen;
 import edu.columbia.quidditch.util.InputChecker;
+import edu.columbia.quidditch.util.ModalListener;
 
 /**
  * The main game class
@@ -76,7 +70,7 @@ public class MainGame
 
 	private static final float ALL_LOADING = 100f;
 
-	private boolean closeRequested = false;
+	private boolean closeRequested, showModal;
 	private long lastFrameTime;
 
 	private Camera camera;
@@ -101,10 +95,14 @@ public class MainGame
 
 	private int loadCount;
 
+	private Modal modal;
+	private ModalListener closeListener;
+
 	public MainGame()
 	{
 		status = STATUS_LOADING;
 		loadCount = 0;
+		closeRequested = showModal = false;
 	}
 
 	/**
@@ -148,7 +146,7 @@ public class MainGame
 
 			Display.setVSyncEnabled(true);
 			Display.setTitle(WINDOW_TITLE);
-			Display.setResizable(true);
+			Display.setResizable(false);
 
 			Display.create();
 
@@ -263,6 +261,24 @@ public class MainGame
 		inputChecker = new InputChecker(this);
 		startScreen = new StartScreen(this);
 
+		modal = Modal.create(this);
+		
+		closeListener = new ModalListener()
+		{
+			@Override
+			public void onConfirm()
+			{
+				closeRequested = true;
+			}
+
+			@Override
+			public void onCancel()
+			{
+				showModal = false;
+			}
+			
+		};
+		
 		status = STATUS_START;
 	}
 
@@ -329,6 +345,11 @@ public class MainGame
 			startScreen.render();
 			break;
 		}
+		
+		if (showModal)
+		{
+			modal.render();
+		}
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 
@@ -355,7 +376,7 @@ public class MainGame
 
 		if (Display.isCloseRequested())
 		{
-			closeRequested = true;
+			requestClose();
 		}
 	}
 
@@ -380,7 +401,7 @@ public class MainGame
 				current = windowed;
 				Display.setDisplayMode(current);
 				Display.setFullscreen(false);
-				Display.setResizable(true);
+				Display.setResizable(false);
 			}
 
 			resetGL();
@@ -528,7 +549,13 @@ public class MainGame
 
 	public void requestClose()
 	{
-		closeRequested = true;
+		if (showModal)
+		{
+			return;
+		}
+		
+		modal.setListener(closeListener);
+		showModal = true;
 	}
 
 	public static void main(String[] args)
@@ -539,5 +566,15 @@ public class MainGame
 	public StartScreen getStartScreen()
 	{
 		return startScreen;
+	}
+	
+	public Modal getModal()
+	{
+		return modal;
+	}
+	
+	public boolean isShowingModal()
+	{
+		return showModal;
 	}
 }
