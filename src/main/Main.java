@@ -46,7 +46,7 @@ public class Main {
 	
 	private static enum State
 	{
-		LOADING, MAIN_MENU, GAME, PAUSE, TEAM;
+		LOADING, MAIN_MENU, GAME, PAUSE, TEAM, QUIT;
 	}
 
     String windowTitle = "Quidditch World Cup";
@@ -67,15 +67,24 @@ public class Main {
     private Menu title = new Menu();
     private Menu game = new Menu();
     private Menu team = new Menu();
-    private Menu pause = new Menu();
     
     private ProgressBar barBackground = new ProgressBar();
     private ProgressBar progressing = new ProgressBar();
+    private Menu emblem = new Menu();
     private int loadingCount = 0;
     
     private Button playGame = new Button();
     private Button museMusic = new Button();
     private Button quitGame = new Button();
+    
+
+    private Menu pause = new Menu();
+    private Button resume = new Button();
+    private Button cancel = new Button();
+    
+    private Menu quit = new Menu();
+    private Button cancelQuit = new Button();
+    private Button confirmQuit = new Button();
     
     
     private Music gameMusic;
@@ -202,7 +211,8 @@ public class Main {
     	int i = 0;
     	
     	// load resources concerning with loading screen.
-    	loading.loadMenu("loadingGame", 0, 0, window.getWidth(), window.getHeight());
+    	loading.loadMenu("loadingMain", 0, 0, window.getWidth(), window.getHeight());
+    	emblem.loadMenu("emblem", (PropertiesManager.getDefaultWidth() - 300)/2, 50, 300, 300);
     	barBackground.loadMenu("progress", (PropertiesManager.getDefaultWidth() - 764)/2, 405, 764, 58);
     	progressing.loadMenu("bar", 120, 440, PropertiesManager.getDefaultWidth() - 241, 8);
 
@@ -210,6 +220,7 @@ public class Main {
     	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glLoadIdentity();
     	loading.draw();
+    	emblem.draw();
     	barBackground.draw(100);
     	progressing.draw(i);
     	Display.update();
@@ -218,11 +229,23 @@ public class Main {
         // load other resources concerning opengl.
         mainMenu.loadMenu("mainMenu", 0, 0, window.getWidth(), window.getHeight());
     	title.loadMenu("title", 232, 50, 496, 172);
+    	pause.loadMenu("dialogFrame",  (PropertiesManager.getDefaultWidth() - 400)/2,  
+    			(PropertiesManager.getDefaultHeight() - 280)/2, 400, 280);
+    	quit.loadMenu("dialogFrame",  (PropertiesManager.getDefaultWidth() - 400)/2,  
+    			(PropertiesManager.getDefaultHeight() - 280)/2, 400, 280);
     	
     	playGame.loadButton("button1", "button2", 355, 270, 250, 90);
     	museMusic.loadButton("button1", "button2", 355, 350, 250, 90);
     	quitGame.loadButton("button1", "button2", 355, 430, 250, 90);
 
+        resume.loadButton("woodButton", "woodButtonPressed", (PropertiesManager.getDefaultWidth() + 200)/2 - 80, 
+        		(PropertiesManager.getDefaultHeight() - 280)/2 + 200, 100, 50);
+        cancel.loadButton("woodButton", "woodButtonPressed", (PropertiesManager.getDefaultWidth() - 200)/2,  
+    			(PropertiesManager.getDefaultHeight() - 280)/2 + 200, 100, 50);
+        cancelQuit.loadButton("woodButton", "woodButtonPressed", (PropertiesManager.getDefaultWidth() + 200)/2 - 80, 
+        		(PropertiesManager.getDefaultHeight() - 280)/2 + 200, 100, 50);
+        confirmQuit.loadButton("woodButton", "woodButtonPressed", (PropertiesManager.getDefaultWidth() - 200)/2,  
+    			(PropertiesManager.getDefaultHeight() - 280)/2 + 200, 100, 50);
 //    	gameMusic = new Music("res/autumn.ogg");
 //    	gameMusic.loop(1.0f, 0.1f);
     	
@@ -232,6 +255,7 @@ public class Main {
         	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         	glLoadIdentity();
         	loading.draw();
+        	emblem.draw();
         	barBackground.draw(100);
         	progressing.draw(i);
         	Display.update();
@@ -406,7 +430,10 @@ public class Main {
 	            {
 		    		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
 		    		{
-		    			closeRequested = true;
+		    			playGame.setFixed(true);
+		        		museMusic.setFixed(true);
+		        		quitGame.setFixed(true);
+		    			state = State.QUIT;
 		    		}
 		    		else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
 		    		{
@@ -446,7 +473,7 @@ public class Main {
 	            {
 	                if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE)
 	                {
-	                	state = State.MAIN_MENU;
+	                	state = State.PAUSE;
 	                	break;
 	                }
 	                else if (Keyboard.getEventKey() == Keyboard.KEY_P)
@@ -476,6 +503,43 @@ public class Main {
 	        }
 	        
 	        break;
+    	case PAUSE:
+    		camera.acceptInput(getDelta());
+    		while (Keyboard.next()) 
+	        {
+	            if (Keyboard.getEventKeyState()) 
+	            {
+	                if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE)
+	                {
+	                	state = State.GAME;
+	                	break;
+	                }
+	                else if (Keyboard.getEventKey() == Keyboard.KEY_P)
+	                    snapshot();
+	            }
+	        }
+	        
+	        break;
+	        
+    	case QUIT:
+    		camera.acceptInput(getDelta());
+    		while (Keyboard.next()) 
+	        {
+	            if (Keyboard.getEventKeyState()) 
+	            {
+	                if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE)
+	                {
+	        			playGame.setFixed(false);
+	            		museMusic.setFixed(false);
+	            		quitGame.setFixed(false);
+	                	state = State.MAIN_MENU;
+	                	break;
+	                }
+	                else if (Keyboard.getEventKey() == Keyboard.KEY_P)
+	                    snapshot();
+	            }
+	        }
+    		break;
 		default:
 			break;
     	}
@@ -520,8 +584,12 @@ public class Main {
     		quitGame.draw();
     		if(playGame.hasClicked() == 2)
     			state = State.GAME;
-    		if(quitGame.hasClicked() == 2)
-    			cleanup();
+    		if(quitGame.hasClicked() == 2) {
+    			state = State.QUIT;
+    			playGame.setFixed(true);
+        		museMusic.setFixed(true);
+        		quitGame.setFixed(true);
+    		}
     		break;
     	case GAME:
     		//reinitGL();
@@ -531,6 +599,39 @@ public class Main {
     		team.draw();
     		break;
     	case PAUSE:   			
+    		loading.draw();
+    		pause.draw();
+    		resume.draw();
+    		cancel.draw();
+    		if(resume.hasClicked() == 2)
+    			state = State.GAME;
+    		if(cancel.hasClicked() == 2) {
+    			playGame.setFixed(false);
+        		museMusic.setFixed(false);
+        		quitGame.setFixed(false);
+    			state = State.MAIN_MENU;
+    			//TODO reset game.
+    		}
+    		
+    		break;
+    	case QUIT:   			
+    		mainMenu.draw();
+    		title.draw();
+    		
+    		quitGame.draw();
+    		museMusic.draw();
+    		pause.draw();
+    		confirmQuit.draw();
+    		cancelQuit.draw();
+    		if(confirmQuit.hasClicked() == 2){
+    			cleanup();
+    		}
+    		if(cancelQuit.hasClicked() == 2) {
+    			playGame.setFixed(false);
+        		museMusic.setFixed(false);
+        		quitGame.setFixed(false);
+    			state = State.MAIN_MENU;
+    		}
     		
     		break;
 		default:
