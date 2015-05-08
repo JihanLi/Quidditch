@@ -12,7 +12,6 @@ import static org.lwjgl.opengl.GL12.*;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 
 import util.PropertiesManager;
 
@@ -29,9 +28,14 @@ public class Button {
     private int texIdxPressed;
     
     private static boolean released = true;
+    private boolean fixed = false;
     
     
-    private boolean isClicked = false;
+    public void setFixed(boolean fixed) {
+		this.fixed = fixed;
+	}
+
+	private boolean isClicked = false;
     private int hasClicked = 0;
 
 
@@ -157,6 +161,9 @@ public class Button {
     
     public boolean mouseWithinBound()
     {
+    	if(fixed)
+    		return false;
+    	
     	if(Mouse.getX() > posX && Mouse.getX() < posX + texWid)
     	{
     		int mouseY = PropertiesManager.getDefaultHeight() - Mouse.getY();
