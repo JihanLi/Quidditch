@@ -1,0 +1,12 @@
+mainMenu   http://harrypotter.wikia.com/wiki/1994_Quidditch_World_Cup
+loadingMain  http://www.texturex.com/Wood-Textures/red+wood+texture+grain+natural+wooden+paneling+surface+photo+wallpaper.jpg.php
+loadingGame  http://harrypotter.wikia.com/wiki/Gryffindor_Quidditch_team
+button1 http://www.ngkids.co.uk/games/unbeatables-game
+button2 http://www.ngkids.co.uk/games/unbeatables-game
+emblem  http://rapunzelalltangledup.blogspot.com/2012/03/harry-potter-documents-gift.html
+progress  http://www.mundusbellicus.fr/forum/archive/index.php?t-8676.html
+team1  http://rapunzelalltangledup.blogspot.com/2012/03/harry-potter-documents-gift.html
+team2  http://rapunzelalltangledup.blogspot.com/2012/03/harry-potter-documents-gift.html
+team3  http://rapunzelalltangledup.blogspot.com/2012/03/harry-potter-documents-gift.html
+team4  http://rapunzelalltangledup.blogspot.com/2012/03/harry-potter-documents-gift.html
+goldenSnitch http://guide-to-pottermore-items.blogspot.com/2013/01/ps-chp-11-golden-snitch.html
