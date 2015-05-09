@@ -38,13 +38,4 @@ public abstract class Model
 		
 		GL11.glCallList(list);
 	}
-	
-	/**
-	 * Move function
-	 * @param delta time
-	 */
-	public void move(float delta)
-	{
-		
-	}
 }

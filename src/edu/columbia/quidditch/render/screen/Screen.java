@@ -20,6 +20,13 @@ public abstract class Screen extends Model
 		children = new Vector<Model>();
 		buttons = new Vector<Button>();
 	}
+	
+	public void addButton(Button button)
+	{
+		children.add(button);
+		buttons.add(button);
+		button.setScreen(this);
+	}
 
 	@Override
 	public void render()

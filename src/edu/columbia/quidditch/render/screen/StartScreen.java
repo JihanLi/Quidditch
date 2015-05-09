@@ -47,13 +47,9 @@ public class StartScreen extends Screen
 			}
 		});
 		
-		buttons.add(button0);
-		buttons.add(button1);
-		buttons.add(button2);
-		
-		children.add(button0);
-		children.add(button1);
-		children.add(button2);
+		addButton(button0);
+		addButton(button1);
+		addButton(button2);
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Texture;
 import edu.columbia.quidditch.interact.ButtonListener;
 import edu.columbia.quidditch.render.screen.LoadScreen;
+import edu.columbia.quidditch.render.screen.Screen;
 
 /**
  * Button
@@ -54,6 +55,7 @@ public class Button extends Model
 	private String type;
 	
 	private ButtonListener listener;
+	private Screen screen;
 
 	public Button(MainGame game, String type, float x, float y, String text)
 	{
@@ -77,6 +79,8 @@ public class Button extends Model
 		bgList = GL11.glGenLists(1);
 		activeBgList = GL11.glGenLists(1);
 		textList = GL11.glGenLists(1);
+		
+		screen = null;
 
 		createList();
 		
@@ -133,6 +137,11 @@ public class Button extends Model
 	{
 		this.listener = listener;
 	}
+	
+	public void setScreen(Screen screen)
+	{
+		this.screen = screen;
+	}
 
 	@Override
 	public void render()
@@ -162,6 +171,11 @@ public class Button extends Model
 	public boolean mouseInside()
 	{
 		if (!visible)
+		{
+			return false;
+		}
+		
+		if (screen != null && screen != game.getActiveScreen())
 		{
 			return false;
 		}

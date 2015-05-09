@@ -33,16 +33,18 @@ public class Modal extends Screen
 		Button button0 = new Button(game, "Wood", 380, 150, "Confirm");
 		Button button1 = new Button(game, "Wood", 500, 150, "Cancel");
 		
-		buttons.add(button0);
-		buttons.add(button1);
-		
-		children.add(button0);
-		children.add(button1);
+		addButton(button0);
+		addButton(button1);
 	}
 	
 	public void setButtonText(int idx, String text)
 	{
 		buttons.get(idx).setText(text);
+	}
+	
+	public void setListener(int idx, ButtonListener listener)
+	{
+		buttons.get(idx).setListener(listener);
 	}
 
 	@Override
@@ -68,12 +70,6 @@ public class Modal extends Screen
 			bg.drawRectangle(280, 130, 400, 280);
 		}
 		GL11.glEndList();
-	}
-	
-	public void setListeners(ButtonListener confirmListener, ButtonListener cancelListener)
-	{
-		buttons.get(0).setListener(confirmListener);
-		buttons.get(1).setListener(cancelListener);
 	}
 
 	@Override

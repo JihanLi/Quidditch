@@ -478,7 +478,8 @@ public class MainGame
 
 	public void requestClose()
 	{
-		modal.setListeners(closeListener, cancelListener);
+		modal.setListener(0, closeListener);
+		modal.setListener(1, cancelListener);
 		showModal = true;
 	}
 

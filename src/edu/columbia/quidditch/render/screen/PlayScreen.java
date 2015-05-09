@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Camera;
+import edu.columbia.quidditch.render.Character;
 import edu.columbia.quidditch.render.Model;
 import edu.columbia.quidditch.render.Sky;
 import edu.columbia.quidditch.render.Stadium;
@@ -18,7 +19,7 @@ import edu.columbia.quidditch.render.Terra;
 public class PlayScreen extends Screen
 {
 	private static final float MOUSE_SENSITIVITY = 0.05f;
-
+	
 	// Position of light source
 	private static final float[] LIGHT_POS =
 	{ 3.73f, 5.0f, -1.0f, 0.0f };
@@ -37,6 +38,7 @@ public class PlayScreen extends Screen
 
 	private Camera camera;
 	private Model sky, terra, stadium;
+	private Character character;
 
 	public PlayScreen(MainGame game)
 	{
@@ -47,6 +49,7 @@ public class PlayScreen extends Screen
 		sky = new Sky(game);
 		terra = Terra.create(game);
 		stadium = Stadium.create(game);
+		//character = new Character(game);
 
 		children.add(sky);
 		children.add(terra);
@@ -76,6 +79,7 @@ public class PlayScreen extends Screen
 
 		terra.render();
 		stadium.render();
+		//character.render();
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package edu.columbia.quidditch.render.screen;
+package edu.columbia.quidditch.render;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -15,11 +15,10 @@ import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Material;
 import edu.columbia.quidditch.basic.ShaderProgram;
 import edu.columbia.quidditch.basic.Texture;
-import edu.columbia.quidditch.render.Model;
 import edu.columbia.quidditch.render.link.Link;
 import edu.columbia.quidditch.util.IQELoader;
 
-public abstract class Character extends Model
+public class Character extends Model
 {
 	protected static final float SHINE = 25.0f;
 	private static final String MODEL_NAME = "res/char/char.iqe";
