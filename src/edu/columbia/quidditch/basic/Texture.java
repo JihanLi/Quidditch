@@ -11,7 +11,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import edu.columbia.quidditch.MainGame;
+import edu.columbia.quidditch.model.LoadingScreen;
 
 /**
  * Texture class
@@ -44,7 +44,7 @@ public class Texture
 	{
 		try
 		{
-			MainGame.log("Loading texture from " + imageName);
+			LoadingScreen.log("Loading texture from " + imageName);
 			return new Texture(imageName);
 		}
 		catch (IOException e)

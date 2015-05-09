@@ -17,13 +17,44 @@ import edu.columbia.quidditch.basic.Texture;
  */
 public class LoadingScreen extends Model implements Runnable
 {
+	private static final float ALL_LOAD_COUNT = 200;
+	
 	private static final long INTERVAL = 100;
+	
+	private static LoadingScreen singleton = null;
+		
+	public static void log(String text)
+	{
+		System.out.println(text);
+		
+		if (singleton == null)
+		{
+			return;
+		}
+		
+		++singleton.loadCount;
+	}
+	
+	public static void increaseLoadCount()
+	{
+		if (singleton == null)
+		{
+			return;
+		}
+		
+		++singleton.loadCount;
+	}
+	
+	private int loadCount;	
 	private Texture bg, barBg, barContent;
 	private Texture emblem;
 
 	public LoadingScreen(MainGame game)
 	{
 		super(game);
+		
+		loadCount = 1;
+		singleton = this;
 
 		bg = Texture.createFromFile("res/loading/loadScreen.png");
 		emblem = Texture.createFromFile("res/hogwarts1.png");
@@ -59,7 +90,7 @@ public class LoadingScreen extends Model implements Runnable
 		GL11.glCallList(list);
 
 		barContent.bind();
-		float percentage = game.getLoadPercentage();
+		float percentage = loadCount / ALL_LOAD_COUNT;
 
 		GL11.glBegin(GL11.GL_QUADS);
 		{

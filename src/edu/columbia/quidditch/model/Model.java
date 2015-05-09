@@ -19,7 +19,7 @@ public abstract class Model
 	
 	public Model(MainGame game)
 	{
-		game.increaseLoadCount();
+		LoadingScreen.increaseLoadCount();
 		this.game = game;
 	}
 	

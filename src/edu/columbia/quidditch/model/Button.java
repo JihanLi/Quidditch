@@ -92,7 +92,7 @@ public class Button extends Model
 	@Override
 	protected void createList()
 	{
-		MainGame.log("Creating display lists for button");
+		LoadingScreen.log("Creating display lists for button");
 		
 		createBackgroundList();
 		createTextList();

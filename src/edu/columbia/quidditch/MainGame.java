@@ -72,22 +72,6 @@ public class MainGame
 
 	private static final int BYTES_PER_PIXEL = 4;
 
-	private static final float ALL_LOADING = 200f;
-	
-	private static MainGame singleton;
-	
-	public static void log(String text)
-	{
-		System.out.println(text);
-		
-		if (singleton == null)
-		{
-			return;
-		}
-		
-		singleton.increaseLoadCount();
-	}
-
 	private boolean closeRequested, showModal;
 	private long lastFrameTime;
 
@@ -111,8 +95,6 @@ public class MainGame
 
 	private FloatBuffer projBuffer;
 
-	private int loadCount;
-
 	private Modal modal;
 	private ButtonListener closeListener, cancelListener;
 
@@ -120,10 +102,7 @@ public class MainGame
 	
 	public MainGame()
 	{
-		singleton = this;
-		
 		status = STATUS_LOADING;
-		loadCount = 0;
 		closeRequested = showModal = false;
 	}
 
@@ -552,16 +531,6 @@ public class MainGame
 	public boolean isLoading()
 	{
 		return status == STATUS_LOADING;
-	}
-
-	public void increaseLoadCount()
-	{
-		++loadCount;
-	}
-
-	public float getLoadPercentage()
-	{
-		return Math.min(Math.max(loadCount / ALL_LOADING, 0), 1);
 	}
 
 	public boolean isBeginning()

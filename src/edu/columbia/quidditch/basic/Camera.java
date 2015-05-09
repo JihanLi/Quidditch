@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import edu.columbia.quidditch.MainGame;
+import edu.columbia.quidditch.model.LoadingScreen;
 
 /**
  * Camera class
@@ -17,7 +18,7 @@ import edu.columbia.quidditch.MainGame;
  */
 public class Camera
 {
-	private static final float MAX_LOOK = 180;
+	private static final float MAX_LOOK = 90;
 
 	private Vector3f cameraRot;
 
@@ -38,7 +39,7 @@ public class Camera
 
 	public Camera(MainGame game)
 	{
-		game.increaseLoadCount();
+		LoadingScreen.increaseLoadCount();
 		this.game = game;
 		
 		cameraRot = new Vector3f(0, 0, 0);

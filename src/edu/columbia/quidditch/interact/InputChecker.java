@@ -6,6 +6,7 @@ import org.lwjgl.opengl.Display;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Camera;
+import edu.columbia.quidditch.model.LoadingScreen;
 
 /**
  * Check the keyboard and mouse input
@@ -21,7 +22,7 @@ public class InputChecker
 
 	public InputChecker(MainGame game)
 	{
-		game.increaseLoadCount();
+		LoadingScreen.increaseLoadCount();
 		this.game = game;
 	}
 
