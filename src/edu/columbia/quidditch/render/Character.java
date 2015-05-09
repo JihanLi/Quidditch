@@ -129,6 +129,14 @@ public class Character extends Model
 
 		rot.x = X_ROT;
 		setDefaultTrans();
+				
+		links[18].setTheta(45);
+		
+		links[30].setTheta(15);
+		links[31].setTheta(15);
+		
+		links[42].setTheta(-15);
+		links[43].setTheta(-15);
 
 		updateRot();
 
