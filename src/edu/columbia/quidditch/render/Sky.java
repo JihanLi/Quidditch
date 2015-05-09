@@ -1,9 +1,10 @@
-package edu.columbia.quidditch.model;
+package edu.columbia.quidditch.render;
 
 import org.lwjgl.opengl.GL11;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Texture;
+import edu.columbia.quidditch.render.screen.LoadScreen;
 
 /**
  * Sky
@@ -51,7 +52,7 @@ public class Sky extends Model
 	@Override
 	protected void createList()
 	{
-		LoadingScreen.log("Creating display list for sky");
+		LoadScreen.log("Creating display list for sky");
 
 		list = GL11.glGenLists(1);
 		GL11.glNewList(list, GL11.GL_COMPILE);

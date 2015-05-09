@@ -6,7 +6,8 @@ import org.lwjgl.opengl.Display;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Camera;
-import edu.columbia.quidditch.model.LoadingScreen;
+import edu.columbia.quidditch.render.screen.LoadScreen;
+import edu.columbia.quidditch.render.screen.Screen;
 
 /**
  * Check the keyboard and mouse input
@@ -16,13 +17,11 @@ import edu.columbia.quidditch.model.LoadingScreen;
  */
 public class InputChecker
 {
-	private static final float MOUSE_SENSITIVITY = 0.05f;
-
 	private MainGame game;
 
 	public InputChecker(MainGame game)
 	{
-		LoadingScreen.increaseLoadCount();
+		LoadScreen.increaseLoadCount();
 		this.game = game;
 	}
 
@@ -77,39 +76,6 @@ public class InputChecker
 	}
 
 	/**
-	 * Check keyboard for all status
-	 */
-	private void checkKeyboardForAllStatuses()
-	{
-		while (Keyboard.next())
-		{
-			if (Keyboard.getEventKeyState())
-			{
-				switch (Keyboard.getEventKey())
-				{
-				case Keyboard.KEY_Q:
-				case Keyboard.KEY_ESCAPE:
-					game.requestClose();
-					break;
-				case Keyboard.KEY_F2: // In Minecraft, F2 can be used to take
-										// screenshots
-				case Keyboard.KEY_F12: // In Europa Universalis and Victoria,
-										// F12 can be used to take screenshots
-				case Keyboard.KEY_P:
-					game.screenshot();
-					break;
-				case Keyboard.KEY_F11:
-					game.toggleFullscreen();
-					break;
-				case Keyboard.KEY_RETURN:
-
-					break;
-				}
-			}
-		}
-	}
-
-	/**
 	 * Check keyboard
 	 * 
 	 * @param delta
@@ -117,12 +83,11 @@ public class InputChecker
 	 */
 	public void checkKeyboard(float delta)
 	{
-		if (game.isRunning())
+		Screen screen = game.getActiveScreen();
+		if (screen != null)
 		{
-			checkKeyboardForStatusRunning(delta);
+			screen.checkKeyboardInput(delta);
 		}
-
-		checkKeyboardForAllStatuses();
 	}
 
 	/**
@@ -133,59 +98,10 @@ public class InputChecker
 	 */
 	public void checkMouse(float delta)
 	{
-		if (game.isShowingModal())
+		Screen screen = game.getActiveScreen();
+		if (screen != null)
 		{
-			while (Mouse.next())
-			{
-				if (!Mouse.getEventButtonState() && Mouse.getEventButton() == 0)
-				{
-					game.getModal().checkMouseInput();
-				}
-			}
-			
-			return;
-		}
-		
-		if (!game.isRunning())
-		{
-			while (Mouse.next())
-			{
-				if (!Mouse.getEventButtonState() && Mouse.getEventButton() == 0)
-				{
-					if (game.isBeginning())
-					{
-						game.getStartScreen().checkMouseInput();
-					}
-				}
-			}
-
-			return;
-		}
-
-		// Rotate the camera by mouse
-		Camera camera = game.getCamera();
-
-		if (Display.isActive())
-		{
-			if (camera.isSwinging())
-			{
-				float mouseDX = Mouse.getDX();
-				float mouseDY = -Mouse.getDY();
-
-				camera.rotY(mouseDX * MOUSE_SENSITIVITY * delta);
-				camera.rotX(mouseDY * MOUSE_SENSITIVITY * delta);
-			}
-			else
-			{
-				Mouse.getDX();
-				Mouse.getDY();
-
-				camera.startSwing();
-			}
-		}
-		else
-		{
-			camera.stopSwing();
+			screen.checkMouseInput(delta);
 		}
 	}
 }

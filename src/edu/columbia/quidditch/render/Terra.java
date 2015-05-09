@@ -1,4 +1,4 @@
-package edu.columbia.quidditch.model;
+package edu.columbia.quidditch.render;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -22,6 +22,7 @@ import edu.columbia.quidditch.filter.CombineFilter;
 import edu.columbia.quidditch.filter.Filter;
 import edu.columbia.quidditch.filter.GaussianFilter;
 import edu.columbia.quidditch.filter.MeanFilter;
+import edu.columbia.quidditch.render.screen.LoadScreen;
 
 /**
  * The terrain
@@ -109,15 +110,15 @@ public class Terra extends Model
 
 		if (terraFile.exists())
 		{
-			LoadingScreen.log("Loading terrain from " + TERRA_NAME);
+			LoadScreen.log("Loading terrain from " + TERRA_NAME);
 			terra = new Terra(game, TERRA_NAME);
 		}
 		else
 		{
-			LoadingScreen.log("Generating random terrain");
+			LoadScreen.log("Generating random terrain");
 			terra = new Terra(game);
 
-			LoadingScreen.log("Saving terrain to " + TERRA_NAME);
+			LoadScreen.log("Saving terrain to " + TERRA_NAME);
 			terra.save(TERRA_NAME);
 		}
 

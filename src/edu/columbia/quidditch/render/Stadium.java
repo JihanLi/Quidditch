@@ -1,4 +1,4 @@
-package edu.columbia.quidditch.model;
+package edu.columbia.quidditch.render;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +10,7 @@ import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Material;
 import edu.columbia.quidditch.basic.ShaderProgram;
 import edu.columbia.quidditch.basic.Texture;
+import edu.columbia.quidditch.render.screen.LoadScreen;
 import edu.columbia.quidditch.util.ObjLoader;
 import edu.columbia.quidditch.util.Vector3i;
 
@@ -71,7 +72,7 @@ public class Stadium extends Model
 	 */
 	private static void createDefaultList()
 	{
-		LoadingScreen.log("Creating display list for stadium");
+		LoadScreen.log("Creating display list for stadium");
 
 		defaultList = GL11.glGenLists(1);
 		GL11.glNewList(defaultList, GL11.GL_COMPILE);

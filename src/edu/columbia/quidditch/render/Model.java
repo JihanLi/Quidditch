@@ -1,8 +1,9 @@
-package edu.columbia.quidditch.model;
+package edu.columbia.quidditch.render;
 
 import org.lwjgl.opengl.GL11;
 
 import edu.columbia.quidditch.MainGame;
+import edu.columbia.quidditch.render.screen.LoadScreen;
 
 /**
  * Abstract model class
@@ -19,7 +20,7 @@ public abstract class Model
 	
 	public Model(MainGame game)
 	{
-		LoadingScreen.increaseLoadCount();
+		LoadScreen.increaseLoadCount();
 		this.game = game;
 	}
 	
@@ -43,16 +44,6 @@ public abstract class Model
 	 * @param delta time
 	 */
 	public void move(float delta)
-	{
-		
-	}
-	
-	public void checkMouseInput()
-	{
-		
-	}
-	
-	public void checkKeyboardInput()
 	{
 		
 	}

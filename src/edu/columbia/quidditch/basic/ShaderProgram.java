@@ -9,7 +9,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import edu.columbia.quidditch.model.LoadingScreen;
+import edu.columbia.quidditch.render.screen.LoadScreen;
 
 /**
  * ShaderProgram class
@@ -31,7 +31,7 @@ public class ShaderProgram
 	{
 		try
 		{
-			LoadingScreen.log("Loading shaders from " + vertexName + " and " + fragmentName);
+			LoadScreen.log("Loading shaders from " + vertexName + " and " + fragmentName);
 			
 			String vertexSrc = readFile(vertexName);
 			String fragmentSrc = readFile(fragmentName);

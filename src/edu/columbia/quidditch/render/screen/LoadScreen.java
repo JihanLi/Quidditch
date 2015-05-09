@@ -1,4 +1,4 @@
-package edu.columbia.quidditch.model;
+package edu.columbia.quidditch.render.screen;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -15,13 +15,13 @@ import edu.columbia.quidditch.basic.Texture;
  * @author Yuqing Guan
  * 
  */
-public class LoadingScreen extends Model implements Runnable
+public class LoadScreen extends Screen implements Runnable
 {
 	private static final float ALL_LOAD_COUNT = 200;
 	
 	private static final long INTERVAL = 100;
 	
-	private static LoadingScreen singleton = null;
+	private static LoadScreen singleton = null;
 		
 	public static void log(String text)
 	{
@@ -49,7 +49,7 @@ public class LoadingScreen extends Model implements Runnable
 	private Texture bg, barBg, barContent;
 	private Texture emblem;
 
-	public LoadingScreen(MainGame game)
+	public LoadScreen(MainGame game)
 	{
 		super(game);
 		
@@ -189,5 +189,11 @@ public class LoadingScreen extends Model implements Runnable
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+
+	@Override
+	public boolean checkKeyboardInput(float delta)
+	{
+		return false;
 	}
 }

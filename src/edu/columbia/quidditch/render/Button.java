@@ -1,4 +1,4 @@
-package edu.columbia.quidditch.model;
+package edu.columbia.quidditch.render;
 
 import java.util.HashMap;
 
@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Texture;
 import edu.columbia.quidditch.interact.ButtonListener;
+import edu.columbia.quidditch.render.screen.LoadScreen;
 
 /**
  * Button
@@ -92,7 +93,7 @@ public class Button extends Model
 	@Override
 	protected void createList()
 	{
-		LoadingScreen.log("Creating display lists for button");
+		LoadScreen.log("Creating display lists for button");
 		
 		createBackgroundList();
 		createTextList();

@@ -18,16 +18,13 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.SharedDrawable;
 import org.lwjgl.util.glu.GLU;
 
-import edu.columbia.quidditch.basic.Camera;
 import edu.columbia.quidditch.interact.ButtonListener;
 import edu.columbia.quidditch.interact.InputChecker;
-import edu.columbia.quidditch.model.LoadingScreen;
-import edu.columbia.quidditch.model.Modal;
-import edu.columbia.quidditch.model.Model;
-import edu.columbia.quidditch.model.Sky;
-import edu.columbia.quidditch.model.Stadium;
-import edu.columbia.quidditch.model.StartScreen;
-import edu.columbia.quidditch.model.Terra;
+import edu.columbia.quidditch.render.screen.LoadScreen;
+import edu.columbia.quidditch.render.screen.Modal;
+import edu.columbia.quidditch.render.screen.PlayScreen;
+import edu.columbia.quidditch.render.screen.Screen;
+import edu.columbia.quidditch.render.screen.StartScreen;
 
 /**
  * The main game class
@@ -50,32 +47,16 @@ public class MainGame
 	// Farthest distance
 	private static final float FAR = 20000.0f;
 
-	// Position of light source
-	private static final float[] LIGHT_POS =
-	{ 3.73f, 5.0f, -1.0f, 0.0f };
-
-	// Color of light source
-	private static final float[] AMBIENT =
-	{ 0.4f, 0.4f, 0.4f, 1.0f };
-	private static final float[] BLACK =
-	{ 0.0f, 0.0f, 0.0f, 1.0f };
-	private static final float[] DIFFUSE =
-	{ 1.0f, 1.0f, 1.0f, 1.0f };
-	private static final float[] SPECULAR =
-	{ 1.0f, 1.0f, 1.0f, 1.0f };
-
 	// Statuses
 	private static final int STATUS_START = 0;
 	private static final int STATUS_RUNNING = 1;
-	private static final int STATUS_END = 2;
-	private static final int STATUS_LOADING = 3;
+	private static final int STATUS_LOADING = 2;
 
 	private static final int BYTES_PER_PIXEL = 4;
 
 	private boolean closeRequested, showModal;
 	private long lastFrameTime;
-
-	private Camera camera;
+	
 	private InputChecker inputChecker;
 
 	private StartScreen startScreen;
@@ -84,8 +65,6 @@ public class MainGame
 	private DisplayMode windowed, fullscreen, current;
 
 	// Models
-
-	private FloatBuffer lightPosBuffer;
 
 	// Current status
 	private int status;
@@ -98,8 +77,8 @@ public class MainGame
 	private Modal modal;
 	private ButtonListener closeListener, cancelListener;
 
-	private Model sky, terra, stadium;
-	
+	private PlayScreen playScreen;
+
 	public MainGame()
 	{
 		status = STATUS_LOADING;
@@ -201,20 +180,8 @@ public class MainGame
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		
+
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-
-		lightPosBuffer = floats2Buffer(LIGHT_POS);
-
-		FloatBuffer ambientBuffer = floats2Buffer(AMBIENT);
-		FloatBuffer blackBuffer = floats2Buffer(BLACK);
-		FloatBuffer diffuseBuffer = floats2Buffer(DIFFUSE);
-		FloatBuffer specularBuffer = floats2Buffer(SPECULAR);
-
-		GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, ambientBuffer);
-		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_AMBIENT, blackBuffer);
-		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, diffuseBuffer);
-		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, specularBuffer);
 	}
 
 	/**
@@ -224,7 +191,7 @@ public class MainGame
 	{
 		try
 		{
-			LoadingScreen loadingScreen = new LoadingScreen(this);
+			LoadScreen loadingScreen = new LoadScreen(this);
 			Thread loadingThread = new Thread(loadingScreen);
 			loadingThread.start();
 
@@ -260,12 +227,11 @@ public class MainGame
 	 */
 	private void createModels()
 	{
-		camera = new Camera(this);
 		inputChecker = new InputChecker(this);
 		startScreen = new StartScreen(this);
 
 		modal = Modal.create(this);
-		
+
 		closeListener = new ButtonListener()
 		{
 			@Override
@@ -274,7 +240,7 @@ public class MainGame
 				closeRequested = true;
 			}
 		};
-		
+
 		cancelListener = new ButtonListener()
 		{
 			@Override
@@ -282,13 +248,11 @@ public class MainGame
 			{
 				showModal = false;
 			}
-			
+
 		};
 		
-		sky = new Sky(this);
-		terra = Terra.create(this);
-		stadium = Stadium.create(this);
-		
+		playScreen = new PlayScreen(this);
+
 		status = STATUS_START;
 	}
 
@@ -323,22 +287,10 @@ public class MainGame
 
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
-
-		camera.applyRotation();
 		
 		if (status == STATUS_RUNNING)
 		{
-			sky.render();
-		}
-		
-		camera.applyTranslation();
-
-		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, lightPosBuffer);
-		
-		if (status == STATUS_RUNNING)
-		{
-			terra.render();
-			stadium.render();
+			playScreen.render();
 		}
 	}
 
@@ -367,7 +319,7 @@ public class MainGame
 			startScreen.render();
 			break;
 		}
-		
+
 		if (showModal)
 		{
 			modal.render();
@@ -411,7 +363,10 @@ public class MainGame
 	{
 		try
 		{
-			camera.stopSwing();
+			if (status == STATUS_RUNNING)
+			{
+				playScreen.getCamera().stopSwing();
+			}
 
 			if (current == windowed)
 			{
@@ -435,19 +390,6 @@ public class MainGame
 		}
 
 		return true;
-	}
-
-	/**
-	 * Convert float array to buffer, mainly used for light source
-	 * 
-	 * @param float array
-	 * @return converted float buffer
-	 */
-	private FloatBuffer floats2Buffer(float[] floats)
-	{
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(floats.length);
-		buffer.put(floats).flip();
-		return buffer;
 	}
 
 	/**
@@ -523,11 +465,6 @@ public class MainGame
 		return drawable;
 	}
 
-	public Camera getCamera()
-	{
-		return camera;
-	}
-
 	public boolean isLoading()
 	{
 		return status == STATUS_LOADING;
@@ -543,50 +480,39 @@ public class MainGame
 		return status == STATUS_RUNNING;
 	}
 
-	public boolean isEnded()
-	{
-		return status == STATUS_END;
-	}
-
 	public void startGame()
 	{
 		status = STATUS_RUNNING;
 	}
 
-	public void stopGame()
+	public void requestClose()
 	{
-		status = STATUS_END;
-		camera.resetRot();
+		modal.setListeners(closeListener, cancelListener);
+		showModal = true;
 	}
 
-	public void requestClose()
+	public Screen getActiveScreen()
 	{
 		if (showModal)
 		{
-			return;
+			return modal;
 		}
-		
-		modal.setListeners(closeListener, cancelListener);
-		showModal = true;
+		else
+		{
+			switch (status)
+			{
+			case STATUS_START:
+				return startScreen;
+			case STATUS_RUNNING:
+				return playScreen;
+			default:
+				return null;
+			}
+		}
 	}
 
 	public static void main(String[] args)
 	{
 		new MainGame().run();
-	}
-
-	public StartScreen getStartScreen()
-	{
-		return startScreen;
-	}
-	
-	public Modal getModal()
-	{
-		return modal;
-	}
-	
-	public boolean isShowingModal()
-	{
-		return showModal;
 	}
 }

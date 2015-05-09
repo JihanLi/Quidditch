@@ -11,7 +11,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import edu.columbia.quidditch.basic.Material;
 import edu.columbia.quidditch.basic.Texture;
-import edu.columbia.quidditch.model.LoadingScreen;
+import edu.columbia.quidditch.render.screen.LoadScreen;
 
 /**
  * Load obj and mtl file
@@ -30,7 +30,7 @@ public class ObjLoader
 	{
 		try
 		{
-			LoadingScreen.log("Loading model from " + objName);
+			LoadScreen.log("Loading model from " + objName);
 			return new ObjLoader(objName);
 		}
 		catch (IOException e)
