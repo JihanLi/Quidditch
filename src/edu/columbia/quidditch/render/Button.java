@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Texture;
@@ -15,28 +15,28 @@ import edu.columbia.quidditch.render.screen.Screen;
 /**
  * Button
  * 
- * @author Yuqing Guan
+ * @author Jihan Li
  * 
  */
 public class Button extends Model
 {
 	private static final String[] TYPES = { "Green", "Wood" };
-	private static final HashMap<String, Texture> bg, activeBg;
+	private static final HashMap<String, Texture> normalBg, pressedBg;
 
 	private static final HashMap<String, Float> defaultWidths, defaultHeights;
 	
 	static
 	{
-		bg = new HashMap<String, Texture>();
-		activeBg = new HashMap<String, Texture>();
+		normalBg = new HashMap<String, Texture>();
+		pressedBg = new HashMap<String, Texture>();
 		
 		defaultWidths = new HashMap<String, Float>();
 		defaultHeights = new HashMap<String, Float>();
 		
 		for (String type : TYPES)
 		{
-			bg.put(type, Texture.createFromFile("res/button/normal" + type + ".png"));
-			activeBg.put(type, Texture.createFromFile("res/button/active" + type + ".png"));
+			normalBg.put(type, Texture.createFromFile("res/button/normal" + type + ".png"));
+			pressedBg.put(type, Texture.createFromFile("res/button/active" + type + ".png"));
 		}
 		
 		defaultWidths.put("Green", 250.0f);
@@ -76,9 +76,9 @@ public class Button extends Model
 		this.type = type;
 		this.text = text;
 
-		bgList = GL11.glGenLists(1);
-		activeBgList = GL11.glGenLists(1);
-		textList = GL11.glGenLists(1);
+		bgList = glGenLists(1);
+		activeBgList = glGenLists(1);
+		textList = glGenLists(1);
 		
 		screen = null;
 
@@ -108,17 +108,17 @@ public class Button extends Model
 	 */
 	private void createBackgroundList()
 	{
-		GL11.glNewList(bgList, GL11.GL_COMPILE);
+		glNewList(bgList, GL_COMPILE);
 		{
-			bg.get(type).drawRectangle(x, y, width, height);
+			normalBg.get(type).drawRectangle(x, y, width, height);
 		}
-		GL11.glEndList();
+		glEndList();
 
-		GL11.glNewList(activeBgList, GL11.GL_COMPILE);
+		glNewList(activeBgList, GL_COMPILE);
 		{
-			activeBg.get(type).drawRectangle(x, y, width, height);
+			pressedBg.get(type).drawRectangle(x, y, width, height);
 		}
-		GL11.glEndList();
+		glEndList();
 	}
 
 	/**
@@ -126,11 +126,11 @@ public class Button extends Model
 	 */
 	private void createTextList()
 	{
-		GL11.glNewList(textList, GL11.GL_COMPILE);
+		glNewList(textList, GL_COMPILE);
 		{
 			// TODO
 		}
-		GL11.glEndList();
+		glEndList();
 	}
 	
 	public void setListener(ButtonListener listener)
@@ -153,14 +153,14 @@ public class Button extends Model
 
 		if (!mouseInside() || !Mouse.isButtonDown(0))
 		{
-			GL11.glCallList(bgList);
+			glCallList(bgList);
 		}
 		else
 		{
-			GL11.glCallList(activeBgList);
+			glCallList(activeBgList);
 		}
 		
-		GL11.glCallList(textList);
+		glCallList(textList);
 	}
 
 	/**

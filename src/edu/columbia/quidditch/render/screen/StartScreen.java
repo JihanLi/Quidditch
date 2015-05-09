@@ -11,7 +11,7 @@ import edu.columbia.quidditch.render.Button;
 /**
  * Loading screen, executed in a separated new thread
  * 
- * @author Yuqing Guan
+ * @author Yilin Xiong
  * 
  */
 public class StartScreen extends Screen

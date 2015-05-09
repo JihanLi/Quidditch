@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.util.glu.GLU.*;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -14,9 +16,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.Drawable;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.SharedDrawable;
-import org.lwjgl.util.glu.GLU;
 
 import edu.columbia.quidditch.interact.ButtonListener;
 import edu.columbia.quidditch.render.screen.LoadScreen;
@@ -28,7 +28,7 @@ import edu.columbia.quidditch.render.screen.StartScreen;
 /**
  * The main game class
  * 
- * @author Yuqing Guan
+ * @author Jihan Li, Yuqing Guan
  * 
  */
 public class MainGame
@@ -83,8 +83,7 @@ public class MainGame
 	}
 
 	/**
-	 * Create window, initialize icons and OpenGL, load models and then start
-	 * the loop
+	 * Create window, initialize OpenGL, load models and render
 	 */
 	public void run()
 	{
@@ -97,8 +96,8 @@ public class MainGame
 		{
 			moveAndInput();
 
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-			GL11.glLoadIdentity();
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glLoadIdentity();
 
 			render3D();
 			render2D();
@@ -108,7 +107,7 @@ public class MainGame
 	}
 
 	/**
-	 * Create an OpenGL window, defaultly windowed
+	 * Create an OpenGL window with default size
 	 */
 	private void createWindow()
 	{
@@ -144,41 +143,41 @@ public class MainGame
 		int width = Display.getWidth();
 		int height = Display.getHeight();
 
-		GL11.glViewport(0, 0, width, height);
+		glViewport(0, 0, width, height);
 
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 
 		projBuffer = BufferUtils.createFloatBuffer(16);
-		GLU.gluPerspective(45.0f * height / DEFAULT_HEIGHT,
+		gluPerspective(45.0f * height / DEFAULT_HEIGHT,
 				((float) width / (float) height), 0.1f, FAR);
-		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projBuffer);
+		glGetFloat(GL_PROJECTION_MATRIX, projBuffer);
 
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
-		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		GL11.glClearDepth(1.0f);
+		glShadeModel(GL_SMOOTH);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClearDepth(1.0f);
 
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_2D);
 
-		GL11.glEnable(GL11.GL_POINT_SMOOTH);
-		GL11.glHint(GL11.GL_POINT_SMOOTH_HINT, GL11.GL_NICEST);
+		glEnable(GL_POINT_SMOOTH);
+		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 
-		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+		glEnable(GL_LINE_SMOOTH);
+		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
-		GL11.glEnable(GL11.GL_LIGHT0);
+		glEnable(GL_LIGHT0);
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+		glEnable(GL_COLOR_MATERIAL);
 	}
 
 	/**
@@ -260,29 +259,29 @@ public class MainGame
 		int width = Display.getWidth();
 		int height = Display.getHeight();
 
-		GL11.glViewport(0, 0, width, height);
+		glViewport(0, 0, width, height);
 
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 
 		projBuffer.rewind();
-		GLU.gluPerspective(45.0f * height / DEFAULT_HEIGHT,
+		gluPerspective(45.0f * height / DEFAULT_HEIGHT,
 				((float) width / (float) height), 0.1f, FAR);
-		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projBuffer);
+		glGetFloat(GL_PROJECTION_MATRIX, projBuffer);
 
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 	}
 
 	public void render3D()
 	{
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 
-		GL11.glMultMatrix(projBuffer);
+		glMultMatrix(projBuffer);
 
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 		
 		if (status == STATUS_RUNNING)
 		{
@@ -297,15 +296,15 @@ public class MainGame
 	 */
 	public void render2D()
 	{
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadIdentity();
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_LIGHTING);
 
-		GLU.gluOrtho2D(0, MainGame.DEFAULT_WIDTH, 0, MainGame.DEFAULT_HEIGHT);
+		gluOrtho2D(0, MainGame.DEFAULT_WIDTH, 0, MainGame.DEFAULT_HEIGHT);
 
 		switch (status)
 		{
@@ -319,10 +318,10 @@ public class MainGame
 			modal.render();
 		}
 
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_LIGHTING);
 
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		glMatrixMode(GL_MODELVIEW);
 	}
 
 	/**
@@ -388,15 +387,15 @@ public class MainGame
 	 */
 	public void screenshot()
 	{
-		GL11.glReadBuffer(GL11.GL_FRONT);
+		glReadBuffer(GL_FRONT);
 
 		int width = Display.getWidth();
 		int height = Display.getHeight();
 
 		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height
 				* BYTES_PER_PIXEL);
-		GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA,
-				GL11.GL_UNSIGNED_BYTE, buffer);
+		glReadPixels(0, 0, width, height, GL_RGBA,
+				GL_UNSIGNED_BYTE, buffer);
 
 		BufferedImage image = new BufferedImage(width, height,
 				BufferedImage.TYPE_INT_RGB);
