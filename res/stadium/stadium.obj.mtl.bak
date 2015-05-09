@@ -1,0 +1,489 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.1.187496374)
+
+newmtl 7de95c6
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 07de95c6.PNG
+
+newmtl 719e41a
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 1719e41a.PNG
+
+newmtl dd1fef9
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 1dd1fef9.PNG
+
+newmtl dd6a1a5
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 1dd6a1a5.PNG
+
+newmtl 53dfe6b
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 253dfe6b.PNG
+
+newmtl 6be8701
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 26be8701.PNG
+
+newmtl 8ac6d21
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 28ac6d21.PNG
+
+newmtl 9a90197
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 29a90197.PNG
+
+newmtl c0eae84
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 3c0eae84.PNG
+
+newmtl ea62cb3
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 3ea62cb3.PNG
+
+newmtl 80f02e6
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 480f02e6.PNG
+
+newmtl 87446ab
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 487446ab.PNG
+
+newmtl abb53e1
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 4abb53e1.PNG
+
+newmtl 0f2e681
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 50f2e681.PNG
+
+newmtl 6f16b5e
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 56f16b5e.PNG
+
+newmtl c6369c0
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 5c6369c0.PNG
+
+newmtl d3dc7c2
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 5d3dc7c2.PNG
+
+newmtl e0f5dcf
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 5e0f5dcf.PNG
+
+newmtl 1e6e318
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 61e6e318.PNG
+
+newmtl 2723a3e
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 62723a3e.PNG
+
+newmtl 5079cbb
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 65079cbb.PNG
+
+newmtl 5d68016
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 65d68016.PNG
+
+newmtl 8f67fad
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 68f67fad.PNG
+
+newmtl 34f5188
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 734f5188.PNG
+
+newmtl 3e75b7c
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 73e75b7c.PNG
+
+newmtl 70f1403
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 770f1403.PNG
+
+newmtl 88b010e
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 888b010e.PNG
+
+newmtl ae604cb
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 8ae604cb.PNG
+
+newmtl 1f0f5e8
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 91f0f5e8.PNG
+
+newmtl 6fc4387
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 96fc4387.PNG
+
+newmtl 75bdc35
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd 975bdc35.PNG
+
+newmtl 5ca7416
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd a5ca7416.PNG
+
+newmtl 70b6cea
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd a70b6cea.PNG
+
+newmtl 9341862
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd a9341862.PNG
+
+newmtl b514f5f
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd ab514f5f.PNG
+
+newmtl e3b184f
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd ae3b184f.PNG
+
+newmtl 901985f
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd b901985f.PNG
+
+newmtl 9352a1e
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd b9352a1e.PNG
+
+newmtl 3577f39
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd c3577f39.PNG
+
+newmtl c4e65b8
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd cc4e65b8.PNG
+
+newmtl cd71703
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd ccd71703.PNG
+
+newmtl eaf86e3
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd ceaf86e3.PNG
+
+newmtl 4c6794b
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd d4c6794b.PNG
+
+newmtl af7344c
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd daf7344c.PNG
+
+newmtl e3154f7
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd de3154f7.PNG
+
+newmtl 2cf9e92
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd e2cf9e92.PNG
+
+newmtl be54196
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd ebe54196.PNG
+
+newmtl c5d454d
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd ec5d454d.PNG
+
+newmtl cf06ed2
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd ecf06ed2.PNG
+
+newmtl 381e745
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd f381e745.PNG
+
+newmtl 45dd839
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd f45dd839.PNG
+
+newmtl 9bbd3a9
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd f9bbd3a9.PNG
+
+newmtl e9a7eca
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd fe9a7eca.PNG
+
+newmtl f011821
+Kd 1 1 1
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+d 1
+illum 1
+map_Kd ff011821.PNG
+
