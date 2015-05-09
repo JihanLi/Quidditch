@@ -48,7 +48,7 @@ public class Button extends Model
 
 	private String text;
 
-	private int bgList, activeBgList, textList, name;
+	private int normalBgList, pressedBgList, textList, name;
 	private float x, y, width, height;
 
 	private boolean visible;
@@ -76,8 +76,8 @@ public class Button extends Model
 		this.type = type;
 		this.text = text;
 
-		bgList = glGenLists(1);
-		activeBgList = glGenLists(1);
+		normalBgList = glGenLists(1);
+		pressedBgList = glGenLists(1);
 		textList = glGenLists(1);
 		
 		screen = null;
@@ -108,13 +108,13 @@ public class Button extends Model
 	 */
 	private void createBackgroundList()
 	{
-		glNewList(bgList, GL_COMPILE);
+		glNewList(normalBgList, GL_COMPILE);
 		{
 			normalBg.get(type).drawRectangle(x, y, width, height);
 		}
 		glEndList();
 
-		glNewList(activeBgList, GL_COMPILE);
+		glNewList(pressedBgList, GL_COMPILE);
 		{
 			pressedBg.get(type).drawRectangle(x, y, width, height);
 		}
@@ -153,11 +153,11 @@ public class Button extends Model
 
 		if (!mouseInside() || !Mouse.isButtonDown(0))
 		{
-			glCallList(bgList);
+			glCallList(normalBgList);
 		}
 		else
 		{
-			glCallList(activeBgList);
+			glCallList(pressedBgList);
 		}
 		
 		glCallList(textList);
