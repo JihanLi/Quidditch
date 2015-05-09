@@ -1,8 +1,10 @@
 package edu.columbia.quidditch.render;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -44,6 +46,8 @@ public class Stadium extends Model
 	private static Stadium singleton;
 	private static int defaultList;
 
+	private static FloatBuffer specularBuffer;
+
 	/**
 	 * Load obj file
 	 */
@@ -64,6 +68,9 @@ public class Stadium extends Model
 		shaderProgram = ShaderProgram.createFromFiles(VERTEX_SHADER_NAME,
 				FRAGMENT_SHADER_NAME, null);
 
+		specularBuffer = BufferUtils.createFloatBuffer(4);
+		specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
+		
 		createDefaultList();
 	}
 
@@ -80,6 +87,7 @@ public class Stadium extends Model
 			shaderProgram.bind();
 			shaderProgram.setUniformi("tex", 0);
 
+			GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, specularBuffer);
 			GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, SHINE);
 
 			// Draw meshes with corresponding materials

@@ -307,8 +307,6 @@ public class MainGame
 		GL11.glLoadIdentity();
 
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-
-		GL11.glDisable(GL11.GL_LIGHT0);
 		GL11.glDisable(GL11.GL_LIGHTING);
 
 		GLU.gluOrtho2D(0, MainGame.DEFAULT_WIDTH, 0, MainGame.DEFAULT_HEIGHT);
@@ -326,8 +324,6 @@ public class MainGame
 		}
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-
-		GL11.glEnable(GL11.GL_LIGHT0);
 		GL11.glEnable(GL11.GL_LIGHTING);
 
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);

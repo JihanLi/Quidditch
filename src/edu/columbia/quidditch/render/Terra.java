@@ -72,15 +72,17 @@ public class Terra extends Model
 	private static final float MAX_SNOW_OFFSET = 800.0f;
 	private static final float MAX_GRASS_OFFSET = 800.0f;
 
-	private static final int FLAT_X = 1250;
-	private static final int FLAT_Y = 1250;
+	private static final int FLAT_X = 1400;
+	private static final int FLAT_Y = 1400;
 
 	private static final int FLAT_COL = FLAT_X / CELL_SIZE;
 	private static final int FLAT_ROW = FLAT_Y / CELL_SIZE;
 
-	private static final int MULTIPLE_FLAT = 2;
+	private static final int MULTIPLE_FLAT = 3;
 	private static final int MULTIPLE_FLAT_COL = FLAT_COL * MULTIPLE_FLAT;
 	private static final int MULTIPLE_FLAT_ROW = FLAT_ROW * MULTIPLE_FLAT;
+	
+	private static final float FLAT_SLOPE = 0.3f;
 
 	private static final String GRASS_NAME = "res/terra/grass.jpg";
 	private static final String DIRT_NAME = "res/terra/dirt.jpg";
@@ -258,7 +260,8 @@ public class Terra extends Model
 	private void createHeightMap()
 	{
 		heightMap = generateRandomMap(COLS, COLS);
-		heightMap[HALF_COLS][HALF_COLS] = 0;
+
+		stretch();
 		
 		Filter gaussianFilter = new GaussianFilter(HALF_FILTER_SIZE,
 				HALF_FILTER_SIZE);
@@ -274,11 +277,34 @@ public class Terra extends Model
 
 		stretch();
 
-		for (int col = -FLAT_COL; col <= FLAT_COL; ++col)
+		for (int col = HALF_COLS - MULTIPLE_FLAT_COL; col <= HALF_COLS + MULTIPLE_FLAT_COL; ++col)
 		{
-			for (int row = -FLAT_ROW; row <= FLAT_ROW; ++row)
+			if (col < 0 || col >= COLS)
 			{
-				heightMap[row + HALF_COLS][col + HALF_COLS] = PITCH;
+				continue;
+			}
+			
+			float colCenter = Math.abs(col - HALF_COLS) / (float) FLAT_COL;
+			
+			for (int row = HALF_COLS - MULTIPLE_FLAT_ROW; row <= HALF_COLS + MULTIPLE_FLAT_ROW; ++row)
+			{
+				if (row < 0 || row >= COLS)
+				{
+					continue;
+				}
+				
+				float rowCenter = Math.abs(row - HALF_COLS) / (float) FLAT_ROW;
+				float center = (float) Math.sqrt(colCenter * colCenter + rowCenter * rowCenter);
+				
+				if (center < 1 + 1e-6)
+				{
+					heightMap[row][col] = PITCH;
+				}
+				else
+				{
+					center -= 1;
+					heightMap[row][col] = (float) (PITCH + (heightMap[row][col] - PITCH) * Math.pow(center / (MULTIPLE_FLAT - 1), FLAT_SLOPE));
+				}
 			}
 		}
 	}
@@ -314,22 +340,6 @@ public class Terra extends Model
 			{
 				heightMap[row][col] = (heightMap[row][col] - low) * ratio
 						+ LOWEST;
-			}
-		}
-		
-		float baseFlatOffset = HIGHEST - PITCH;
-		
-		for (int col = HALF_COLS - MULTIPLE_FLAT_COL; col <= HALF_COLS + MULTIPLE_FLAT_COL; ++col)
-		{
-			float colCenter = 1 - Math.abs(col - HALF_COLS) / MULTIPLE_FLAT_COL;
-			
-			for (int row = HALF_COLS - MULTIPLE_FLAT_ROW; row <= HALF_COLS + MULTIPLE_FLAT_ROW; ++row)
-			{
-				float rowCenter = 1 - Math.abs(row - HALF_COLS) / MULTIPLE_FLAT_ROW;
-				float center = (float) Math.sqrt(colCenter * colCenter + rowCenter * rowCenter);
-				
-				float flatOffset = baseFlatOffset * center * MULTIPLE_FLAT;
-				heightMap[row][col] -= flatOffset;
 			}
 		}
 	}
