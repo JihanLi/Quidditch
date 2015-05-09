@@ -36,7 +36,7 @@ public class Button extends Model
 		for (String type : TYPES)
 		{
 			normalBg.put(type, Texture.createFromFile("res/button/normal" + type + ".png"));
-			pressedBg.put(type, Texture.createFromFile("res/button/active" + type + ".png"));
+			pressedBg.put(type, Texture.createFromFile("res/button/pressed" + type + ".png"));
 		}
 		
 		defaultWidths.put("Green", 250.0f);

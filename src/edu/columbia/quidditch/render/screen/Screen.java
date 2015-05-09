@@ -49,7 +49,7 @@ public abstract class Screen extends Model
 			{
 				for (Button button : buttons)
 				{
-					if (button.mouseInside())
+					if (button.mouseInBound())
 					{
 						button.click();
 						click = true;
