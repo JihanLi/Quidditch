@@ -181,8 +181,8 @@ Ks 0.075000 0.075000 0.075000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd t0092.png
-map_d t0092.png
+map_Kd t0092.bmp
+map_d t0092.bmp
 
 newmtl Material3
 Ns 96.078431

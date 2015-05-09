@@ -324,7 +324,6 @@ public class Character extends Model
 
 			shaderProgram.bind();
 			shaderProgram.setUniformi("tex", 0);
-			shaderProgram.setUniformi("hasTex", 1);
 
 			// Render each mesh with a material
 
@@ -335,6 +334,8 @@ public class Character extends Model
 
 				Material material = mtlMap.get(mtlName);
 				material.bind();
+				shaderProgram.setUniformi("hasTex", material.hasTexture() ? 1
+						: 0);
 
 				// Draw each face
 
