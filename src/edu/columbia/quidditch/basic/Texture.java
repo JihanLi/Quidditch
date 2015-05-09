@@ -8,15 +8,15 @@ import java.nio.ByteBuffer;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.util.glu.GLU.*;
 
 import edu.columbia.quidditch.render.screen.LoadScreen;
 
 /**
  * Texture class
  * 
- * @author Yuqing Guan
+ * @author Jihan Li
  * 
  */
 public class Texture
@@ -24,11 +24,11 @@ public class Texture
 	private static final int BYTES_PER_PIXEL = 4;
 
 	// Default method of warp and filters
-	private static final int WARP_S = GL11.GL_REPEAT;
-	private static final int WARP_T = GL11.GL_REPEAT;
+	private static final int WARP_S = GL_REPEAT;
+	private static final int WARP_T = GL_REPEAT;
 
-	private static final int MAG_FILTER = GL11.GL_NEAREST;
-	private static final int MIN_FILTER = GL11.GL_NEAREST;
+	private static final int MAG_FILTER = GL_NEAREST;
+	private static final int MIN_FILTER = GL_NEAREST;
 
 	private int width, height;
 
@@ -112,23 +112,23 @@ public class Texture
 
 		ByteBuffer buffer = image2Buffer(image);
 
-		texId = GL11.glGenTextures();
+		texId = glGenTextures();
 
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
-		GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+		glBindTexture(GL_TEXTURE_2D, texId);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-		GLU.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D, GL11.GL_RGBA, width, height,
-				GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height,
+				GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
-		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, WARP_S);
-		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, WARP_T);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, WARP_S);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, WARP_T);
 
-		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
 				MAG_FILTER);
-		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
 				MIN_FILTER);
 
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	public int getId()
@@ -141,9 +141,9 @@ public class Texture
 	 */
 	public void bind()
 	{
-		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE,
-				GL11.GL_REPLACE);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
+				GL_REPLACE);
+		glBindTexture(GL_TEXTURE_2D, texId);
 	}
 
 	/**
@@ -151,35 +151,35 @@ public class Texture
 	 */
 	public void bindWithColor()
 	{
-		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE,
-				GL11.GL_BLEND);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
+				GL_BLEND);
+		glBindTexture(GL_TEXTURE_2D, texId);
 	}
 
 	public static void unbind()
 	{
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	
 	public void drawRectangle(float x, float y, float width, float height)
 	{
 		bind();
 		
-		GL11.glBegin(GL11.GL_QUADS);
+		glBegin(GL_QUADS);
 		{
-			GL11.glTexCoord2d(0, 1);
-			GL11.glVertex2d(x, y);
+			glTexCoord2d(0, 1);
+			glVertex2d(x, y);
 
-			GL11.glTexCoord2d(0, 0);
-			GL11.glVertex2d(x, y + height);
+			glTexCoord2d(0, 0);
+			glVertex2d(x, y + height);
 
-			GL11.glTexCoord2d(1, 0);
-			GL11.glVertex2d(x + width, y + height);
+			glTexCoord2d(1, 0);
+			glVertex2d(x + width, y + height);
 
-			GL11.glTexCoord2d(1, 1);
-			GL11.glVertex2d(x + width, y);
+			glTexCoord2d(1, 1);
+			glVertex2d(x + width, y);
 		}
-		GL11.glEnd();
+		glEnd();
 		
 		unbind();
 	}
