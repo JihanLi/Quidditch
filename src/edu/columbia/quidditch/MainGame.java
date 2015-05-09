@@ -19,7 +19,6 @@ import org.lwjgl.opengl.SharedDrawable;
 import org.lwjgl.util.glu.GLU;
 
 import edu.columbia.quidditch.interact.ButtonListener;
-import edu.columbia.quidditch.interact.InputChecker;
 import edu.columbia.quidditch.render.screen.LoadScreen;
 import edu.columbia.quidditch.render.screen.Modal;
 import edu.columbia.quidditch.render.screen.PlayScreen;
@@ -56,8 +55,6 @@ public class MainGame
 
 	private boolean closeRequested, showModal;
 	private long lastFrameTime;
-	
-	private InputChecker inputChecker;
 
 	private StartScreen startScreen;
 
@@ -227,7 +224,6 @@ public class MainGame
 	 */
 	private void createModels()
 	{
-		inputChecker = new InputChecker(this);
 		startScreen = new StartScreen(this);
 
 		modal = Modal.create(this);
@@ -335,15 +331,14 @@ public class MainGame
 	private void moveAndInput()
 	{
 		float delta = getDeltaTime();
-
-		if (status == STATUS_RUNNING)
+		
+		Screen screen = getActiveScreen();
+		if (screen != null)
 		{
-
+			screen.checkKeyboardInput(delta);
+			screen.checkMouseInput(delta);
 		}
-
-		inputChecker.checkKeyboard(delta);
-		inputChecker.checkMouse(delta);
-
+		
 		if (Display.isCloseRequested())
 		{
 			requestClose();
