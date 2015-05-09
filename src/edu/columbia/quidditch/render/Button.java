@@ -151,7 +151,7 @@ public class Button extends Model
 			return;
 		}
 
-		if (!mouseInside() || !Mouse.isButtonDown(0))
+		if (!mouseInBound() || !Mouse.isButtonDown(0))
 		{
 			glCallList(normalBgList);
 		}
@@ -168,7 +168,7 @@ public class Button extends Model
 	 * 
 	 * @return
 	 */
-	public boolean mouseInside()
+	public boolean mouseInBound()
 	{
 		if (!visible)
 		{
