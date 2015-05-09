@@ -1,7 +1,7 @@
 package edu.columbia.quidditch.render.screen;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Texture;
@@ -55,14 +55,14 @@ public class StartScreen extends Screen
 	@Override
 	protected void createList()
 	{
-		list = GL11.glGenLists(1);
+		list = glGenLists(1);
 
-		GL11.glNewList(list, GL11.GL_COMPILE);
+		glNewList(list, GL_COMPILE);
 		{
 			bg.drawRectangle(0, 0, 960, 540);
 			title.drawRectangle(232, 318, 496, 172);
 		}
-		GL11.glEndList();
+		glEndList();
 	}
 
 	@Override
