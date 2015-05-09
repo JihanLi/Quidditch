@@ -49,7 +49,7 @@ public class PlayScreen extends Screen
 		sky = new Sky(game);
 		terra = Terra.create(game);
 		stadium = Stadium.create(game);
-		//character = new Character(game);
+		character = new Character(game);
 
 		children.add(sky);
 		children.add(terra);
@@ -79,7 +79,7 @@ public class PlayScreen extends Screen
 
 		terra.render();
 		stadium.render();
-		//character.render();
+		character.render();
 	}
 
 	@Override

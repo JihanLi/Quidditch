@@ -132,11 +132,11 @@ public class Character extends Model
 
 		updateRot();
 
-		list = GL11.glGenLists(1);
-		createList();
-
 		shaderProgram = ShaderProgram.createFromFiles(VERTEX_SHADER_NAME,
 				FRAGMENT_SHADER_NAME, null);
+
+		list = GL11.glGenLists(1);
+		createList();
 	}
 
 	/**
@@ -323,6 +323,8 @@ public class Character extends Model
 			GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, SHINE);
 
 			shaderProgram.bind();
+			shaderProgram.setUniformi("tex", 0);
+			shaderProgram.setUniformi("hasTex", 1);
 
 			// Render each mesh with a material
 
