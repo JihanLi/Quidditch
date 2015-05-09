@@ -46,4 +46,14 @@ public abstract class Model
 	{
 		
 	}
+	
+	public void checkMouseInput()
+	{
+		
+	}
+	
+	public void checkKeyboardInput()
+	{
+		
+	}
 }

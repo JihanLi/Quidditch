@@ -19,11 +19,15 @@ import org.lwjgl.opengl.SharedDrawable;
 import org.lwjgl.util.glu.GLU;
 
 import edu.columbia.quidditch.basic.Camera;
+import edu.columbia.quidditch.interact.ButtonListener;
+import edu.columbia.quidditch.interact.InputChecker;
 import edu.columbia.quidditch.model.LoadingScreen;
 import edu.columbia.quidditch.model.Modal;
+import edu.columbia.quidditch.model.Model;
+import edu.columbia.quidditch.model.Sky;
+import edu.columbia.quidditch.model.Stadium;
 import edu.columbia.quidditch.model.StartScreen;
-import edu.columbia.quidditch.util.InputChecker;
-import edu.columbia.quidditch.util.ModalListener;
+import edu.columbia.quidditch.model.Terra;
 
 /**
  * The main game class
@@ -44,7 +48,7 @@ public class MainGame
 	private static final String SCREENSHOT_NAME = "pa5_";
 
 	// Farthest distance
-	private static final float FAR = 1000.0f;
+	private static final float FAR = 20000.0f;
 
 	// Position of light source
 	private static final float[] LIGHT_POS =
@@ -68,7 +72,21 @@ public class MainGame
 
 	private static final int BYTES_PER_PIXEL = 4;
 
-	private static final float ALL_LOADING = 100f;
+	private static final float ALL_LOADING = 200f;
+	
+	private static MainGame singleton;
+	
+	public static void log(String text)
+	{
+		System.out.println(text);
+		
+		if (singleton == null)
+		{
+			return;
+		}
+		
+		singleton.increaseLoadCount();
+	}
 
 	private boolean closeRequested, showModal;
 	private long lastFrameTime;
@@ -96,10 +114,14 @@ public class MainGame
 	private int loadCount;
 
 	private Modal modal;
-	private ModalListener closeListener;
+	private ButtonListener closeListener, cancelListener;
 
+	private Model sky, terra, stadium;
+	
 	public MainGame()
 	{
+		singleton = this;
+		
 		status = STATUS_LOADING;
 		loadCount = 0;
 		closeRequested = showModal = false;
@@ -200,6 +222,8 @@ public class MainGame
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		
+		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
 		lightPosBuffer = floats2Buffer(LIGHT_POS);
 
@@ -263,21 +287,28 @@ public class MainGame
 
 		modal = Modal.create(this);
 		
-		closeListener = new ModalListener()
+		closeListener = new ButtonListener()
 		{
 			@Override
-			public void onConfirm()
+			public void onClick()
 			{
 				closeRequested = true;
 			}
-
+		};
+		
+		cancelListener = new ButtonListener()
+		{
 			@Override
-			public void onCancel()
+			public void onClick()
 			{
 				showModal = false;
 			}
 			
 		};
+		
+		sky = new Sky(this);
+		terra = Terra.create(this);
+		stadium = Stadium.create(this);
 		
 		status = STATUS_START;
 	}
@@ -315,9 +346,21 @@ public class MainGame
 		GL11.glLoadIdentity();
 
 		camera.applyRotation();
+		
+		if (status == STATUS_RUNNING)
+		{
+			sky.render();
+		}
+		
 		camera.applyTranslation();
 
 		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, lightPosBuffer);
+		
+		if (status == STATUS_RUNNING)
+		{
+			terra.render();
+			stadium.render();
+		}
 	}
 
 	/**
@@ -554,7 +597,7 @@ public class MainGame
 			return;
 		}
 		
-		modal.setListener(closeListener);
+		modal.setListeners(closeListener, cancelListener);
 		showModal = true;
 	}
 

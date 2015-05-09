@@ -1,4 +1,4 @@
-package edu.columbia.quidditch.util;
+package edu.columbia.quidditch.interact;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -132,22 +132,28 @@ public class InputChecker
 	 */
 	public void checkMouse(float delta)
 	{
+		if (game.isShowingModal())
+		{
+			while (Mouse.next())
+			{
+				if (!Mouse.getEventButtonState() && Mouse.getEventButton() == 0)
+				{
+					game.getModal().checkMouseInput();
+				}
+			}
+			
+			return;
+		}
+		
 		if (!game.isRunning())
 		{
 			while (Mouse.next())
 			{
 				if (!Mouse.getEventButtonState() && Mouse.getEventButton() == 0)
 				{
-					if (game.isShowingModal())
+					if (game.isBeginning())
 					{
-						game.getModal().checkMouseInput();
-					}
-					else
-					{
-						if (game.isBeginning())
-						{
-							game.getStartScreen().checkMouseInput();
-						}
+						game.getStartScreen().checkMouseInput();
 					}
 				}
 			}

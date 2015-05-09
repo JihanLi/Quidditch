@@ -17,7 +17,7 @@ import edu.columbia.quidditch.MainGame;
  */
 public class Camera
 {
-	private static final float MAX_LOOK = 90;
+	private static final float MAX_LOOK = 180;
 
 	private Vector3f cameraRot;
 

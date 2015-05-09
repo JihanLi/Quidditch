@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Material;
 import edu.columbia.quidditch.basic.Texture;
 
@@ -29,7 +30,7 @@ public class ObjLoader
 	{
 		try
 		{
-			System.out.println("Loading model from " + objName);
+			MainGame.log("Loading model from " + objName);
 			return new ObjLoader(objName);
 		}
 		catch (IOException e)

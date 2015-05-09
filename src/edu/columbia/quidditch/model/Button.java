@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Texture;
+import edu.columbia.quidditch.interact.ButtonListener;
 
 /**
  * Button
@@ -50,6 +51,8 @@ public class Button extends Model
 
 	private boolean visible;
 	private String type;
+	
+	private ButtonListener listener;
 
 	public Button(MainGame game, String type, float x, float y, String text)
 	{
@@ -75,7 +78,8 @@ public class Button extends Model
 		textList = GL11.glGenLists(1);
 
 		createList();
-
+		
+		listener = null;
 		visible = true;
 	}
 
@@ -88,6 +92,8 @@ public class Button extends Model
 	@Override
 	protected void createList()
 	{
+		MainGame.log("Creating display lists for button");
+		
 		createBackgroundList();
 		createTextList();
 	}
@@ -120,6 +126,11 @@ public class Button extends Model
 			// TODO
 		}
 		GL11.glEndList();
+	}
+	
+	public void setListener(ButtonListener listener)
+	{
+		this.listener = listener;
 	}
 
 	@Override
@@ -172,5 +183,15 @@ public class Button extends Model
 	public int getName()
 	{
 		return name;
+	}
+	
+	public void click()
+	{
+		if (listener == null)
+		{
+			return;
+		}
+		
+		listener.onClick();
 	}
 }

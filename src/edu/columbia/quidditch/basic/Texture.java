@@ -9,8 +9,9 @@ import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import org.lwjgl.util.glu.GLU;
+
+import edu.columbia.quidditch.MainGame;
 
 /**
  * Texture class
@@ -23,8 +24,8 @@ public class Texture
 	private static final int BYTES_PER_PIXEL = 4;
 
 	// Default method of warp and filters
-	private static final int WARP_S = GL12.GL_CLAMP_TO_EDGE;
-	private static final int WARP_T = GL12.GL_CLAMP_TO_EDGE;
+	private static final int WARP_S = GL11.GL_REPEAT;
+	private static final int WARP_T = GL11.GL_REPEAT;
 
 	private static final int MAG_FILTER = GL11.GL_NEAREST;
 	private static final int MIN_FILTER = GL11.GL_NEAREST;
@@ -43,7 +44,7 @@ public class Texture
 	{
 		try
 		{
-			System.out.println("Loading texture from " + imageName);
+			MainGame.log("Loading texture from " + imageName);
 			return new Texture(imageName);
 		}
 		catch (IOException e)
