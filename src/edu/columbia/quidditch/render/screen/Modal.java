@@ -9,6 +9,14 @@ import edu.columbia.quidditch.basic.Texture;
 import edu.columbia.quidditch.interact.ButtonListener;
 import edu.columbia.quidditch.render.Button;
 
+
+/**
+ * Modal
+ * 
+ * @author Yilin Xiong
+ * 
+ */
+
 public class Modal extends Screen
 {
 	private static Modal singleton;

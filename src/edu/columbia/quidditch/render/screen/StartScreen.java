@@ -10,7 +10,7 @@ import edu.columbia.quidditch.interact.ButtonListener;
 import edu.columbia.quidditch.render.Button;
 
 /**
- * Loading screen, executed in a separated new thread
+ * Start screen
  * 
  * @author Jihan Li
  * 
