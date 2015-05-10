@@ -96,7 +96,7 @@ public class PlayScreen extends Screen
 				{
 				case Keyboard.KEY_Q:
 				case Keyboard.KEY_ESCAPE:
-					game.requestClose();
+					game.requestReturn();
 					break;
 				case Keyboard.KEY_F2:
 				case Keyboard.KEY_F12:

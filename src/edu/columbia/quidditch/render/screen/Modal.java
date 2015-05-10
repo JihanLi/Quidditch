@@ -24,19 +24,36 @@ public class Modal extends Screen
 	}
 	
 	private Texture bg;
+	private Texture textRunning;
+	private Texture textStart;
+	private Boolean modalType; // True for modal in start. False for modal in running.
 	
 	private Modal(MainGame game)
 	{
 		super(game);
 		
 		bg = Texture.createFromFile("res/modal/modalBg.png");
+		textRunning = Texture.createFromFile("res/title/pause.png");
+		textStart = Texture.createFromFile("res/title/quit.png");
 		
+		modalType = true;
 		Button button0 = new Button(game, "Wood", 380, 150, "Confirm", 12);
 		Button button1 = new Button(game, "Wood", 500, 150, "Cancel", 12);
 		
 		addButton(button0);
 		addButton(button1);
 	}
+	
+	public void setModalInRunning()
+	{
+		modalType = false;
+	}
+	
+	public void setModalInStart()
+	{
+		modalType = true;
+	}
+	
 	
 	public void setButtonText(int idx, String text)
 	{
@@ -104,4 +121,17 @@ public class Modal extends Screen
 		
 		return keyReleased;
 	}
+	
+	@Override
+	public void render()
+	{
+		super.render();
+
+		if(modalType)
+			textStart.drawRectangle(345, 230, 270, 81);
+		else
+			textRunning.drawRectangle(345, 230, 270, 81);
+		
+	}
+
 }
