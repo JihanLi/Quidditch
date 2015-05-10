@@ -19,7 +19,7 @@ import edu.columbia.quidditch.render.Terra;
 public class PlayScreen extends Screen
 {
 	private static final float MOUSE_SENSITIVITY = 0.05f;
-	
+
 	// Position of light source
 	private static final float[] LIGHT_POS =
 	{ 3.73f, 5.0f, -1.0f, 0.0f };
@@ -86,7 +86,7 @@ public class PlayScreen extends Screen
 	public boolean checkKeyboardInput(float delta)
 	{
 		boolean keyReleased = false;
-		
+
 		while (Keyboard.next())
 		{
 			if (!Keyboard.getEventKeyState())
@@ -108,7 +108,7 @@ public class PlayScreen extends Screen
 				}
 			}
 		}
-		
+
 		return keyReleased;
 	}
 

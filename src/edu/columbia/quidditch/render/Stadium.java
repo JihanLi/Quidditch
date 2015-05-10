@@ -4,8 +4,9 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
 import edu.columbia.quidditch.MainGame;
@@ -17,7 +18,7 @@ import edu.columbia.quidditch.util.ObjLoader;
 import edu.columbia.quidditch.util.Vector3i;
 
 /**
- * The player itself
+ * Characters
  * 
  * @author Yuqing Guan
  * 
@@ -27,13 +28,7 @@ public class Stadium extends Model
 	// Object file
 	private static final String OBJ_NAME = "res/stadium/stadium.obj";
 
-	private static final String VERTEX_SHADER_NAME = "shaders/default.vsh";
-	private static final String FRAGMENT_SHADER_NAME = "shaders/default.fsh";
-
 	private static final float SHINE = 10.0f;
-
-	private static final Vector3f POS = new Vector3f(0.0f, -200.0f, 0.0f);
-	private static final Vector3f ROT = new Vector3f(0.0f, 0.0f, 0.0f);
 
 	private static ArrayList<Vector3f> verList, texList, norList;
 	private static ArrayList<ArrayList<ArrayList<Vector3i>>> meshList;
@@ -65,8 +60,7 @@ public class Stadium extends Model
 
 		mtlMap = loader.getMtlMap();
 
-		shaderProgram = ShaderProgram.createFromFiles(VERTEX_SHADER_NAME,
-				FRAGMENT_SHADER_NAME, null);
+		shaderProgram = ShaderProgram.getDefaultShader();
 
 		specularBuffer = BufferUtils.createFloatBuffer(4);
 		specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
@@ -75,20 +69,25 @@ public class Stadium extends Model
 	}
 
 	/**
-	 * Create display lists for the plane and the propeller
+	 * Create display lists for the stadium
 	 */
 	private static void createDefaultList()
 	{
 		LoadScreen.log("Creating display list for stadium");
 
-		defaultList = GL11.glGenLists(1);
-		GL11.glNewList(defaultList, GL11.GL_COMPILE);
+		defaultList = glGenLists(1);
+		glNewList(defaultList, GL_COMPILE);
 		{
+			glPushMatrix();
+			
+			glTranslatef(5, -200, -22);
+			glRotatef(59.4f, 0, 1, 0);
+			
 			shaderProgram.bind();
 			shaderProgram.setUniformi("tex", 0);
 
-			GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, specularBuffer);
-			GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, SHINE);
+			glMaterial(GL_FRONT, GL_SPECULAR, specularBuffer);
+			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
 
 			// Draw meshes with corresponding materials
 			for (int i = meshList.size() - 1; i >= 0; --i)
@@ -104,7 +103,7 @@ public class Stadium extends Model
 
 				for (ArrayList<Vector3i> face : mesh)
 				{
-					GL11.glBegin(GL11.GL_POLYGON);
+					glBegin(GL_POLYGON);
 					{
 						for (Vector3i point : face)
 						{
@@ -115,27 +114,29 @@ public class Stadium extends Model
 							if (norIdx != NO_INDEX)
 							{
 								Vector3f nor = norList.get(norIdx);
-								GL11.glNormal3f(nor.x, nor.y, nor.z);
+								glNormal3f(nor.x, nor.y, nor.z);
 							}
 
 							if (texIdx != NO_INDEX)
 							{
 								Vector3f tex = texList.get(texIdx);
-								GL11.glTexCoord2f(tex.x, tex.y);
+								glTexCoord2f(tex.x, tex.y);
 							}
 
 							Vector3f ver = verList.get(verIdx);
-							GL11.glVertex3f(ver.x, ver.y, ver.z);
+							glVertex3f(ver.x, ver.y, ver.z);
 						}
 					}
-					GL11.glEnd();
+					glEnd();
 				}
 			}
 
 			Texture.unbind();
 			ShaderProgram.unbind();
+			
+			glPopMatrix();
 		}
-		GL11.glEndList();
+		glEndList();
 	}
 
 	public static Stadium create(MainGame game)
@@ -162,23 +163,5 @@ public class Stadium extends Model
 	protected void createList()
 	{
 		list = defaultList;
-	}
-
-	/**
-	 * Translate and rotate, draw the spinning propeller, then the whole plane
-	 */
-	@Override
-	public void render()
-	{
-		GL11.glPushMatrix();
-
-		GL11.glTranslatef(POS.x, POS.y, POS.z);
-
-		GL11.glRotatef(ROT.y, 0, 1, 0);
-		GL11.glRotatef(ROT.x, 1, 0, 0);
-
-		GL11.glCallList(defaultList);
-
-		GL11.glPopMatrix();
 	}
 }

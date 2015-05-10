@@ -1,6 +1,6 @@
 package edu.columbia.quidditch.render;
 
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.render.screen.LoadScreen;
@@ -36,6 +36,6 @@ public abstract class Model
 			createList();
 		}
 		
-		GL11.glCallList(list);
+		glCallList(list);
 	}
 }

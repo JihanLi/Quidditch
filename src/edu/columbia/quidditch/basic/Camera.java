@@ -2,8 +2,9 @@ package edu.columbia.quidditch.basic;
 
 import java.nio.FloatBuffer;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -18,7 +19,7 @@ import edu.columbia.quidditch.render.screen.LoadScreen;
  */
 public class Camera
 {
-	private static final float MAX_LOOK = 90;
+	private static final float MAX_LOOK = 360;
 
 	private Vector3f cameraRot;
 
@@ -55,11 +56,11 @@ public class Camera
 	{
 		// Vector3f myselfRot = myself.getRot();
 
-		GL11.glRotatef(cameraRot.x, 1, 0, 0);
-		GL11.glRotatef(cameraRot.y, 0, 1, 0);
+		glRotatef(cameraRot.x, 1, 0, 0);
+		glRotatef(cameraRot.y, 0, 1, 0);
 
-		// GL11.glRotatef(-myselfRot.x, 1, 0, 0);
-		// GL11.glRotatef(-myselfRot.y, 0, 1, 0);
+		// glRotatef(-myselfRot.x, 1, 0, 0);
+		// glRotatef(-myselfRot.y, 0, 1, 0);
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class Camera
 	public void applyTranslation()
 	{
 		// Vector3f pos = myself.getPos();
-		// GL11.glTranslatef(-pos.x, -pos.y, -pos.z);
+		// glTranslatef(-pos.x, -pos.y, -pos.z);
 	}
 
 	/**
@@ -123,7 +124,7 @@ public class Camera
 	public void readMatrix()
 	{
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
+		glGetFloat(GL_MODELVIEW_MATRIX, buffer);
 		matrix.load(buffer);
 	}
 

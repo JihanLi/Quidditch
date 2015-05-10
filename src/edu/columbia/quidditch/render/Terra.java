@@ -72,11 +72,11 @@ public class Terra extends Model
 	private static final float MAX_SNOW_OFFSET = 800.0f;
 	private static final float MAX_GRASS_OFFSET = 800.0f;
 
-	private static final int FLAT_X = 1400;
-	private static final int FLAT_Y = 1400;
+	private static final int FLAT_X = 1000;
+	private static final int FLAT_Z = 1350;
 
 	private static final int FLAT_COL = FLAT_X / CELL_SIZE;
-	private static final int FLAT_ROW = FLAT_Y / CELL_SIZE;
+	private static final int FLAT_ROW = FLAT_Z / CELL_SIZE;
 
 	private static final int MULTIPLE_FLAT = 3;
 	private static final int MULTIPLE_FLAT_COL = FLAT_COL * MULTIPLE_FLAT;

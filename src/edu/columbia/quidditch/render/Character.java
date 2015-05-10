@@ -5,8 +5,9 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -20,12 +21,10 @@ import edu.columbia.quidditch.util.IQELoader;
 
 public class Character extends Model
 {
-	protected static final float SHINE = 25.0f;
-	private static final String MODEL_NAME = "res/char/char.iqe";
+	private static final float SHINE = 25;
+	private static final float SCALE = 10;
 
-	private static final float Y_OFFSET = -2.0f;
-	private static final float Z_OFFSET = -7.0f;
-	private static final float X_ROT = -90.0f;
+	private static final String MODEL_NAME = "res/char/char.iqe";
 
 	private static ArrayList<Integer> jointParentList;
 	private static ArrayList<float[]> jointPQList;
@@ -39,9 +38,6 @@ public class Character extends Model
 	private static ArrayList<HashMap<Integer, Float>> weightList;
 
 	private static int linksize, verSize;
-
-	private static final String VERTEX_SHADER_NAME = "shaders/default.vsh";
-	private static final String FRAGMENT_SHADER_NAME = "shaders/default.fsh";
 
 	static
 	{
@@ -81,26 +77,19 @@ public class Character extends Model
 
 	protected Vector3f pos, rot;
 
-	protected FloatBuffer rotBuffer, specularBuffer;
+	protected FloatBuffer specularBuffer;
 
 	protected Link[] links;
-	protected Matrix4f rotMatrix;
 
 	public Character(MainGame game)
 	{
 		super(game);
 
-		pos = new Vector3f();
-		rot = new Vector3f();
+		pos = new Vector3f(0, 2, -50);
+		rot = new Vector3f(-30, 0, 0);
 
 		specularBuffer = BufferUtils.createFloatBuffer(4);
 		specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
-
-		rotBuffer = BufferUtils.createFloatBuffer(16);
-		rotMatrix = new Matrix4f();
-
-		pos.y = Y_OFFSET;
-		pos.z = Z_OFFSET;
 
 		links = new Link[linksize];
 		links = new Link[linksize];
@@ -127,60 +116,45 @@ public class Character extends Model
 			}
 		}
 
-		rot.x = X_ROT;
 		setDefaultTrans();
-				
+		initFixedPosture();
+
+		shaderProgram = ShaderProgram.getDefaultShader();
+
+		list = glGenLists(1);
+		handDown();
+	}
+	
+	private void initFixedPosture()
+	{
 		links[18].setTheta(45);
-		
+		links[26].setTheta(45);
+
 		links[30].setTheta(15);
 		links[31].setTheta(15);
-		
+
 		links[42].setTheta(-15);
 		links[43].setTheta(-15);
-
-		updateRot();
-
-		shaderProgram = ShaderProgram.createFromFiles(VERTEX_SHADER_NAME,
-				FRAGMENT_SHADER_NAME, null);
-
-		list = GL11.glGenLists(1);
+		
+		links[27].setTheta(-165);
+		links[39].setTheta(-80);
+		
+		links[28].setTheta(-165);
+		links[40].setTheta(-80);
+		
+		links[56].setTheta(0);
+	}
+	
+	public void handDown()
+	{		
+		links[60].setTheta(0);
 		createList();
 	}
-
-	/**
-	 * Update rotation matrix for the whole planner
-	 */
-	protected void updateRot()
+	
+	public void handUp()
 	{
-		GL11.glPushMatrix();
-
-		GL11.glLoadIdentity();
-		GL11.glRotatef(rot.x, 1.0f, 0.0f, 0.0f);
-		GL11.glRotatef(rot.y, 0.0f, 1.0f, 0.0f);
-		GL11.glRotatef(rot.z, 0.0f, 0.0f, 1.0f);
-
-		rotBuffer.rewind();
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, rotBuffer);
-
-		rotMatrix.load(rotBuffer);
-		rotBuffer.flip();
-
-		GL11.glPopMatrix();
-	}
-
-	@Override
-	public void render()
-	{
-		GL11.glPushMatrix();
-
-		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, SHINE);
-
-		GL11.glTranslatef(pos.x, pos.y, pos.z);
-		GL11.glMultMatrix(rotBuffer);
-
-		GL11.glCallList(list);
-
-		GL11.glPopMatrix();
+		links[60].setTheta(90);
+		createList();
 	}
 
 	private void setDefaultTrans()
@@ -325,10 +299,21 @@ public class Character extends Model
 			}
 		}
 
-		GL11.glNewList(list, GL11.GL_COMPILE);
+		glNewList(list, GL_COMPILE);
 		{
-			GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, specularBuffer);
-			GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, SHINE);
+			glPushMatrix();
+
+			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
+
+			glTranslatef(pos.x, pos.y, pos.z);
+			glRotatef(rot.x, 1.0f, 0.0f, 0.0f);
+			glRotatef(rot.y, 0.0f, 1.0f, 0.0f);
+			glRotatef(rot.z, 0.0f, 0.0f, 1.0f);
+
+			glMaterial(GL_FRONT, GL_SPECULAR, specularBuffer);
+			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
+
+			glScalef(SCALE, SCALE, SCALE);
 
 			shaderProgram.bind();
 			shaderProgram.setUniformi("tex", 0);
@@ -349,7 +334,7 @@ public class Character extends Model
 
 				for (ArrayList<Integer> face : mesh)
 				{
-					GL11.glBegin(GL11.GL_POLYGON);
+					glBegin(GL_POLYGON);
 					{
 						int faceSize = face.size();
 
@@ -358,16 +343,16 @@ public class Character extends Model
 							int point = face.get(i);
 
 							Vector3f nor = realNorList[point];
-							GL11.glNormal3f(nor.x, nor.y, nor.z);
+							glNormal3f(nor.x, nor.y, nor.z);
 
 							Vector3f tex = texList.get(point);
-							GL11.glTexCoord2f(tex.x, tex.y);
+							glTexCoord2f(tex.x, tex.y);
 
 							Vector3f ver = realVerList[point];
-							GL11.glVertex3f(ver.x, ver.y, ver.z);
+							glVertex3f(ver.x, ver.y, ver.z);
 						}
 					}
-					GL11.glEnd();
+					glEnd();
 				}
 
 				++idx;
@@ -375,7 +360,9 @@ public class Character extends Model
 
 			Texture.unbind();
 			ShaderProgram.unbind();
+
+			glPopMatrix();
 		}
-		GL11.glEndList();
+		glEndList();
 	}
 }
