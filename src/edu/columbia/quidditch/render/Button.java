@@ -6,6 +6,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import static org.lwjgl.opengl.GL11.*;
+
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Fonts;
 import edu.columbia.quidditch.basic.Texture;
@@ -21,28 +22,31 @@ import edu.columbia.quidditch.render.screen.Screen;
  */
 public class Button extends Model
 {
-	private static final String[] TYPES = { "Green", "Wood" };
+	private static final String[] TYPES =
+	{ "Green", "Wood" };
 	private static final HashMap<String, Texture> normalBg, pressedBg;
 
 	private static final HashMap<String, Float> defaultWidths, defaultHeights;
-	
+
 	static
 	{
 		normalBg = new HashMap<String, Texture>();
 		pressedBg = new HashMap<String, Texture>();
-		
+
 		defaultWidths = new HashMap<String, Float>();
 		defaultHeights = new HashMap<String, Float>();
-		
+
 		for (String type : TYPES)
 		{
-			normalBg.put(type, Texture.createFromFile("res/button/normal" + type + ".png"));
-			pressedBg.put(type, Texture.createFromFile("res/button/pressed" + type + ".png"));
+			normalBg.put(type,
+					Texture.createFromFile("res/button/normal" + type + ".png"));
+			pressedBg.put(type, Texture.createFromFile("res/button/pressed"
+					+ type + ".png"));
 		}
-		
+
 		defaultWidths.put("Green", 250.0f);
 		defaultHeights.put("Green", 90.0f);
-		
+
 		defaultWidths.put("Wood", 100.0f);
 		defaultHeights.put("Wood", 50.0f);
 	}
@@ -55,17 +59,19 @@ public class Button extends Model
 
 	private boolean visible;
 	private String type;
-	
+
 	private ButtonListener listener;
 	private Screen screen;
 
-	public Button(MainGame game, String type, float x, float y, String text, int fontSize)
+	public Button(MainGame game, String type, float x, float y, String text,
+			int fontSize)
 	{
-		this(game, type, x, y, defaultWidths.get(type), defaultHeights.get(type), text, fontSize);
+		this(game, type, x, y, defaultWidths.get(type), defaultHeights
+				.get(type), text, fontSize);
 	}
 
-	public Button(MainGame game, String type, float x, float y, float width, float height,
-			String text, int fontSize)
+	public Button(MainGame game, String type, float x, float y, float width,
+			float height, String text, int fontSize)
 	{
 		super(game);
 
@@ -81,11 +87,11 @@ public class Button extends Model
 
 		normalBgList = glGenLists(1);
 		pressedBgList = glGenLists(1);
-		
+
 		screen = null;
 
 		createList();
-		
+
 		listener = null;
 		visible = true;
 	}
@@ -99,7 +105,7 @@ public class Button extends Model
 	protected void createList()
 	{
 		LoadScreen.log("Creating display lists for button");
-		
+
 		createBackgroundList();
 	}
 
@@ -126,14 +132,14 @@ public class Button extends Model
 	 */
 	private void displayText()
 	{
-		Fonts.draw(x + width/2, y + height/2, text, fontSize);
+		Fonts.draw(x + width / 2, y + height / 2, text, fontSize);
 	}
-	
+
 	public void setListener(ButtonListener listener)
 	{
 		this.listener = listener;
 	}
-	
+
 	public void setScreen(Screen screen)
 	{
 		this.screen = screen;
@@ -169,7 +175,7 @@ public class Button extends Model
 		{
 			return false;
 		}
-		
+
 		if (screen != null && screen != game.getActiveScreen())
 		{
 			return false;
@@ -194,14 +200,14 @@ public class Button extends Model
 	{
 		return name;
 	}
-	
+
 	public void click()
 	{
 		if (listener == null)
 		{
 			return;
 		}
-		
+
 		listener.onClick();
 	}
 }

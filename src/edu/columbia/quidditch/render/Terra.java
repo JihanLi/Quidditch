@@ -10,9 +10,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL20.*;
+
 import org.lwjgl.util.vector.Vector3f;
 
 import edu.columbia.quidditch.MainGame;
@@ -411,25 +412,25 @@ public class Terra extends Model
 	@Override
 	protected void createList()
 	{
-		list = GL11.glGenLists(1);
-		GL11.glNewList(list, GL11.GL_COMPILE);
+		list = glGenLists(1);
+		glNewList(list, GL_COMPILE);
 		{
 			shaderProgram.bind();
 
 			// Set three textures
-			GL13.glActiveTexture(GL13.GL_TEXTURE0);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, grass.getId());
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, grass.getId());
 			shaderProgram.setUniformi("grass", 0);
 
-			GL13.glActiveTexture(GL13.GL_TEXTURE1);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, dirt.getId());
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, dirt.getId());
 			shaderProgram.setUniformi("dirt", 1);
 
-			GL13.glActiveTexture(GL13.GL_TEXTURE2);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, snow.getId());
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, snow.getId());
 			shaderProgram.setUniformi("snow", 2);
 
-			GL13.glActiveTexture(GL13.GL_TEXTURE0);
+			glActiveTexture(GL_TEXTURE0);
 
 			// Set three heights of layers
 			shaderProgram.setUniformf("low", LOW);
@@ -437,7 +438,7 @@ public class Terra extends Model
 			shaderProgram.setUniformf("high", HIGH);
 
 			// Set the shininess, which will only be used for snow
-			GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, SHINE);
+			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
 
 			int lastCol = 0;
 			float lastX = lastCol * CELL_SIZE - HALF_SIZE;
@@ -449,7 +450,7 @@ public class Terra extends Model
 				float x = col * CELL_SIZE - HALF_SIZE;
 				float texX = x / (HALF_SIZE * 2);
 
-				GL11.glBegin(GL11.GL_QUAD_STRIP);
+				glBegin(GL_QUAD_STRIP);
 				{
 					for (int row = 0; row < COLS; ++row)
 					{
@@ -461,28 +462,28 @@ public class Terra extends Model
 						// offsets of heights of snow and grass layers for each
 						// vertex
 						Vector3f normalLeft = computeNormals(row, lastCol);
-						GL11.glNormal3f(normalLeft.x, normalLeft.y,
+						glNormal3f(normalLeft.x, normalLeft.y,
 								normalLeft.z);
-						GL11.glTexCoord2f(lastTexX, texZ);
-						GL20.glVertexAttrib1f(SNOW_OFFSET_LOC,
+						glTexCoord2f(lastTexX, texZ);
+						glVertexAttrib1f(SNOW_OFFSET_LOC,
 								getElement(snowMap, row, lastCol));
-						GL20.glVertexAttrib1f(GRASS_OFFSET_LOC,
+						glVertexAttrib1f(GRASS_OFFSET_LOC,
 								getElement(grassMap, row, lastCol));
-						GL11.glVertex3f(lastX,
+						glVertex3f(lastX,
 								getElement(heightMap, row, lastCol), z);
 
 						Vector3f normalRight = computeNormals(row, col);
-						GL11.glNormal3f(normalRight.x, normalRight.y,
+						glNormal3f(normalRight.x, normalRight.y,
 								normalRight.z);
-						GL11.glTexCoord2f(texX, texZ);
-						GL20.glVertexAttrib1f(SNOW_OFFSET_LOC,
+						glTexCoord2f(texX, texZ);
+						glVertexAttrib1f(SNOW_OFFSET_LOC,
 								getElement(snowMap, row, col));
-						GL20.glVertexAttrib1f(GRASS_OFFSET_LOC,
+						glVertexAttrib1f(GRASS_OFFSET_LOC,
 								getElement(grassMap, row, col));
-						GL11.glVertex3f(x, getElement(heightMap, row, col), z);
+						glVertex3f(x, getElement(heightMap, row, col), z);
 					}
 				}
-				GL11.glEnd();
+				glEnd();
 
 				lastCol = col;
 				lastX = x;
@@ -492,7 +493,7 @@ public class Terra extends Model
 			Texture.unbind();
 			ShaderProgram.unbind();
 		}
-		GL11.glEndList();
+		glEndList();
 	}
 
 	/**

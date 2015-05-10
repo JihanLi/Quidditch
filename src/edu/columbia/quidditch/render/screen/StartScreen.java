@@ -1,6 +1,7 @@
 package edu.columbia.quidditch.render.screen;
 
 import org.lwjgl.input.Keyboard;
+
 import static org.lwjgl.opengl.GL11.*;
 
 import edu.columbia.quidditch.MainGame;

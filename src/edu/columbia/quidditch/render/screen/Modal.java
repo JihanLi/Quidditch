@@ -1,7 +1,8 @@
 package edu.columbia.quidditch.render.screen;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
+
+import static org.lwjgl.opengl.GL11.*;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Texture;
@@ -52,24 +53,24 @@ public class Modal extends Screen
 	{
 		LoadScreen.log("Creating display lists for modal");
 		
-		list = GL11.glGenLists(1);
+		list = glGenLists(1);
 
-		GL11.glNewList(list, GL11.GL_COMPILE);
+		glNewList(list, GL_COMPILE);
 		{
-			GL11.glColor4f(0, 0, 0, 0.5f);
+			glColor4f(0, 0, 0, 0.5f);
 			
-			GL11.glBegin(GL11.GL_QUADS);
+			glBegin(GL_QUADS);
 			
-			GL11.glVertex2f(0, 0);
-			GL11.glVertex2f(0, 540);
-			GL11.glVertex2f(960, 540);
-			GL11.glVertex2f(960, 0);
+			glVertex2f(0, 0);
+			glVertex2f(0, 540);
+			glVertex2f(960, 540);
+			glVertex2f(960, 0);
 			
-			GL11.glEnd();
+			glEnd();
 			
 			bg.drawRectangle(280, 130, 400, 280);
 		}
-		GL11.glEndList();
+		glEndList();
 	}
 
 	@Override

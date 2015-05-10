@@ -1,6 +1,6 @@
 package edu.columbia.quidditch.render;
 
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Texture;
@@ -54,107 +54,107 @@ public class Sky extends Model
 	{
 		LoadScreen.log("Creating display list for sky");
 
-		list = GL11.glGenLists(1);
-		GL11.glNewList(list, GL11.GL_COMPILE);
+		list = glGenLists(1);
+		glNewList(list, GL_COMPILE);
 		{
 			// Top
 			skies[0].bind();
 
-			GL11.glBegin(GL11.GL_QUADS);
+			glBegin(GL_QUADS);
 			{
-				GL11.glTexCoord2f(1.0f, 1.0f);
-				GL11.glVertex3i(SKY_SIZE, SKY_SIZE, -SKY_SIZE);
-				GL11.glTexCoord2f(0.0f, 1.0f);
-				GL11.glVertex3i(-SKY_SIZE, SKY_SIZE, -SKY_SIZE);
-				GL11.glTexCoord2f(0.0f, 0.0f);
-				GL11.glVertex3i(-SKY_SIZE, SKY_SIZE, SKY_SIZE);
-				GL11.glTexCoord2f(1.0f, 0.0f);
-				GL11.glVertex3i(SKY_SIZE, SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex3i(SKY_SIZE, SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex3i(-SKY_SIZE, SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex3i(-SKY_SIZE, SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex3i(SKY_SIZE, SKY_SIZE, SKY_SIZE);
 			}
-			GL11.glEnd();
+			glEnd();
 
 			// Bottom
 			skies[1].bind();
 
-			GL11.glBegin(GL11.GL_QUADS);
+			glBegin(GL_QUADS);
 			{
-				GL11.glTexCoord2f(1.0f, 1.0f);
-				GL11.glVertex3i(SKY_SIZE, -SKY_SIZE, SKY_SIZE);
-				GL11.glTexCoord2f(0.0f, 1.0f);
-				GL11.glVertex3i(-SKY_SIZE, -SKY_SIZE, SKY_SIZE);
-				GL11.glTexCoord2f(0.0f, 0.0f);
-				GL11.glVertex3i(-SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
-				GL11.glTexCoord2f(1.0f, 0.0f);
-				GL11.glVertex3i(SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex3i(SKY_SIZE, -SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex3i(-SKY_SIZE, -SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex3i(-SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex3i(SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
 			}
-			GL11.glEnd();
+			glEnd();
 
 			// Front
 			skies[2].bind();
 
-			GL11.glBegin(GL11.GL_QUADS);
+			glBegin(GL_QUADS);
 			{
-				GL11.glTexCoord2f(1.0f, 1.0f);
-				GL11.glVertex3i(SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
-				GL11.glTexCoord2f(0.0f, 1.0f);
-				GL11.glVertex3i(-SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
-				GL11.glTexCoord2f(0.0f, 0.0f);
-				GL11.glVertex3i(-SKY_SIZE, SKY_SIZE, -SKY_SIZE);
-				GL11.glTexCoord2f(1.0f, 0.0f);
-				GL11.glVertex3i(SKY_SIZE, SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex3i(SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex3i(-SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex3i(-SKY_SIZE, SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex3i(SKY_SIZE, SKY_SIZE, -SKY_SIZE);
 			}
-			GL11.glEnd();
+			glEnd();
 
 			// Back
 			skies[3].bind();
 
-			GL11.glBegin(GL11.GL_QUADS);
+			glBegin(GL_QUADS);
 			{
-				GL11.glTexCoord2f(0.0f, 1.0f);
-				GL11.glVertex3i(SKY_SIZE, -SKY_SIZE, SKY_SIZE);
-				GL11.glTexCoord2f(1.0f, 1.0f);
-				GL11.glVertex3i(-SKY_SIZE, -SKY_SIZE, SKY_SIZE);
-				GL11.glTexCoord2f(1.0f, 0.0f);
-				GL11.glVertex3i(-SKY_SIZE, SKY_SIZE, SKY_SIZE);
-				GL11.glTexCoord2f(0.0f, 0.0f);
-				GL11.glVertex3i(SKY_SIZE, SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex3i(SKY_SIZE, -SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex3i(-SKY_SIZE, -SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex3i(-SKY_SIZE, SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex3i(SKY_SIZE, SKY_SIZE, SKY_SIZE);
 			}
-			GL11.glEnd();
+			glEnd();
 
 			// Left
 			skies[4].bind();
 
-			GL11.glBegin(GL11.GL_QUADS);
+			glBegin(GL_QUADS);
 			{
-				GL11.glTexCoord2f(0.0f, 0.0f);
-				GL11.glVertex3i(-SKY_SIZE, SKY_SIZE, SKY_SIZE);
-				GL11.glTexCoord2f(1.0f, 0.0f);
-				GL11.glVertex3i(-SKY_SIZE, SKY_SIZE, -SKY_SIZE);
-				GL11.glTexCoord2f(1.0f, 1.0f);
-				GL11.glVertex3i(-SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
-				GL11.glTexCoord2f(0.0f, 1.0f);
-				GL11.glVertex3i(-SKY_SIZE, -SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex3i(-SKY_SIZE, SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex3i(-SKY_SIZE, SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex3i(-SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex3i(-SKY_SIZE, -SKY_SIZE, SKY_SIZE);
 			}
-			GL11.glEnd();
+			glEnd();
 
 			// Right
 			skies[5].bind();
 
-			GL11.glBegin(GL11.GL_QUADS);
+			glBegin(GL_QUADS);
 			{
-				GL11.glTexCoord2f(0.0f, 0.0f);
-				GL11.glVertex3i(SKY_SIZE, SKY_SIZE, -SKY_SIZE);
-				GL11.glTexCoord2f(1.0f, 0.0f);
-				GL11.glVertex3i(SKY_SIZE, SKY_SIZE, SKY_SIZE);
-				GL11.glTexCoord2f(1.0f, 1.0f);
-				GL11.glVertex3i(SKY_SIZE, -SKY_SIZE, SKY_SIZE);
-				GL11.glTexCoord2f(0.0f, 1.0f);
-				GL11.glVertex3i(SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex3i(SKY_SIZE, SKY_SIZE, -SKY_SIZE);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex3i(SKY_SIZE, SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex3i(SKY_SIZE, -SKY_SIZE, SKY_SIZE);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex3i(SKY_SIZE, -SKY_SIZE, -SKY_SIZE);
 			}
-			GL11.glEnd();
+			glEnd();
 
 			Texture.unbind();
 		}
-		GL11.glEndList();
+		glEndList();
 	}
 }

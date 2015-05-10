@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
@@ -117,16 +118,14 @@ public class Texture
 		glBindTexture(GL_TEXTURE_2D, texId);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height,
-				GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_RGBA,
+				GL_UNSIGNED_BYTE, buffer);
 
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, WARP_S);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, WARP_T);
 
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-				MAG_FILTER);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-				MIN_FILTER);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, MAG_FILTER);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, MIN_FILTER);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
@@ -141,8 +140,7 @@ public class Texture
 	 */
 	public void bind()
 	{
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
-				GL_REPLACE);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 		glBindTexture(GL_TEXTURE_2D, texId);
 	}
 
@@ -151,8 +149,7 @@ public class Texture
 	 */
 	public void bindWithColor()
 	{
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
-				GL_BLEND);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
 		glBindTexture(GL_TEXTURE_2D, texId);
 	}
 
@@ -160,11 +157,11 @@ public class Texture
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-	
+
 	public void drawRectangle(float x, float y, float width, float height)
 	{
 		bind();
-		
+
 		glBegin(GL_QUADS);
 		{
 			glTexCoord2d(0, 1);
@@ -180,7 +177,7 @@ public class Texture
 			glVertex2d(x + width, y);
 		}
 		glEnd();
-		
+
 		unbind();
 	}
 }

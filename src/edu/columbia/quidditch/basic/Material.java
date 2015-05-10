@@ -1,6 +1,7 @@
 package edu.columbia.quidditch.basic;
 
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
+
 import org.lwjgl.util.vector.Vector3f;
 
 /**
@@ -88,16 +89,16 @@ public class Material
 		Vector3f color;
 		
 		color = ambient;
-		GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT);
-		GL11.glColor4f(color.x, color.y, color.z, transparency);
+		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
+		glColor4f(color.x, color.y, color.z, transparency);
 		
 		color = diffuse;
-		GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE);
-		GL11.glColor4f(color.x, color.y, color.z, transparency);
+		glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+		glColor4f(color.x, color.y, color.z, transparency);
 		
 		color = specular;
-		GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR);
-		GL11.glColor4f(color.x, color.y, color.z, transparency);
+		glColorMaterial(GL_FRONT_AND_BACK, GL_SPECULAR);
+		glColor4f(color.x, color.y, color.z, transparency);
 		
 		if (texture != null)
 		{
@@ -105,7 +106,7 @@ public class Material
 		}
 		else
 		{
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
 	

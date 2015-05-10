@@ -6,7 +6,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
+
+import static org.lwjgl.opengl.GL11.*;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Camera;
@@ -62,10 +63,10 @@ public class PlayScreen extends Screen
 		FloatBuffer diffuseBuffer = floats2Buffer(DIFFUSE);
 		FloatBuffer specularBuffer = floats2Buffer(SPECULAR);
 
-		GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, ambientBuffer);
-		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_AMBIENT, blackBuffer);
-		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, diffuseBuffer);
-		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, specularBuffer);
+		glLightModel(GL_LIGHT_MODEL_AMBIENT, ambientBuffer);
+		glLight(GL_LIGHT0, GL_AMBIENT, blackBuffer);
+		glLight(GL_LIGHT0, GL_DIFFUSE, diffuseBuffer);
+		glLight(GL_LIGHT0, GL_SPECULAR, specularBuffer);
 	}
 
 	@Override
@@ -75,7 +76,7 @@ public class PlayScreen extends Screen
 		sky.render();
 		camera.applyTranslation();
 
-		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, lightPosBuffer);
+		glLight(GL_LIGHT0, GL_POSITION, lightPosBuffer);
 
 		terra.render();
 		stadium.render();
