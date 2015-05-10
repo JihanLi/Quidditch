@@ -22,7 +22,7 @@ import edu.columbia.quidditch.util.IQELoader;
 public class Character extends Model
 {
 	private static final float SHINE = 25;
-	private static final float SCALE = 10;
+	private static final float SCALE = 5;
 
 	private static final String MODEL_NAME = "res/char/char.iqe";
 
@@ -38,7 +38,7 @@ public class Character extends Model
 	private static ArrayList<HashMap<Integer, Float>> weightList;
 
 	private static int linksize, verSize;
-
+	
 	static
 	{
 		try
@@ -75,18 +75,21 @@ public class Character extends Model
 
 	private ShaderProgram shaderProgram;
 
-	protected Vector3f pos, rot;
+	private Vector3f pos, rot;
 
-	protected FloatBuffer specularBuffer;
+	private FloatBuffer specularBuffer;
 
-	protected Link[] links;
+	private Link[] links;
+	private Model broom;
 
 	public Character(MainGame game)
 	{
 		super(game);
+		
+		broom = Broom.create(game);
 
-		pos = new Vector3f(0, 2, -50);
-		rot = new Vector3f(-30, 0, 0);
+		pos = new Vector3f(0, 2, 50);
+		rot = new Vector3f(0, 0, 0);
 
 		specularBuffer = BufferUtils.createFloatBuffer(4);
 		specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
@@ -305,14 +308,10 @@ public class Character extends Model
 
 			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
 
-			glTranslatef(pos.x, pos.y, pos.z);
-			glRotatef(rot.x, 1.0f, 0.0f, 0.0f);
-			glRotatef(rot.y, 0.0f, 1.0f, 0.0f);
-			glRotatef(rot.z, 0.0f, 0.0f, 1.0f);
-
 			glMaterial(GL_FRONT, GL_SPECULAR, specularBuffer);
 			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
 
+			glRotatef(-45, 1, 0, 0);
 			glScalef(SCALE, SCALE, SCALE);
 
 			shaderProgram.bind();
@@ -364,5 +363,22 @@ public class Character extends Model
 			glPopMatrix();
 		}
 		glEndList();
+	}
+	
+	@Override
+	public void render()
+	{
+		glPushMatrix();
+		
+		glTranslatef(pos.x, pos.y, pos.z);
+		glRotatef(rot.x, 1.0f, 0.0f, 0.0f);
+		glRotatef(rot.y, 0.0f, 1.0f, 0.0f);
+		glRotatef(rot.z, 0.0f, 0.0f, 1.0f);
+
+		glCallList(list);
+		
+		broom.render();
+		
+		glPopMatrix();
 	}
 }

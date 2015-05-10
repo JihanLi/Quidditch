@@ -26,6 +26,8 @@ public class ObjLoader
 	private ArrayList<String> mtlList;
 	private HashMap<String, Material> mtlMap;
 	
+	private HashMap<String, Texture> textureMap;
+	
 	public static ObjLoader create(String objName)
 	{
 		try
@@ -174,6 +176,8 @@ public class ObjLoader
 		
 		Material material = null;
 		
+		textureMap = new HashMap<String, Texture>();
+		
 		// Loop until the end of file
 		while ((line = reader.readLine()) != null)
 		{
@@ -194,7 +198,19 @@ public class ObjLoader
 			}
 			else if (array[0].equals("map_Kd")) // image file
 			{
-				Texture texture = Texture.createFromFile(texturePath + exceptFirst(line));
+				String textureName = texturePath + exceptFirst(line);
+				Texture texture;
+				
+				if (textureMap.containsKey(textureName))
+				{
+					texture = textureMap.get(textureName);
+				}
+				else
+				{
+					texture = Texture.createFromFile(textureName);
+					textureMap.put(textureName, texture);
+				}				
+				
 				material.setTexture(texture);
 			}
 			else if (array[0].equals("Kd")) // diffuse color
