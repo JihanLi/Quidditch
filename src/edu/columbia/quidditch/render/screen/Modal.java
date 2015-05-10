@@ -30,8 +30,8 @@ public class Modal extends Screen
 		
 		bg = Texture.createFromFile("res/modal/modalBg.png");
 		
-		Button button0 = new Button(game, "Wood", 380, 150, "Confirm");
-		Button button1 = new Button(game, "Wood", 500, 150, "Cancel");
+		Button button0 = new Button(game, "Wood", 380, 150, "Confirm", 12);
+		Button button1 = new Button(game, "Wood", 500, 150, "Cancel", 12);
 		
 		addButton(button0);
 		addButton(button1);

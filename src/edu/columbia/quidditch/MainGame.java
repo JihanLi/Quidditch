@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
@@ -17,7 +18,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.Drawable;
 import org.lwjgl.opengl.SharedDrawable;
-
 import edu.columbia.quidditch.interact.ButtonListener;
 import edu.columbia.quidditch.render.screen.LoadScreen;
 import edu.columbia.quidditch.render.screen.Modal;
@@ -33,6 +33,7 @@ import edu.columbia.quidditch.render.screen.StartScreen;
  */
 public class MainGame
 {
+
 	private static final String WINDOW_TITLE = "Quidditch World Cup";
 
 	// Default width and height
@@ -75,6 +76,7 @@ public class MainGame
 	private ButtonListener closeListener, cancelListener;
 
 	private PlayScreen playScreen;
+    
 
 	public MainGame()
 	{
@@ -112,7 +114,7 @@ public class MainGame
 	private void createWindow()
 	{
 		try
-		{
+		{	
 			windowed = new DisplayMode(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 			fullscreen = Display.getDesktopDisplayMode();
 
@@ -178,6 +180,7 @@ public class MainGame
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_COLOR_MATERIAL);
+		
 	}
 
 	/**
@@ -501,6 +504,7 @@ public class MainGame
 			}
 		}
 	}
+	
 
 	public static void main(String[] args)
 	{
