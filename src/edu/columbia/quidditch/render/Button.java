@@ -4,9 +4,10 @@ import java.util.HashMap;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import static org.lwjgl.opengl.GL11.*;
 
+import static org.lwjgl.opengl.GL11.*;
 import edu.columbia.quidditch.MainGame;
+import edu.columbia.quidditch.basic.Fonts;
 import edu.columbia.quidditch.basic.Texture;
 import edu.columbia.quidditch.interact.ButtonListener;
 import edu.columbia.quidditch.render.screen.LoadScreen;
@@ -47,8 +48,9 @@ public class Button extends Model
 	}
 
 	private String text;
+	private int fontSize;
 
-	private int normalBgList, pressedBgList, textList, name;
+	private int normalBgList, pressedBgList, name;
 	private float x, y, width, height;
 
 	private boolean visible;
@@ -57,13 +59,13 @@ public class Button extends Model
 	private ButtonListener listener;
 	private Screen screen;
 
-	public Button(MainGame game, String type, float x, float y, String text)
+	public Button(MainGame game, String type, float x, float y, String text, int fontSize)
 	{
-		this(game, type, x, y, defaultWidths.get(type), defaultHeights.get(type), text);
+		this(game, type, x, y, defaultWidths.get(type), defaultHeights.get(type), text, fontSize);
 	}
 
 	public Button(MainGame game, String type, float x, float y, float width, float height,
-			String text)
+			String text, int fontSize)
 	{
 		super(game);
 
@@ -75,10 +77,10 @@ public class Button extends Model
 
 		this.type = type;
 		this.text = text;
+		this.fontSize = fontSize;
 
 		normalBgList = glGenLists(1);
 		pressedBgList = glGenLists(1);
-		textList = glGenLists(1);
 		
 		screen = null;
 
@@ -91,7 +93,6 @@ public class Button extends Model
 	public void setText(String text)
 	{
 		this.text = text;
-		createTextList();
 	}
 
 	@Override
@@ -100,7 +101,6 @@ public class Button extends Model
 		LoadScreen.log("Creating display lists for button");
 		
 		createBackgroundList();
-		createTextList();
 	}
 
 	/**
@@ -124,13 +124,9 @@ public class Button extends Model
 	/**
 	 * Create display list for the text
 	 */
-	private void createTextList()
+	private void displayText()
 	{
-		glNewList(textList, GL_COMPILE);
-		{
-			// TODO
-		}
-		glEndList();
+		Fonts.draw(x + width/2, y + height/2, text, fontSize);
 	}
 	
 	public void setListener(ButtonListener listener)
@@ -159,8 +155,7 @@ public class Button extends Model
 		{
 			glCallList(pressedBgList);
 		}
-		
-		glCallList(textList);
+		displayText();
 	}
 
 	/**

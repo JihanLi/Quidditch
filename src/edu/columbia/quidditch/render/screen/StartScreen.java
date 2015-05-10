@@ -23,11 +23,11 @@ public class StartScreen extends Screen
 		super(game);
 
 		bg = Texture.createFromFile("res/start/main.png");
-		title = Texture.createFromFile("res/title.png");
+		title = Texture.createFromFile("res/title/title.png");
 		
-		Button button0 = new Button(game, "Green", 355, 200, "Start!");
-		Button button1 = new Button(game, "Green", 355, 120, "?");
-		Button button2 = new Button(game, "Green", 355, 40, "Quit");
+		Button button0 = new Button(game, "Green", 355, 200, "Start Game", 18);
+		Button button1 = new Button(game, "Green", 355, 120, "Music On/Off", 18);
+		Button button2 = new Button(game, "Green", 355, 40, "Quit", 18);
 
 		button0.setListener(new ButtonListener()
 		{
