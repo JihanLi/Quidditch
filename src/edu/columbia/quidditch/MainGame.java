@@ -73,7 +73,7 @@ public class MainGame
 	private FloatBuffer projBuffer;
 
 	private Modal modal;
-	private ButtonListener closeListener, cancelListener;
+	private ButtonListener closeListener, cancelListener, returnListener;
 
 	private PlayScreen playScreen;
     
@@ -247,6 +247,18 @@ public class MainGame
 				showModal = false;
 			}
 
+		};
+		
+		returnListener = new ButtonListener()
+		{
+			@Override
+			// TODO Yilin 
+			// Listener clear game after return.
+			public void onClick()
+			{
+				status = STATUS_START;
+				showModal = false;
+			}
 		};
 		
 		playScreen = new PlayScreen(this);
@@ -482,6 +494,16 @@ public class MainGame
 	{
 		modal.setListener(0, closeListener);
 		modal.setListener(1, cancelListener);
+		modal.setModalInStart();
+		showModal = true;
+	}
+	
+	//TODO return Modal
+	public void requestReturn()
+	{
+		modal.setListener(0, returnListener);
+		modal.setListener(1, cancelListener);
+		modal.setModalInRunning();
 		showModal = true;
 	}
 

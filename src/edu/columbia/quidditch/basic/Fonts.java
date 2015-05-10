@@ -10,6 +10,14 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 
+
+/**
+ * Fonts
+ * 
+ * @author Jihan Li
+ * 
+ */
+
 public class Fonts
 {
 	private static UnicodeFont font;
