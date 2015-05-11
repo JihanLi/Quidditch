@@ -14,7 +14,7 @@ import edu.columbia.quidditch.render.screen.LoadScreen;
 /**
  * Camera class
  * 
- * @author Yuqing Guan, Jihan Li
+ * @author Jihan Li, Yuqing Guan
  * 
  */
 public class Camera
@@ -25,6 +25,7 @@ public class Camera
 	private Vector3f cameraPos;
 	private Vector3f globalRot;
 	private Vector3f globalPos;
+
 
 	/**
 	 * Determine whether the world will be rotated by the last mouse move This
@@ -238,7 +239,9 @@ public class Camera
 	}
 
 	public void setGlobalRot(Vector3f globalRot) {
-		this.globalRot = globalRot;
+		this.globalRot.x = globalRot.x;
+		this.globalRot.y = globalRot.y;
+		this.globalRot.z = globalRot.z;
 	}
 
 	public Vector3f getGlobalPos() {
@@ -246,22 +249,17 @@ public class Camera
 	}
 
 	public void setGlobalPos(Vector3f globalPos) {
-		this.globalPos = globalPos;
+		this.globalPos.x = globalPos.x;
+		this.globalPos.y = globalPos.y;
+		this.globalPos.z = globalPos.z;
 	}
 
 	public Vector3f getCameraRot() {
 		return cameraRot;
 	}
 
-	public void setCameraRot(Vector3f cameraRot) {
-		this.cameraRot = cameraRot;
-	}
-
 	public Vector3f getCameraPos() {
 		return cameraPos;
 	}
-
-	public void setCameraPos(Vector3f cameraPos) {
-		this.cameraPos = cameraPos;
-	}
+	
 }
