@@ -88,7 +88,7 @@ public class Character extends Model
 		
 		broom = Broom.create(game);
 
-		pos = new Vector3f(-50, 2, 0);
+		pos = new Vector3f(0, 2, 50);
 		rot = new Vector3f(0, 0, 0);
 
 		specularBuffer = BufferUtils.createFloatBuffer(4);
@@ -156,7 +156,7 @@ public class Character extends Model
 	
 	public void handUp()
 	{
-		links[60].setTheta(60);
+		links[60].setTheta(90);
 		createList();
 	}
 
@@ -380,5 +380,79 @@ public class Character extends Model
 		broom.render();
 		
 		glPopMatrix();
+	}
+	
+	public void rotate(float x, float y, float z)
+	{
+		rotX(x);
+		rotY(y);
+		rotZ(z);
+	}
+	
+	public void rotate(Vector3f rot)
+	{
+		rotX(rot.x);
+		rotY(rot.y);
+		rotZ(rot.z);
+	}
+	
+	public void translate(float x, float y, float z)
+	{
+		transX(x);
+		transY(y);
+		transZ(z);
+	}
+	
+	public void translate(Vector3f val)
+	{
+		transX(val.x);
+		transY(val.y);
+		transZ(val.z);
+	}
+	
+	public void rotX(float delta)
+	{
+		rot.x += delta;
+	}
+
+	public void rotY(float delta)
+	{
+		rot.y += delta;
+	}
+	
+	public void rotZ(float delta)
+	{
+		rot.z += delta;
+	}
+	
+	public void transX(float delta)
+	{
+		pos.x += delta;
+	}
+	
+	public void transY(float delta)
+	{
+		pos.y += delta;
+	}
+	
+	public void transZ(float delta)
+	{
+		pos.z += delta;
+	}
+
+	public Vector3f getPosition() {
+		return pos;
+	}
+
+	public void setPosition(Vector3f pos) {
+		this.pos = pos;
+	}
+
+	public Vector3f getRotation() {
+		return rot;
+	}
+
+	public void setRotation(Vector3f rot) {
+		this.rot = rot;
 	}
 }

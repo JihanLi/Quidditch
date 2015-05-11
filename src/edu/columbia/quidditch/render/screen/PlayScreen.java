@@ -17,6 +17,15 @@ import edu.columbia.quidditch.render.Sky;
 import edu.columbia.quidditch.render.Stadium;
 import edu.columbia.quidditch.render.Terra;
 
+
+/**
+ * Camera class
+ * 
+ * @author Yuqing Guan, Jihan Li
+ * 
+ */
+
+
 public class PlayScreen extends Screen
 {
 	private static final float MOUSE_SENSITIVITY = 0.05f;
@@ -38,6 +47,9 @@ public class PlayScreen extends Screen
 	private FloatBuffer lightPosBuffer;
 
 	private Camera camera;
+	private boolean globalView = true;
+	private float velocity = 5;
+	
 	private Model sky, terra, stadium;
 	private Character character;
 
@@ -46,7 +58,9 @@ public class PlayScreen extends Screen
 		super(game);
 
 		camera = new Camera(game);
-
+		camera.setPosition(camera.getGlobalPos());
+		camera.setRotation(camera.getGlobalRot());
+		
 		sky = new Sky(game);
 		terra = Terra.create(game);
 		stadium = Stadium.create(game);
@@ -87,6 +101,21 @@ public class PlayScreen extends Screen
 	public boolean checkKeyboardInput(float delta)
 	{
 		boolean keyReleased = false;
+		
+		if(globalView)
+		{
+			if(Keyboard.isKeyDown(Keyboard.KEY_UP))
+			{
+				if(camera.getCameraPos().z < 600)
+					camera.translate(0, 0, velocity);
+			}
+			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN))
+			{
+				if(camera.getCameraPos().z > -1200)
+					camera.translate(0, 0, -velocity);
+			}
+		}
+		
 
 		while (Keyboard.next())
 		{
@@ -106,21 +135,67 @@ public class PlayScreen extends Screen
 				case Keyboard.KEY_F11:
 					game.toggleFullscreen();
 					break;
+					
+				case Keyboard.KEY_C:
+					globalView = false;
+					camera.setRotation(character.getRotation());
+					camera.setPosition(character.getPosition());
+					break;
+				case Keyboard.KEY_R:
+					globalView = true;
+					camera.setRotation(camera.getGlobalRot());
+					camera.setPosition(camera.getGlobalPos());
+					break;
+/*				case Keyboard.KEY_UP:
+					if(globalView == true)
+					{
+						camera.translate(0, 0, velocity);
+					}
+					break;
+				case Keyboard.KEY_DOWN:
+					if(globalView == true)
+					{
+						camera.translate(0, 0, -velocity);
+					}
+					break;*/
 				}
 			}
 		}
-
+		
 		return keyReleased;
 	}
 
 	@Override
 	public boolean checkMouseInput(float delta)
 	{
-		if (super.checkMouseInput(delta))
+		/*if (super.checkMouseInput(delta))
 		{
 			return true;
 		}
-
+		
+		// Rotate the camera by mouse
+		if (Display.isActive())
+		{
+			if(Mouse.isInsideWindow() && Mouse.isButtonDown(0))
+			{
+				flag = true;
+			}
+			
+			if(!Mouse.isButtonDown(0) && flag)
+			{
+				flag = false;
+				camera.setRotation(character.getRotation());
+				camera.setPosition(character.getPosition());
+			}
+		}
+		*/
+		
+		
+		/*if (super.checkMouseInput(delta))
+		{
+			return true;
+		}
+		
 		// Rotate the camera by mouse
 		if (Display.isActive())
 		{
@@ -143,7 +218,7 @@ public class PlayScreen extends Screen
 		else
 		{
 			camera.stopSwing();
-		}
+		}*/
 
 		return false;
 	}
