@@ -8,9 +8,9 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import static org.lwjgl.opengl.GL11.*;
-
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Camera;
+import edu.columbia.quidditch.interact.CameraAnimator;
 import edu.columbia.quidditch.render.Character;
 import edu.columbia.quidditch.render.Model;
 import edu.columbia.quidditch.render.Sky;
@@ -48,7 +48,10 @@ public class PlayScreen extends Screen
 
 	private Camera camera;
 	private boolean globalView = true;
+	private boolean gameOn = true;
 	private float velocity = 5;
+	private CameraAnimator animator1;
+	
 	
 	private Model sky, terra, stadium;
 	private Character character;
@@ -60,6 +63,8 @@ public class PlayScreen extends Screen
 		camera = new Camera(game);
 		camera.setPosition(camera.getGlobalPos());
 		camera.setRotation(camera.getGlobalRot());
+		
+		animator1 = new CameraAnimator(1);
 		
 		sky = new Sky(game);
 		terra = Terra.create(game);
@@ -101,6 +106,12 @@ public class PlayScreen extends Screen
 	public boolean checkKeyboardInput(float delta)
 	{
 		boolean keyReleased = false;
+		
+		if(gameOn)
+		{
+			gameOn = animator1.animate(camera);
+			return true;
+		}
 		
 		if(globalView)
 		{
