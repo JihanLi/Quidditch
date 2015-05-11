@@ -114,7 +114,7 @@ public class LoadScreen extends Screen implements Runnable
 
 		Texture.unbind();
 		
-		Fonts.draw(480, 140, lastLog, 16);
+		Fonts.draw(480, 150, lastLog, 16);
 	}
 
 	/**

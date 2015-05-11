@@ -1,4 +1,4 @@
-package edu.columbia.quidditch.render;
+package edu.columbia.quidditch.render.collisionobject;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -8,6 +8,7 @@ import java.util.HashMap;
 import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.glu.Sphere;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -16,13 +17,16 @@ import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Material;
 import edu.columbia.quidditch.basic.ShaderProgram;
 import edu.columbia.quidditch.basic.Texture;
+import edu.columbia.quidditch.render.Broom;
+import edu.columbia.quidditch.render.Model;
 import edu.columbia.quidditch.render.link.Link;
 import edu.columbia.quidditch.util.IQELoader;
 
-public class Character extends Model
+public class Character extends CollisionObject
 {
 	private static final float SHINE = 25;
-	private static final float SCALE = 5;
+	private static final float SCALE = 40;
+	private static final float RADIUS = 85;
 
 	private static final String MODEL_NAME = "res/char/char.iqe";
 
@@ -75,8 +79,6 @@ public class Character extends Model
 
 	private ShaderProgram shaderProgram;
 
-	private Vector3f pos, rot;
-
 	private FloatBuffer specularBuffer;
 
 	private Link[] links;
@@ -84,12 +86,11 @@ public class Character extends Model
 
 	public Character(MainGame game)
 	{
-		super(game);
+		super(game, RADIUS);
 		
 		broom = Broom.create(game);
 
-		pos = new Vector3f(0, 2, 50);
-		rot = new Vector3f(0, 0, 0);
+		inBound = true;
 
 		specularBuffer = BufferUtils.createFloatBuffer(4);
 		specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
@@ -311,9 +312,11 @@ public class Character extends Model
 			glMaterial(GL_FRONT, GL_SPECULAR, specularBuffer);
 			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
 
-			glRotatef(-45, 1, 0, 0);
 			glScalef(SCALE, SCALE, SCALE);
-
+			glTranslatef(0, -1, 2);
+			glRotatef(180, 0, 1, 0);
+			glRotatef(-45, 1, 0, 0);
+			
 			shaderProgram.bind();
 			shaderProgram.setUniformi("tex", 0);
 
@@ -378,6 +381,14 @@ public class Character extends Model
 		glCallList(list);
 		
 		broom.render();
+		
+		glDisable(GL_LIGHTING);
+		Sphere sphere = new Sphere();
+		
+		glColor4f(0, 0, 1, 0.25f);
+		sphere.draw(RADIUS, 32, 32);
+
+		glEnable(GL_LIGHTING);
 		
 		glPopMatrix();
 	}

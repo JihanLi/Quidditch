@@ -29,7 +29,7 @@ public class Broom extends Model
 	private static final String OBJ_NAME = "res/broom/broom.obj";
 
 	private static final float SHINE = 25;
-	private static final float SCALE = 2.5f;
+	private static final float SCALE = 18;
 
 	private static ArrayList<Vector3f> verList, texList, norList;
 	private static ArrayList<ArrayList<ArrayList<Vector3i>>> meshList;
@@ -84,10 +84,9 @@ public class Broom extends Model
 			shaderProgram.bind();
 			shaderProgram.setUniformi("tex", 0);
 
-			glTranslatef(0, 5, -8);
-			glRotatef(90, 1, 0, 0);
-			
 			glScalef(SCALE, SCALE, SCALE);
+			glTranslatef(0, 0, 7.5f);
+			glRotatef(-90, 1, 0, 0);
 			
 			glMaterial(GL_FRONT, GL_SPECULAR, specularBuffer);
 			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
