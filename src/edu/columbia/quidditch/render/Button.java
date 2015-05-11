@@ -26,15 +26,18 @@ public class Button extends Model
 	{ "Green", "Wood" };
 	private static final HashMap<String, Texture> normalBg, pressedBg;
 
-	private static final HashMap<String, Float> defaultWidths, defaultHeights;
+	private static final HashMap<String, Float> widths, heights,
+			textCenterHeights;
 
 	static
 	{
 		normalBg = new HashMap<String, Texture>();
 		pressedBg = new HashMap<String, Texture>();
 
-		defaultWidths = new HashMap<String, Float>();
-		defaultHeights = new HashMap<String, Float>();
+		widths = new HashMap<String, Float>();
+		heights = new HashMap<String, Float>();
+
+		textCenterHeights = new HashMap<String, Float>();
 
 		for (String type : TYPES)
 		{
@@ -44,18 +47,20 @@ public class Button extends Model
 					+ type + ".png"));
 		}
 
-		defaultWidths.put("Green", 250.0f);
-		defaultHeights.put("Green", 90.0f);
+		widths.put("Green", 250.0f);
+		heights.put("Green", 90.0f);
+		textCenterHeights.put("Green", 0.0f);
 
-		defaultWidths.put("Wood", 100.0f);
-		defaultHeights.put("Wood", 50.0f);
+		widths.put("Wood", 100.0f);
+		heights.put("Wood", 50.0f);
+		textCenterHeights.put("Wood", -4.0f);
 	}
 
 	private String text;
 	private int fontSize;
 
-	private int normalBgList, pressedBgList, name;
-	private float x, y, width, height;
+	private int normalBgList, pressedBgList;
+	private float x, y, width, height, textCenterHeight;
 
 	private boolean visible;
 	private String type;
@@ -66,24 +71,18 @@ public class Button extends Model
 	public Button(MainGame game, String type, float x, float y, String text,
 			int fontSize)
 	{
-		this(game, type, x, y, defaultWidths.get(type), defaultHeights
-				.get(type), text, fontSize);
-	}
-
-	public Button(MainGame game, String type, float x, float y, float width,
-			float height, String text, int fontSize)
-	{
 		super(game);
 
 		this.x = x;
 		this.y = y;
 
-		this.width = width;
-		this.height = height;
-
 		this.type = type;
 		this.text = text;
 		this.fontSize = fontSize;
+
+		width = widths.get(type);
+		height = heights.get(type);
+		textCenterHeight = textCenterHeights.get(type);
 
 		normalBgList = glGenLists(1);
 		pressedBgList = glGenLists(1);
@@ -106,14 +105,6 @@ public class Button extends Model
 	{
 		LoadScreen.log("Creating display lists for button");
 
-		createBackgroundList();
-	}
-
-	/**
-	 * Create display list for the square background
-	 */
-	private void createBackgroundList()
-	{
 		glNewList(normalBgList, GL_COMPILE);
 		{
 			normalBg.get(type).drawRectangle(x, y, width, height);
@@ -125,14 +116,6 @@ public class Button extends Model
 			pressedBg.get(type).drawRectangle(x, y, width, height);
 		}
 		glEndList();
-	}
-
-	/**
-	 * Create display list for the text
-	 */
-	private void displayText()
-	{
-		Fonts.draw(x + width / 2, y + height / 2, text, fontSize);
 	}
 
 	public void setListener(ButtonListener listener)
@@ -161,7 +144,8 @@ public class Button extends Model
 		{
 			glCallList(pressedBgList);
 		}
-		displayText();
+		
+		Fonts.draw(x + width / 2, y + height / 2 + textCenterHeight, text, fontSize);
 	}
 
 	/**
@@ -194,11 +178,6 @@ public class Button extends Model
 	public void setVisible(boolean visible)
 	{
 		this.visible = visible;
-	}
-
-	public int getName()
-	{
-		return name;
 	}
 
 	public void click()

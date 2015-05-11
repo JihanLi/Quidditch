@@ -50,7 +50,7 @@ public class Camera
 		cameraRot = new Vector3f(0, 0, 0);
 		cameraPos = new Vector3f(0, 0, 0);
 		globalRot = new Vector3f(30, 0, 0);
-		globalPos = new Vector3f(0, -300, -1200);
+		globalPos = new Vector3f(0, -300, -300);
 
 		swing = false;
 		matrix = new Matrix4f();

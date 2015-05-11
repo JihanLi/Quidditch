@@ -107,6 +107,7 @@ public class PlayScreen extends Screen
 	{
 		boolean keyReleased = false;
 		
+		/*
 		if(gameOn)
 		{
 			gameOn = animator1.animate(camera);
@@ -126,7 +127,7 @@ public class PlayScreen extends Screen
 					camera.translate(0, 0, -velocity);
 			}
 		}
-		
+		*/
 
 		while (Keyboard.next())
 		{
@@ -202,7 +203,7 @@ public class PlayScreen extends Screen
 		*/
 		
 		
-		/*if (super.checkMouseInput(delta))
+		if (super.checkMouseInput(delta))
 		{
 			return true;
 		}
@@ -229,7 +230,7 @@ public class PlayScreen extends Screen
 		else
 		{
 			camera.stopSwing();
-		}*/
+		}
 
 		return false;
 	}

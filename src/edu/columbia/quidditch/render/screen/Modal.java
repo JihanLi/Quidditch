@@ -31,10 +31,10 @@ public class Modal extends Screen
 		return singleton;
 	}
 	
-	private Texture bg;
-	private Texture textRunning;
-	private Texture textStart;
+	private Texture bg, textRunning, textStart;
 	private Boolean modalType; // True for modal in start. False for modal in running.
+	
+	private int textRunningList, textStartList;
 	
 	private Modal(MainGame game)
 	{
@@ -96,6 +96,22 @@ public class Modal extends Screen
 			bg.drawRectangle(280, 130, 400, 280);
 		}
 		glEndList();
+		
+		textStartList = glGenLists(1);
+
+		glNewList(textStartList, GL_COMPILE);
+		{
+			textStart.drawRectangle(345, 230, 270, 81);
+		}
+		glEndList();
+		
+		textRunningList = glGenLists(1);
+
+		glNewList(textRunningList, GL_COMPILE);
+		{
+			textRunning.drawRectangle(345, 230, 270, 81);
+		}
+		glEndList();
 	}
 
 	@Override
@@ -133,13 +149,8 @@ public class Modal extends Screen
 	@Override
 	public void render()
 	{
-		super.render();
-
-		if(modalType)
-			textStart.drawRectangle(345, 230, 270, 81);
-		else
-			textRunning.drawRectangle(345, 230, 270, 81);
-		
+		super.render();	
+		glCallList(modalType ? textStartList : textRunningList);		
 	}
 
 }
