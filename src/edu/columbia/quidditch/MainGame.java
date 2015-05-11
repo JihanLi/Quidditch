@@ -252,8 +252,6 @@ public class MainGame
 		returnListener = new ButtonListener()
 		{
 			@Override
-			// TODO Yilin 
-			// Listener clear game after return.
 			public void onClick()
 			{
 				status = STATUS_START;

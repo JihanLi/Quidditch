@@ -14,7 +14,7 @@ import edu.columbia.quidditch.render.screen.LoadScreen;
 /**
  * Camera class
  * 
- * @author Yuqing Guan
+ * @author Yuqing Guan, Jihan Li
  * 
  */
 public class Camera
@@ -22,6 +22,9 @@ public class Camera
 	private static final float MAX_LOOK = 360;
 
 	private Vector3f cameraRot;
+	private Vector3f cameraPos;
+	private Vector3f globalRot;
+	private Vector3f globalPos;
 
 	/**
 	 * Determine whether the world will be rotated by the last mouse move This
@@ -44,6 +47,9 @@ public class Camera
 		this.game = game;
 		
 		cameraRot = new Vector3f(0, 0, 0);
+		cameraPos = new Vector3f(0, 0, 0);
+		globalRot = new Vector3f(30, 0, 0);
+		globalPos = new Vector3f(0, -300, -1200);
 
 		swing = false;
 		matrix = new Matrix4f();
@@ -62,15 +68,83 @@ public class Camera
 		// glRotatef(-myselfRot.x, 1, 0, 0);
 		// glRotatef(-myselfRot.y, 0, 1, 0);
 	}
+	
+	public void rotate(float x, float y)
+	{
+		// Vector3f myselfRot = myself.getRot();
+
+		rotX(x);
+		rotY(y);
+		//applyRotation();
+
+		// glRotatef(-myselfRot.x, 1, 0, 0);
+		// glRotatef(-myselfRot.y, 0, 1, 0);
+	}
+	
+	public void rotate(Vector3f rot)
+	{
+		// Vector3f myselfRot = myself.getRot();
+
+		rotX(rot.x);
+		rotY(rot.y);
+		//applyRotation();
+
+		// glRotatef(-myselfRot.x, 1, 0, 0);
+		// glRotatef(-myselfRot.y, 0, 1, 0);
+	}
+	
+	public void setRotation(float x, float y, float z)
+	{
+		cameraRot.x = x;
+		cameraRot.y = y;
+		cameraRot.z = z;
+	}
+	
+	public void setRotation(Vector3f rot)
+	{
+		cameraRot.x = rot.x;
+		cameraRot.y = rot.y;
+		cameraRot.z = rot.z;
+	}
 
 	/**
 	 * Translate the world by the position of myself
 	 */
 	public void applyTranslation()
 	{
-		glTranslatef(0, 0, 0);
+		glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
 		// Vector3f pos = myself.getPos();
 		// glTranslatef(-pos.x, -pos.y, -pos.z);
+	}
+	
+	public void translate(float x, float y, float z)
+	{
+		transX(x);
+		transY(y);
+		transZ(z);
+		//applyTranslation();
+	}
+	
+	public void translate(Vector3f pos)
+	{
+		transX(pos.x);
+		transY(pos.y);
+		transZ(pos.z);
+		//applyTranslation();
+	}
+	
+	public void setPosition(float x, float y, float z)
+	{
+		cameraPos.x = x;
+		cameraPos.y = y;
+		cameraPos.z = z;
+	}
+	
+	public void setPosition(Vector3f pos)
+	{
+		cameraPos.x = pos.x;
+		cameraPos.y = pos.y;
+		cameraPos.z = pos.z;
 	}
 
 	/**
@@ -94,6 +168,21 @@ public class Camera
 		cameraRot.y += delta;
 		cameraRot.y = Math.max(-MAX_LOOK, Math.min(MAX_LOOK, cameraRot.y));
 	}
+	
+	public void transX(float delta)
+	{
+		cameraPos.x += delta;
+	}
+	
+	public void transY(float delta)
+	{
+		cameraPos.y += delta;
+	}
+	
+	public void transZ(float delta)
+	{
+		cameraPos.z += delta;
+	}
 
 	/**
 	 * Reset the camera to normal direction Used when the player hit a hill, we
@@ -102,6 +191,11 @@ public class Camera
 	public void resetRot()
 	{
 		cameraRot.x = cameraRot.y = 0;
+	}
+	
+	public void resetPos()
+	{
+		cameraPos.x = cameraPos.y = cameraPos.z = 0;
 	}
 
 	public void startSwing()
@@ -137,5 +231,37 @@ public class Camera
 	public Matrix4f getMatrix()
 	{
 		return matrix;
+	}
+
+	public Vector3f getGlobalRot() {
+		return globalRot;
+	}
+
+	public void setGlobalRot(Vector3f globalRot) {
+		this.globalRot = globalRot;
+	}
+
+	public Vector3f getGlobalPos() {
+		return globalPos;
+	}
+
+	public void setGlobalPos(Vector3f globalPos) {
+		this.globalPos = globalPos;
+	}
+
+	public Vector3f getCameraRot() {
+		return cameraRot;
+	}
+
+	public void setCameraRot(Vector3f cameraRot) {
+		this.cameraRot = cameraRot;
+	}
+
+	public Vector3f getCameraPos() {
+		return cameraPos;
+	}
+
+	public void setCameraPos(Vector3f cameraPos) {
+		this.cameraPos = cameraPos;
 	}
 }
