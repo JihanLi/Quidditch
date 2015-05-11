@@ -68,7 +68,7 @@ public class Camera
 	 */
 	public void applyTranslation()
 	{
-		glTranslatef(0, 0, 0);
+		glTranslatef(0, -200, 0);
 		// Vector3f pos = myself.getPos();
 		// glTranslatef(-pos.x, -pos.y, -pos.z);
 	}

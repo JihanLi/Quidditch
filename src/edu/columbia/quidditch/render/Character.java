@@ -88,7 +88,7 @@ public class Character extends Model
 		
 		broom = Broom.create(game);
 
-		pos = new Vector3f(0, 2, 50);
+		pos = new Vector3f(-50, 2, 0);
 		rot = new Vector3f(0, 0, 0);
 
 		specularBuffer = BufferUtils.createFloatBuffer(4);
@@ -156,7 +156,7 @@ public class Character extends Model
 	
 	public void handUp()
 	{
-		links[60].setTheta(90);
+		links[60].setTheta(60);
 		createList();
 	}
 
