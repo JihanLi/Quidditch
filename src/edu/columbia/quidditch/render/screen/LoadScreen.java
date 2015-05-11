@@ -6,8 +6,8 @@ import org.lwjgl.opengl.Drawable;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
-
 import edu.columbia.quidditch.MainGame;
+import edu.columbia.quidditch.basic.Fonts;
 import edu.columbia.quidditch.basic.Texture;
 
 /**
@@ -33,6 +33,7 @@ public class LoadScreen extends Screen implements Runnable
 			return;
 		}
 		
+		singleton.lastLog = text;
 		++singleton.loadCount;
 	}
 	
@@ -46,15 +47,17 @@ public class LoadScreen extends Screen implements Runnable
 		++singleton.loadCount;
 	}
 	
+	private String lastLog;
 	private int loadCount;	
-	private Texture bg, barBg, barContent;
-	private Texture emblem;
-
+	
+	private Texture bg, barBg, barContent, emblem;
+	
 	public LoadScreen(MainGame game)
 	{
 		super(game);
 		
 		loadCount = 1;
+		lastLog = "";
 		singleton = this;
 
 		bg = Texture.createFromFile("res/loading/loadScreen.png");
@@ -110,6 +113,8 @@ public class LoadScreen extends Screen implements Runnable
 		glEnd();
 
 		Texture.unbind();
+		
+		Fonts.draw(480, 140, lastLog, 16);
 	}
 
 	/**
