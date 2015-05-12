@@ -20,9 +20,8 @@ public class CameraAnimator {
 	private String[] current;
 	
 	// s means stay, t means translate, r means rotate, f means end.
-	public static String[] animation1 = {"s 0 -300 -1200 30 0 0 10", "t 0 -300 -1200 0 -300 0 400", "s 0 -10 0 -10 180 0 20",
-										 "r -10 180 0 -10 -180 0 300", "s 0 -300 -1200 30 0 0 1", 
-										 "f 0 0 0 0 0 0 0"};
+	public static String[] animation1 = {"s 0 -300 -1200 30 0 0 10", "t 0 -300 -1200 0 -300 0 400", "s 0 0 0 -10 180 0 20",
+										 "r -10 180 0 0 90 0 300", "s 0 0 0 -10 0 0 10", "f 0 0 0 0 0 0 0"};
 	
 	public static String[] animation2 = {"t 0 -300 -1200 30 0 0 10", "f 0 0 0 0 0 0 0"};
 	

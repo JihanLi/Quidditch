@@ -67,6 +67,7 @@ public class PlayScreen extends Screen
 	private boolean globalView = true;
 	private boolean gameOn = true;
 	private float velocity = 5;
+	private float offset = 500;
 	private CameraAnimator animator1;
 
 	private Model sky, terra, stadium;
@@ -169,20 +170,25 @@ public class PlayScreen extends Screen
 		if(gameOn) 
 		{ 
 			gameOn = animator1.animate(camera); 
+			if(!gameOn)
+				camera.setRotation(30, 0, 0);
 			return true; 
 		}
 		 
 		if(globalView) 
 		{ 
-			if(Keyboard.isKeyDown(Keyboard.KEY_UP)) 
+			if(camera.getCameraPos().z >= -1400 && camera.getCameraPos().z <= 400) 
 			{
-				if(camera.getCameraPos().z < 600) 
-					camera.translate(0, 0, velocity); 
+				camera.setPosition(camera.getGlobalPos().x, camera.getGlobalPos().y, -(currentPlayer.getPos().z + offset)); 
 			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) 
+			
+			if(camera.getCameraPos().z < -1400)
 			{
-				if(camera.getCameraPos().z > -1200) 
-					camera.translate(0, 0, -velocity); 
+				camera.getCameraPos().z = -1400;
+			}
+			else if(camera.getCameraPos().z > 400)
+			{
+				camera.getCameraPos().z = 400;
 			}
 		}
 		
