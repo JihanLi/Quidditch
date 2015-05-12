@@ -53,7 +53,7 @@ public class Camera
 		cameraRot = new Vector3f(0, 0, 0);
 		cameraPos = new Vector3f(0, 0, 0);
 		globalRot = new Vector3f(30, 0, 0);
-		globalPos = new Vector3f(200, -300, 200);
+		globalPos = new Vector3f(0, -300, -1200);
 
 		swing = false;
 		matrix = new Matrix4f();
@@ -69,7 +69,7 @@ public class Camera
 		glRotatef(cameraRot.x, 1, 0, 0);
 		glRotatef(cameraRot.y, 0, 1, 0);
 
-		Player player = screen.getCurrentPlayer();
+		/*Player player = screen.getCurrentPlayer();
 		if (player == null)
 		{
 			return;
@@ -78,7 +78,7 @@ public class Camera
 		Vector3f playerRot = player.getRot();
 
 		glRotatef(-playerRot.x, 1, 0, 0);
-		glRotatef(-playerRot.y, 0, 1, 0);
+		glRotatef(-playerRot.y, 0, 1, 0);*/
 	}
 
 	public void rotate(float x, float y)
@@ -124,7 +124,9 @@ public class Camera
 	 */
 	public void applyTranslation()
 	{
-		Player player = screen.getCurrentPlayer();
+		
+		glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
+		/*Player player = screen.getCurrentPlayer();
 		if (player == null)
 		{
 			glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
@@ -143,7 +145,7 @@ public class Camera
 		glTranslatef(0, -6, 3);
 		
 		glRotatef(-playerRot.x, 1, 0, 0);
-		glRotatef(-playerRot.y, 0, 1, 0);
+		glRotatef(-playerRot.y, 0, 1, 0);*/
 	}
 
 	public void translate(float x, float y, float z)

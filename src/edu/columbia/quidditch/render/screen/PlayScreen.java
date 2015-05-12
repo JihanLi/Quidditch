@@ -215,12 +215,6 @@ public class PlayScreen extends Screen
 					camera.setRotation(camera.getGlobalRot());
 					camera.setPosition(camera.getGlobalPos());
 					break;
-				/*
-				 * case Keyboard.KEY_UP: if(globalView == true) {
-				 * camera.translate(0, 0, velocity); } break; case
-				 * Keyboard.KEY_DOWN: if(globalView == true) {
-				 * camera.translate(0, 0, -velocity); } break;
-				 */
 				}
 			}
 		}
@@ -235,12 +229,12 @@ public class PlayScreen extends Screen
 			return false;
 		}
 
-		int wheel = Mouse.getDWheel();
+		//int wheel = Mouse.getDWheel();
 
 		boolean keyForward = Keyboard.isKeyDown(Keyboard.KEY_W)
-				|| Keyboard.isKeyDown(Keyboard.KEY_UP) || wheel > 0;
+				|| Keyboard.isKeyDown(Keyboard.KEY_UP)/* || wheel > 0*/;
 		boolean keyBack = Keyboard.isKeyDown(Keyboard.KEY_S)
-				|| Keyboard.isKeyDown(Keyboard.KEY_DOWN) || wheel < 0;
+				|| Keyboard.isKeyDown(Keyboard.KEY_DOWN)/* || wheel < 0*/;
 
 		boolean keyLeft = Keyboard.isKeyDown(Keyboard.KEY_A)
 				|| Keyboard.isKeyDown(Keyboard.KEY_LEFT);
@@ -318,7 +312,7 @@ public class PlayScreen extends Screen
 			return true;
 		}
 
-		// Rotate the camera by mouse
+		/*// Rotate the camera by mouse
 		if (Display.isActive())
 		{
 			if (camera.isSwinging())
@@ -340,7 +334,7 @@ public class PlayScreen extends Screen
 		else
 		{
 			camera.stopSwing();
-		}
+		}*/
 
 		return false;
 	}
@@ -376,5 +370,21 @@ public class PlayScreen extends Screen
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(floats.length);
 		buffer.put(floats).flip();
 		return buffer;
+	}
+
+	public boolean isGlobalView() {
+		return globalView;
+	}
+
+	public void setGlobalView(boolean globalView) {
+		this.globalView = globalView;
+	}
+
+	public boolean isGameOn() {
+		return gameOn;
+	}
+
+	public void setGameOn(boolean gameOn) {
+		this.gameOn = gameOn;
 	}
 }
