@@ -66,19 +66,24 @@ public class Camera
 	 */
 	public void applyRotation()
 	{
-		glRotatef(cameraRot.x, 1, 0, 0);
-		glRotatef(cameraRot.y, 0, 1, 0);
-
-		/*Player player = screen.getCurrentPlayer();
-		if (player == null)
+		if(screen.isGlobalView())
 		{
-			return;
+			glRotatef(cameraRot.x, 1, 0, 0);
+			glRotatef(cameraRot.y, 0, 1, 0);
 		}
-
-		Vector3f playerRot = player.getRot();
-
-		glRotatef(-playerRot.x, 1, 0, 0);
-		glRotatef(-playerRot.y, 0, 1, 0);*/
+		else
+		{
+			Player player = screen.getCurrentPlayer();
+			if (player == null)
+			{
+				return;
+			}
+	
+			Vector3f playerRot = player.getRot();
+	
+			glRotatef(-playerRot.x, 1, 0, 0);
+			glRotatef(-playerRot.y, 0, 1, 0);
+		}
 	}
 
 	public void rotate(float x, float y)
@@ -124,28 +129,33 @@ public class Camera
 	 */
 	public void applyTranslation()
 	{
-		
-		glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
-		/*Player player = screen.getCurrentPlayer();
-		if (player == null)
+		if(screen.isGlobalView())
 		{
 			glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
-
-			return;
 		}
-		Vector3f playerPos = player.getPos();
-
-		glTranslatef(-playerPos.x, -playerPos.y, -playerPos.z);
-
-		Vector3f playerRot = player.getRot();
-
-		glRotatef(playerRot.y, 0, 1, 0);
-		glRotatef(playerRot.x, 1, 0, 0);
-
-		glTranslatef(0, -6, 3);
-		
-		glRotatef(-playerRot.x, 1, 0, 0);
-		glRotatef(-playerRot.y, 0, 1, 0);*/
+		else
+		{
+			Player player = screen.getCurrentPlayer();
+			if (player == null)
+			{
+				glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
+	
+				return;
+			}
+			Vector3f playerPos = player.getPos();
+	
+			glTranslatef(-playerPos.x, -playerPos.y, -playerPos.z);
+	
+			Vector3f playerRot = player.getRot();
+	
+			glRotatef(playerRot.y, 0, 1, 0);
+			glRotatef(playerRot.x, 1, 0, 0);
+	
+			glTranslatef(0, -6, 3);
+			
+			glRotatef(-playerRot.x, 1, 0, 0);
+			glRotatef(-playerRot.y, 0, 1, 0);
+		}
 	}
 
 	public void translate(float x, float y, float z)

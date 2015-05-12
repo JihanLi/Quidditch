@@ -213,13 +213,13 @@ public class PlayScreen extends Screen
 
 				case Keyboard.KEY_C:
 					globalView = false;
-					camera.setRotation(player.getRot());
-					camera.setPosition(player.getPos());
+					//camera.setRotation(player.getRot());
+					//camera.setPosition(player.getPos());
 					break;
 				case Keyboard.KEY_R:
 					globalView = true;
-					camera.setRotation(camera.getGlobalRot());
-					camera.setPosition(camera.getGlobalPos());
+					//camera.setRotation(camera.getGlobalRot());
+					//camera.setPosition(camera.getGlobalPos());
 					break;
 				}
 			}
