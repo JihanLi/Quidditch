@@ -61,7 +61,7 @@ public class LoadScreen extends Screen implements Runnable
 		singleton = this;
 
 		bg = Texture.createFromFile("res/loading/loadScreen.png");
-		emblem = Texture.createFromFile("res/hogwarts1.png");
+		emblem = Texture.createFromFile("res/loading/hogwarts.png");
 		barBg = Texture.createFromFile("res/loading/progress.png");
 		barContent = Texture.createFromFile("res/loading/bar.png");
 	}

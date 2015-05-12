@@ -165,16 +165,27 @@ public class PlayScreen extends Screen
 	{
 		boolean keyReleased = false;
 
-		/*
-		 * if(gameOn) { gameOn = animator1.animate(camera); return true; }
-		 * 
-		 * if(globalView) { if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-		 * if(camera.getCameraPos().z < 600) camera.translate(0, 0, velocity); }
-		 * if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-		 * if(camera.getCameraPos().z > -1200) camera.translate(0, 0,
-		 * -velocity); } }
-		 */
-
+		
+		if(gameOn) 
+		{ 
+			gameOn = animator1.animate(camera); 
+			return true; 
+		}
+		 
+		if(globalView) 
+		{ 
+			if(Keyboard.isKeyDown(Keyboard.KEY_UP)) 
+			{
+				if(camera.getCameraPos().z < 600) 
+					camera.translate(0, 0, velocity); 
+			}
+			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) 
+			{
+				if(camera.getCameraPos().z > -1200) 
+					camera.translate(0, 0, -velocity); 
+			}
+		}
+		
 		while (Keyboard.next())
 		{
 			if (!Keyboard.getEventKeyState())
