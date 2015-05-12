@@ -26,15 +26,17 @@ public class Player extends CollisionObject
 {
 	private static final float SHINE = 25;
 	private static final float SCALE = 3;
-	
+
 	private static final float RADIUS = 6;
 
 	private static final float W = 0.25f;
 	private static final float ACCELERATOR = 0.005f;
-	
+
 	private static final float MIN_V = 0.01f;
 	private static final float MAX_V = 0.3f;
-	
+
+	private static final float RETREAT = 2;
+
 	private static final float MAX_LOOK = 60;
 
 	private static final String MODEL_NAME = "res/char/char.iqe";
@@ -51,9 +53,9 @@ public class Player extends CollisionObject
 	private static ArrayList<HashMap<Integer, Float>> weightList;
 
 	private static int linksize, verSize;
-	
+
 	private static FloatBuffer specularBuffer;
-	
+
 	static
 	{
 		try
@@ -77,7 +79,7 @@ public class Player extends CollisionObject
 			mtlMap = loader.getMtlMap();
 
 			weightList = loader.getWeightList();
-			
+
 			specularBuffer = BufferUtils.createFloatBuffer(4);
 			specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
 		}
@@ -95,15 +97,15 @@ public class Player extends CollisionObject
 
 	private Link[] links;
 	private Model broom;
-	
+
 	private Vector3f rot;
 
 	public Player(MainGame game, PlayScreen screen)
 	{
 		super(game, screen, RADIUS);
-		
+
 		broom = Broom.create(game);
-		
+
 		speed = MIN_V;
 		rot = new Vector3f();
 
@@ -140,7 +142,7 @@ public class Player extends CollisionObject
 		list = glGenLists(1);
 		handDown();
 	}
-	
+
 	private void initFixedPosture()
 	{
 		links[18].setTheta(45);
@@ -151,22 +153,22 @@ public class Player extends CollisionObject
 
 		links[42].setTheta(-15);
 		links[43].setTheta(-15);
-		
+
 		links[27].setTheta(-165);
 		links[39].setTheta(-80);
-		
+
 		links[28].setTheta(-165);
 		links[40].setTheta(-80);
-		
+
 		links[56].setTheta(0);
 	}
-	
+
 	public void handDown()
-	{		
+	{
 		links[60].setTheta(0);
 		createList();
 	}
-	
+
 	public void handUp()
 	{
 		links[60].setTheta(90);
@@ -326,7 +328,7 @@ public class Player extends CollisionObject
 			glTranslatef(0, -1, 2);
 			glRotatef(180, 0, 1, 0);
 			glRotatef(-45, 1, 0, 0);
-			
+
 			shaderProgram.bind();
 			shaderProgram.setUniformi("tex", 0);
 
@@ -377,34 +379,34 @@ public class Player extends CollisionObject
 		}
 		glEndList();
 	}
-	
+
 	@Override
 	public void render()
 	{
 		glPushMatrix();
-		
+
 		glTranslatef(pos.x, pos.y, pos.z);
-		
+
 		glRotatef(rot.y, 0, 1, 0);
 		glRotatef(rot.x, 1, 0, 0);
 
 		glCallList(list);
-		
+
 		broom.render();
-		
+
 		glPopMatrix();
 	}
-	
+
 	public void rotX(int sign, float delta)
 	{
 		rot.x += sign * delta * W;
 		rot.x = Math.max(-MAX_LOOK, Math.min(MAX_LOOK, rot.x));
 	}
-	
+
 	public void rotY(int sign, float delta)
 	{
 		rot.y += sign * delta * W;
-		
+
 		if (rot.y > 180.0f)
 		{
 			rot.y -= 360.0f;
@@ -419,7 +421,7 @@ public class Player extends CollisionObject
 	{
 		rot.x = 0;
 	}
-	
+
 	public void accelerate()
 	{
 		if (speed < MAX_V)
@@ -427,11 +429,11 @@ public class Player extends CollisionObject
 			speed += ACCELERATOR;
 		}
 	}
-	
+
 	public void decelerate()
 	{
 		if (speed > MIN_V)
-		{	
+		{
 			speed -= ACCELERATOR;
 		}
 	}
@@ -439,43 +441,29 @@ public class Player extends CollisionObject
 	@Override
 	protected void refreshVelocity()
 	{
-		v.x = (float) (-Math.sin(Math.toRadians(rot.y)) * Math.cos(Math.toRadians(rot.x)) * speed);
+		v.x = (float) (-Math.sin(Math.toRadians(rot.y))
+				* Math.cos(Math.toRadians(rot.x)) * speed);
 		v.y = (float) (Math.sin(Math.toRadians(rot.x)) * speed);
-		v.z = (float) (-Math.cos(Math.toRadians(rot.y)) * Math.cos(Math.toRadians(rot.x)) * speed);
+		v.z = (float) (-Math.cos(Math.toRadians(rot.y))
+				* Math.cos(Math.toRadians(rot.x)) * speed);
 	}
-	
+
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
-		if ((newPos.y < PlayScreen.BOTTOM && rot.x < 0) || (newPos.y > PlayScreen.TOP && rot.x > 0))
+		if ((newPos.y < PlayScreen.BOTTOM && rot.x < 0)
+				|| (newPos.y > PlayScreen.TOP && rot.x > 0))
 		{
 			rot.x = 0;
 		}
 	}
-	
+
 	@Override
 	protected void doOutOval(Vector3f newPos, float newOvalVal, float delta)
 	{
-		float oldOvalVal = checkOval(pos);
-		
-		for (int i = 0; i < 10 && oldOvalVal < newOvalVal; ++i)
-		{
-			float normal = 90 + (float) Math.toDegrees(Math.atan2(newPos.z, newPos.x * Math.pow(PlayScreen.LONG_AXIS / PlayScreen.SHORT_AXIS, 2)));
-			normal = normalizeAngle(normal);
-			
-			rot.y = normalizeAngle(2 * normal - rot.y + 180);
-			
-			refreshVelocity();
-			newPos.set(pos);
-			
-			newPos.x += v.x * delta;
-			newPos.y += v.y * delta;
-			newPos.z += v.z * delta;
-			
-			newOvalVal = checkOval(newPos);
-		}
+		// TODO Follow tangent
 	}
-	
+
 	private float normalizeAngle(float angle)
 	{
 		angle %= 360.0f;
@@ -491,7 +479,7 @@ public class Player extends CollisionObject
 
 		return angle;
 	}
-	
+
 	public Vector3f getRot()
 	{
 		return rot;
