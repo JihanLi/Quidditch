@@ -127,17 +127,21 @@ public class Modal extends Screen
 				{
 				case Keyboard.KEY_Q:
 				case Keyboard.KEY_ESCAPE:
+					keyReleased = true;
 					buttons.get(1).click();
 					break;
 				case Keyboard.KEY_F2:
 				case Keyboard.KEY_F12:
 				case Keyboard.KEY_P:
+					keyReleased = true;
 					game.screenshot();
 					break;
 				case Keyboard.KEY_F11:
+					keyReleased = true;
 					game.toggleFullscreen();
 					break;
 				case Keyboard.KEY_RETURN:
+					keyReleased = true;
 					buttons.get(0).click();
 				}
 			}

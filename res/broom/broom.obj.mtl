@@ -1,0 +1,23 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.1.187496374)
+
+newmtl broom
+Kd 0.64 0.64 0.64
+Ka 0.5 0.5 0.5
+Ks 0 0 0
+Ke 0 0 0
+d 1
+Ns 384.314
+illum 2
+map_Kd broom_texture.jpg
+
+newmtl metal
+Kd 0.64 0.64 0.64
+Ka 0.5 0.5 0.5
+Ks 0.30916 0.30916 0.30916
+Ke 0 0 0
+d 1
+Ns 823.529
+illum 2
+map_Kd broom_texture.jpg
+

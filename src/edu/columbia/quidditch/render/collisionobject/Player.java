@@ -8,7 +8,6 @@ import java.util.HashMap;
 import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.util.glu.Sphere;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -20,13 +19,23 @@ import edu.columbia.quidditch.basic.Texture;
 import edu.columbia.quidditch.render.Broom;
 import edu.columbia.quidditch.render.Model;
 import edu.columbia.quidditch.render.link.Link;
+import edu.columbia.quidditch.render.screen.PlayScreen;
 import edu.columbia.quidditch.util.IQELoader;
 
-public class Character extends CollisionObject
+public class Player extends CollisionObject
 {
 	private static final float SHINE = 25;
-	private static final float SCALE = 40;
-	private static final float RADIUS = 85;
+	private static final float SCALE = 3;
+	
+	private static final float RADIUS = 6;
+
+	private static final float W = 0.25f;
+	private static final float ACCELERATOR = 0.005f;
+	
+	private static final float MIN_V = 0.01f;
+	private static final float MAX_V = 0.3f;
+	
+	private static final float MAX_LOOK = 60;
 
 	private static final String MODEL_NAME = "res/char/char.iqe";
 
@@ -42,6 +51,8 @@ public class Character extends CollisionObject
 	private static ArrayList<HashMap<Integer, Float>> weightList;
 
 	private static int linksize, verSize;
+	
+	private static FloatBuffer specularBuffer;
 	
 	static
 	{
@@ -66,6 +77,9 @@ public class Character extends CollisionObject
 			mtlMap = loader.getMtlMap();
 
 			weightList = loader.getWeightList();
+			
+			specularBuffer = BufferUtils.createFloatBuffer(4);
+			specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
 		}
 		catch (IOException e)
 		{
@@ -79,21 +93,19 @@ public class Character extends CollisionObject
 
 	private ShaderProgram shaderProgram;
 
-	private FloatBuffer specularBuffer;
-
 	private Link[] links;
 	private Model broom;
+	
+	private Vector3f rot;
 
-	public Character(MainGame game)
+	public Player(MainGame game, PlayScreen screen)
 	{
-		super(game, RADIUS);
+		super(game, screen, RADIUS);
 		
 		broom = Broom.create(game);
-
-		inBound = true;
-
-		specularBuffer = BufferUtils.createFloatBuffer(4);
-		specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
+		
+		speed = MIN_V;
+		rot = new Vector3f();
 
 		links = new Link[linksize];
 		links = new Link[linksize];
@@ -308,9 +320,7 @@ public class Character extends CollisionObject
 			glPushMatrix();
 
 			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
-
 			glMaterial(GL_FRONT, GL_SPECULAR, specularBuffer);
-			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
 
 			glScalef(SCALE, SCALE, SCALE);
 			glTranslatef(0, -1, 2);
@@ -374,96 +384,116 @@ public class Character extends CollisionObject
 		glPushMatrix();
 		
 		glTranslatef(pos.x, pos.y, pos.z);
-		glRotatef(rot.x, 1.0f, 0.0f, 0.0f);
-		glRotatef(rot.y, 0.0f, 1.0f, 0.0f);
-		glRotatef(rot.z, 0.0f, 0.0f, 1.0f);
+		
+		glRotatef(rot.y, 0, 1, 0);
+		glRotatef(rot.x, 1, 0, 0);
 
 		glCallList(list);
 		
 		broom.render();
 		
-		glDisable(GL_LIGHTING);
-		Sphere sphere = new Sphere();
-		
-		glColor4f(0, 0, 1, 0.25f);
-		sphere.draw(RADIUS, 32, 32);
-
-		glEnable(GL_LIGHTING);
-		
 		glPopMatrix();
 	}
 	
-	public void rotate(float x, float y, float z)
+	public void rotX(int sign, float delta)
 	{
-		rotX(x);
-		rotY(y);
-		rotZ(z);
+		rot.x += sign * delta * W;
+		rot.x = Math.max(-MAX_LOOK, Math.min(MAX_LOOK, rot.x));
 	}
 	
-	public void rotate(Vector3f rot)
+	public void rotY(int sign, float delta)
 	{
-		rotX(rot.x);
-		rotY(rot.y);
-		rotZ(rot.z);
-	}
-	
-	public void translate(float x, float y, float z)
-	{
-		transX(x);
-		transY(y);
-		transZ(z);
-	}
-	
-	public void translate(Vector3f val)
-	{
-		transX(val.x);
-		transY(val.y);
-		transZ(val.z);
-	}
-	
-	public void rotX(float delta)
-	{
-		rot.x += delta;
+		rot.y += sign * delta * W;
+		
+		if (rot.y > 180.0f)
+		{
+			rot.y -= 360.0f;
+		}
+		else if (rot.y < -180.0f)
+		{
+			rot.y += 360.0f;
+		}
 	}
 
-	public void rotY(float delta)
+	public void resetRotX()
 	{
-		rot.y += delta;
+		rot.x = 0;
 	}
 	
-	public void rotZ(float delta)
+	public void accelerate()
 	{
-		rot.z += delta;
+		if (speed < MAX_V)
+		{
+			speed += ACCELERATOR;
+		}
 	}
 	
-	public void transX(float delta)
+	public void decelerate()
 	{
-		pos.x += delta;
-	}
-	
-	public void transY(float delta)
-	{
-		pos.y += delta;
-	}
-	
-	public void transZ(float delta)
-	{
-		pos.z += delta;
+		if (speed > MIN_V)
+		{	
+			speed -= ACCELERATOR;
+		}
 	}
 
-	public Vector3f getPosition() {
-		return pos;
+	@Override
+	protected void refreshVelocity()
+	{
+		v.x = (float) (-Math.sin(Math.toRadians(rot.y)) * Math.cos(Math.toRadians(rot.x)) * speed);
+		v.y = (float) (Math.sin(Math.toRadians(rot.x)) * speed);
+		v.z = (float) (-Math.cos(Math.toRadians(rot.y)) * Math.cos(Math.toRadians(rot.x)) * speed);
 	}
-
-	public void setPosition(Vector3f pos) {
-		this.pos = pos;
+	
+	@Override
+	protected void doOutHeight(Vector3f newPos)
+	{
+		if ((newPos.y < PlayScreen.BOTTOM && rot.x < 0) || (newPos.y > PlayScreen.TOP && rot.x > 0))
+		{
+			rot.x = 0;
+		}
 	}
+	
+	@Override
+	protected void doOutOval(Vector3f newPos, float newOvalVal, float delta)
+	{
+		float oldOvalVal = checkOval(pos);
+		
+		for (int i = 0; i < 10 && oldOvalVal < newOvalVal; ++i)
+		{
+			float normal = 90 + (float) Math.toDegrees(Math.atan2(newPos.z, newPos.x * Math.pow(PlayScreen.LONG_AXIS / PlayScreen.SHORT_AXIS, 2)));
+			normal = normalizeAngle(normal);
+			
+			rot.y = normalizeAngle(2 * normal - rot.y + 180);
+			
+			refreshVelocity();
+			newPos.set(pos);
+			
+			newPos.x += v.x * delta;
+			newPos.y += v.y * delta;
+			newPos.z += v.z * delta;
+			
+			newOvalVal = checkOval(newPos);
+		}
+	}
+	
+	private float normalizeAngle(float angle)
+	{
+		angle %= 360.0f;
 
-	public Vector3f getRotation() {
+		if (angle < -180.0f)
+		{
+			angle += 360.0f;
+		}
+		else if (angle > 180.0f)
+		{
+			angle -= 360.0f;
+		}
+
+		return angle;
+	}
+	
+	public Vector3f getRot()
+	{
 		return rot;
-	}
-
-	public void setRotation(Vector3f rot) {
-		this.rot = rot;
 	}
 }

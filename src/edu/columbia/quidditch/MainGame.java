@@ -349,6 +349,7 @@ public class MainGame
 		{
 			screen.checkKeyboardInput(delta);
 			screen.checkMouseInput(delta);
+			screen.move(delta);
 		}
 		
 		if (Display.isCloseRequested())
@@ -525,7 +526,6 @@ public class MainGame
 		}
 	}
 	
-
 	public static void main(String[] args)
 	{
 		new MainGame().run();

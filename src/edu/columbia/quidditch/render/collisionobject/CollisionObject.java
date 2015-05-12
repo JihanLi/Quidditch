@@ -10,24 +10,28 @@ import org.lwjgl.util.vector.Vector3f;
 
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.render.Model;
+import edu.columbia.quidditch.render.screen.PlayScreen;
 
 public abstract class CollisionObject extends Model
 {
 	private static final float COLLISION_DELTA = 1e-3f;
 	
-	protected boolean inBound;
+	protected PlayScreen screen;
 	
 	protected float radius, speed;
-	protected Vector3f pos, rot;
+	protected Vector3f lastPos, pos, v;
 	
-	public CollisionObject(MainGame game, float radius)
+	public CollisionObject(MainGame game, PlayScreen screen, float radius)
 	{
 		super(game);
 		
 		this.radius = radius;
-		
+
+		lastPos = new Vector3f();
 		pos = new Vector3f();
-		rot = new Vector3f();
+		v = new Vector3f();
+		
+		this.screen = screen;
 	}
 	
 	@Override
@@ -36,10 +40,7 @@ public abstract class CollisionObject extends Model
 		glPushMatrix();
 		
 		glTranslatef(pos.x, pos.y, pos.z);
-		glRotatef(rot.x, 1.0f, 0.0f, 0.0f);
-		glRotatef(rot.y, 0.0f, 1.0f, 0.0f);
-		glRotatef(rot.z, 0.0f, 0.0f, 1.0f);
-
+		
 		if (list == NO_LIST)
 		{
 			createList();
@@ -60,10 +61,56 @@ public abstract class CollisionObject extends Model
 	
 	public void move(float delta)
 	{
-		float dist = delta * speed;
+		lastPos.set(pos);
 		
-		pos.x += (float) (-Math.sin(Math.toRadians(rot.y)) * Math.cos(Math.toRadians(rot.x)) * dist);
-		pos.y += (float) (Math.sin(Math.toRadians(rot.x)) * dist);
-		pos.z += (float) (-Math.cos(Math.toRadians(rot.y)) * Math.cos(Math.toRadians(rot.x)) * dist);
+		Vector3f newPos = new Vector3f();
+
+		refreshVelocity();
+		newPos.set(pos);
+		
+		newPos.x += v.x * delta;
+		newPos.y += v.y * delta;
+		newPos.z += v.z * delta;
+		
+		if (!checkHeight(newPos))
+		{
+			doOutHeight(newPos);
+			return;
+		}
+		
+		float newOvalVal = checkOval(newPos);
+		
+		if (newOvalVal > 1)
+		{
+			doOutOval(newPos, newOvalVal, delta);
+			return;
+		}
+		
+		pos.set(newPos);
 	}
+	
+	protected abstract void refreshVelocity();
+
+	protected float checkOval(Vector3f pos)
+	{
+		return (float) (Math.pow(pos.x / PlayScreen.SHORT_AXIS, 2) + Math.pow(pos.z / PlayScreen.LONG_AXIS, 2));
+	}
+	
+	protected boolean checkHeight(Vector3f pos)
+	{
+		return (pos.z < PlayScreen.TOP && pos.y > PlayScreen.BOTTOM);
+	}
+	
+	public void setPos(Vector3f newPos)
+	{
+		pos.set(newPos);
+	}
+	
+	public Vector3f getPos()
+	{
+		return pos;
+	}
+
+	protected abstract void doOutHeight(Vector3f newPos);
+	protected abstract void doOutOval(Vector3f newPos, float newOvalVal, float delta);
 }

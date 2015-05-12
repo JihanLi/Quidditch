@@ -29,7 +29,7 @@ public class Broom extends Model
 	private static final String OBJ_NAME = "res/broom/broom.obj";
 
 	private static final float SHINE = 25;
-	private static final float SCALE = 18;
+	private static final float SCALE = 1;
 
 	private static ArrayList<Vector3f> verList, texList, norList;
 	private static ArrayList<ArrayList<ArrayList<Vector3i>>> meshList;

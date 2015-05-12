@@ -9,7 +9,9 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import edu.columbia.quidditch.MainGame;
+import edu.columbia.quidditch.render.collisionobject.Player;
 import edu.columbia.quidditch.render.screen.LoadScreen;
+import edu.columbia.quidditch.render.screen.PlayScreen;
 
 /**
  * Camera class
@@ -19,13 +21,12 @@ import edu.columbia.quidditch.render.screen.LoadScreen;
  */
 public class Camera
 {
-	private static final float MAX_LOOK = 360;
+	private static final float MAX_LOOK = 90;
 
 	private Vector3f cameraRot;
 	private Vector3f cameraPos;
 	private Vector3f globalRot;
 	private Vector3f globalPos;
-
 
 	/**
 	 * Determine whether the world will be rotated by the last mouse move This
@@ -42,18 +43,22 @@ public class Camera
 
 	private MainGame game;
 
-	public Camera(MainGame game)
+	private PlayScreen screen;
+
+	public Camera(MainGame game, PlayScreen screen)
 	{
 		LoadScreen.increaseLoadCount();
 		this.game = game;
-		
+
 		cameraRot = new Vector3f(0, 0, 0);
 		cameraPos = new Vector3f(0, 0, 0);
 		globalRot = new Vector3f(30, 0, 0);
-		globalPos = new Vector3f(300, 0, 0);
+		globalPos = new Vector3f(200, -300, 200);
 
 		swing = false;
 		matrix = new Matrix4f();
+		
+		this.screen = screen;
 	}
 
 	/**
@@ -61,46 +66,52 @@ public class Camera
 	 */
 	public void applyRotation()
 	{
-		// Vector3f myselfRot = myself.getRot();
-
 		glRotatef(cameraRot.x, 1, 0, 0);
 		glRotatef(cameraRot.y, 0, 1, 0);
 
-		// glRotatef(-myselfRot.x, 1, 0, 0);
-		// glRotatef(-myselfRot.y, 0, 1, 0);
+		Player player = screen.getCurrentPlayer();
+		if (player == null)
+		{
+			return;
+		}
+
+		Vector3f playerRot = player.getRot();
+
+		glRotatef(-playerRot.x, 1, 0, 0);
+		glRotatef(-playerRot.y, 0, 1, 0);
 	}
-	
+
 	public void rotate(float x, float y)
 	{
 		// Vector3f myselfRot = myself.getRot();
 
 		rotX(x);
 		rotY(y);
-		//applyRotation();
+		// applyRotation();
 
 		// glRotatef(-myselfRot.x, 1, 0, 0);
 		// glRotatef(-myselfRot.y, 0, 1, 0);
 	}
-	
+
 	public void rotate(Vector3f rot)
 	{
 		// Vector3f myselfRot = myself.getRot();
 
 		rotX(rot.x);
 		rotY(rot.y);
-		//applyRotation();
+		// applyRotation();
 
 		// glRotatef(-myselfRot.x, 1, 0, 0);
 		// glRotatef(-myselfRot.y, 0, 1, 0);
 	}
-	
+
 	public void setRotation(float x, float y, float z)
 	{
 		cameraRot.x = x;
 		cameraRot.y = y;
 		cameraRot.z = z;
 	}
-	
+
 	public void setRotation(Vector3f rot)
 	{
 		cameraRot.x = rot.x;
@@ -113,34 +124,51 @@ public class Camera
 	 */
 	public void applyTranslation()
 	{
-		glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
-		// Vector3f pos = myself.getPos();
-		// glTranslatef(-pos.x, -pos.y, -pos.z);
+		Player player = screen.getCurrentPlayer();
+		if (player == null)
+		{
+			glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
+
+			return;
+		}
+		Vector3f playerPos = player.getPos();
+
+		glTranslatef(-playerPos.x, -playerPos.y, -playerPos.z);
+
+		Vector3f playerRot = player.getRot();
+
+		glRotatef(playerRot.y, 0, 1, 0);
+		glRotatef(playerRot.x, 1, 0, 0);
+
+		glTranslatef(0, -6, 3);
+		
+		glRotatef(-playerRot.x, 1, 0, 0);
+		glRotatef(-playerRot.y, 0, 1, 0);
 	}
-	
+
 	public void translate(float x, float y, float z)
 	{
 		transX(x);
 		transY(y);
 		transZ(z);
-		//applyTranslation();
+		// applyTranslation();
 	}
-	
+
 	public void translate(Vector3f pos)
 	{
 		transX(pos.x);
 		transY(pos.y);
 		transZ(pos.z);
-		//applyTranslation();
+		// applyTranslation();
 	}
-	
+
 	public void setPosition(float x, float y, float z)
 	{
 		cameraPos.x = x;
 		cameraPos.y = y;
 		cameraPos.z = z;
 	}
-	
+
 	public void setPosition(Vector3f pos)
 	{
 		cameraPos.x = pos.x;
@@ -169,17 +197,17 @@ public class Camera
 		cameraRot.y += delta;
 		cameraRot.y = Math.max(-MAX_LOOK, Math.min(MAX_LOOK, cameraRot.y));
 	}
-	
+
 	public void transX(float delta)
 	{
 		cameraPos.x += delta;
 	}
-	
+
 	public void transY(float delta)
 	{
 		cameraPos.y += delta;
 	}
-	
+
 	public void transZ(float delta)
 	{
 		cameraPos.z += delta;
@@ -193,7 +221,7 @@ public class Camera
 	{
 		cameraRot.x = cameraRot.y = 0;
 	}
-	
+
 	public void resetPos()
 	{
 		cameraPos.x = cameraPos.y = cameraPos.z = 0;
@@ -234,32 +262,38 @@ public class Camera
 		return matrix;
 	}
 
-	public Vector3f getGlobalRot() {
+	public Vector3f getGlobalRot()
+	{
 		return globalRot;
 	}
 
-	public void setGlobalRot(Vector3f globalRot) {
+	public void setGlobalRot(Vector3f globalRot)
+	{
 		this.globalRot.x = globalRot.x;
 		this.globalRot.y = globalRot.y;
 		this.globalRot.z = globalRot.z;
 	}
 
-	public Vector3f getGlobalPos() {
+	public Vector3f getGlobalPos()
+	{
 		return globalPos;
 	}
 
-	public void setGlobalPos(Vector3f globalPos) {
+	public void setGlobalPos(Vector3f globalPos)
+	{
 		this.globalPos.x = globalPos.x;
 		this.globalPos.y = globalPos.y;
 		this.globalPos.z = globalPos.z;
 	}
 
-	public Vector3f getCameraRot() {
+	public Vector3f getCameraRot()
+	{
 		return cameraRot;
 	}
 
-	public Vector3f getCameraPos() {
+	public Vector3f getCameraPos()
+	{
 		return cameraPos;
 	}
-	
+
 }

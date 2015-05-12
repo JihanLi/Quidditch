@@ -16,7 +16,8 @@ import edu.columbia.quidditch.render.Model;
 import edu.columbia.quidditch.render.Sky;
 import edu.columbia.quidditch.render.Stadium;
 import edu.columbia.quidditch.render.Terra;
-import edu.columbia.quidditch.render.collisionobject.Character;
+import edu.columbia.quidditch.render.collisionobject.Ball;
+import edu.columbia.quidditch.render.collisionobject.Player;
 
 /**
  * Camera class
@@ -27,6 +28,12 @@ import edu.columbia.quidditch.render.collisionobject.Character;
 
 public class PlayScreen extends Screen
 {
+	public static final float LONG_AXIS = 1100;
+	public static final float SHORT_AXIS = 420;
+
+	public static final float TOP = 2500;
+	public static final float BOTTOM = -50;
+
 	private static final float MOUSE_SENSITIVITY = 0.05f;
 
 	// Position of light source
@@ -52,6 +59,7 @@ public class PlayScreen extends Screen
 			new Vector3f(73, 74, 986) };
 
 	private static final float DOOR_RADIUS = 16.0f;
+	private static final float DOOR_EXT_RADIUS = 19.0f;
 
 	private FloatBuffer lightPosBuffer;
 
@@ -62,13 +70,14 @@ public class PlayScreen extends Screen
 	private CameraAnimator animator1;
 
 	private Model sky, terra, stadium;
-	private Character character;
+	private Player player, currentPlayer;
+	private Ball ball;
 
 	public PlayScreen(MainGame game)
 	{
 		super(game);
 
-		camera = new Camera(game);
+		camera = new Camera(game, this);
 		camera.setPosition(camera.getGlobalPos());
 		camera.setRotation(camera.getGlobalRot());
 
@@ -77,11 +86,12 @@ public class PlayScreen extends Screen
 		sky = new Sky(game);
 		terra = Terra.create(game);
 		stadium = Stadium.create(game);
-		character = new Character(game);
+		player = new Player(game, this);
+		
+		ball = new Ball(game, this, 0);
+		ball.setPos(new Vector3f(0, 300, -500));
 
-		children.add(sky);
-		children.add(terra);
-		children.add(stadium);
+		currentPlayer = player;
 
 		lightPosBuffer = floats2Buffer(LIGHT_POS);
 
@@ -94,6 +104,16 @@ public class PlayScreen extends Screen
 		glLight(GL_LIGHT0, GL_AMBIENT, blackBuffer);
 		glLight(GL_LIGHT0, GL_DIFFUSE, diffuseBuffer);
 		glLight(GL_LIGHT0, GL_SPECULAR, specularBuffer);
+		
+		children.add(terra);
+		children.add(stadium);
+		children.add(player);
+		children.add(ball);
+	}
+
+	public Player getCurrentPlayer()
+	{
+		return currentPlayer;
 	}
 
 	@Override
@@ -105,9 +125,7 @@ public class PlayScreen extends Screen
 
 		glLight(GL_LIGHT0, GL_POSITION, lightPosBuffer);
 
-		terra.render();
-		stadium.render();
-		character.render();
+		super.render();
 
 		glDisable(GL_LIGHTING);
 
@@ -178,8 +196,8 @@ public class PlayScreen extends Screen
 
 				case Keyboard.KEY_C:
 					globalView = false;
-					camera.setRotation(character.getRotation());
-					camera.setPosition(character.getPosition());
+					camera.setRotation(player.getRot());
+					camera.setPosition(player.getPos());
 					break;
 				case Keyboard.KEY_R:
 					globalView = true;
@@ -194,6 +212,77 @@ public class PlayScreen extends Screen
 				 */
 				}
 			}
+		}
+
+		if (keyReleased)
+		{
+			return true;
+		}
+		
+		if (currentPlayer == null)
+		{
+			return false;
+		}
+
+		int wheel = Mouse.getDWheel();
+
+		boolean keyForward = Keyboard.isKeyDown(Keyboard.KEY_W)
+				|| Keyboard.isKeyDown(Keyboard.KEY_UP) || wheel > 0;
+		boolean keyBack = Keyboard.isKeyDown(Keyboard.KEY_S)
+				|| Keyboard.isKeyDown(Keyboard.KEY_DOWN) || wheel < 0;
+
+		boolean keyLeft = Keyboard.isKeyDown(Keyboard.KEY_A)
+				|| Keyboard.isKeyDown(Keyboard.KEY_LEFT);
+		boolean keyRight = Keyboard.isKeyDown(Keyboard.KEY_D)
+				|| Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
+
+		boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_SPACE);
+		boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+
+		boolean keyReset = Keyboard.isKeyDown(Keyboard.KEY_R);
+		
+		keyReleased = keyForward || keyBack ||  keyLeft || keyRight || keyUp || keyDown || keyReset;
+
+		// Turn left myself
+		if (keyLeft)
+		{
+			currentPlayer.rotY(1, delta);
+		}
+
+		// Turn right myself
+		if (keyRight)
+		{
+			currentPlayer.rotY(-1, delta);
+		}
+
+		// Turn up myself
+		if (keyUp)
+		{
+			currentPlayer.rotX(1, delta);
+		}
+
+		// Turn down myself
+		if (keyDown)
+		{
+			currentPlayer.rotX(-1, delta);
+		}
+
+		// Reset myself to a horizontal direction
+		if (keyReset)
+		{
+			currentPlayer.resetRotX();
+		}
+
+		// Accelerate
+		if (keyForward)
+		{
+			currentPlayer.accelerate();
+		}
+
+		// Decelerate
+		if (keyBack)
+		{
+			currentPlayer.decelerate();
 		}
 
 		return keyReleased;
@@ -244,11 +333,20 @@ public class PlayScreen extends Screen
 
 		return false;
 	}
+	
+	@Override
+	public void move(float delta)
+	{
+		player.move(delta);
+		ball.move(delta);
+	}
 
 	@Override
 	protected void createList()
 	{
-
+		list = glGenLists(1);
+		glNewList(list, GL_COMPILE);
+		glEndList();
 	}
 
 	public Camera getCamera()

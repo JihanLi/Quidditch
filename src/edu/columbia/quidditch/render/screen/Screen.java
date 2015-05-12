@@ -63,4 +63,9 @@ public abstract class Screen extends Model
 	}
 	
 	public abstract boolean checkKeyboardInput(float delta);
+	
+	public void move(float delta)
+	{
+		
+	}
 }
