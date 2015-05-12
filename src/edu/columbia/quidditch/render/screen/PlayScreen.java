@@ -229,6 +229,10 @@ public class PlayScreen extends Screen
 			return false;
 		}
 
+		if (!currentPlayer.isControllable())
+		{
+			return true;
+		}
 		//int wheel = Mouse.getDWheel();
 
 		boolean keyForward = Keyboard.isKeyDown(Keyboard.KEY_W)

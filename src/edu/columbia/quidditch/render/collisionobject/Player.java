@@ -31,7 +31,8 @@ public class Player extends CollisionObject
 
 	private static final float W = 0.25f;
 	private static final float ACCELERATOR = 0.005f;
-
+	private static final float GRAVITY = -0.05f;
+	
 	private static final float MIN_V = 0.01f;
 	private static final float MAX_V = 0.3f;
 
@@ -55,7 +56,9 @@ public class Player extends CollisionObject
 	private static int linksize, verSize;
 
 	private static FloatBuffer specularBuffer;
-
+	
+	protected boolean controllable = true;
+	
 	static
 	{
 		try
@@ -441,27 +444,46 @@ public class Player extends CollisionObject
 	@Override
 	protected void refreshVelocity()
 	{
-		v.x = (float) (-Math.sin(Math.toRadians(rot.y))
-				* Math.cos(Math.toRadians(rot.x)) * speed);
-		v.y = (float) (Math.sin(Math.toRadians(rot.x)) * speed);
-		v.z = (float) (-Math.cos(Math.toRadians(rot.y))
-				* Math.cos(Math.toRadians(rot.x)) * speed);
+		if (controllable)
+		{
+			v.x = (float) (-Math.sin(Math.toRadians(rot.y))
+					* Math.cos(Math.toRadians(rot.x)) * speed);
+			v.y = (float) (Math.sin(Math.toRadians(rot.x)) * speed);
+			v.z = (float) (-Math.cos(Math.toRadians(rot.y))
+					* Math.cos(Math.toRadians(rot.x)) * speed);
+		}
+		else
+		{
+			v.y += GRAVITY;
+		}
 	}
 
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
-		if ((newPos.y < PlayScreen.BOTTOM && rot.x < 0)
-				|| (newPos.y > PlayScreen.TOP && rot.x > 0))
+		
+		if (newPos.y < PlayScreen.BOTTOM)
 		{
-			rot.x = 0;
+			controllable = true;
+		} 
+		else
+		{
+			controllable = false;
 		}
+		
+		v.y = 0;
+		speed = 0;
+		rot.x = 0;
 	}
 
 	@Override
 	protected void doOutOval(Vector3f newPos, float newOvalVal, float delta)
 	{
-		// TODO Follow tangent
+		v.x = 0;
+		v.y = 0;
+		v.z = 0;
+		speed = 0;
+		controllable = false;
 	}
 
 	private float normalizeAngle(float angle)
@@ -484,4 +506,9 @@ public class Player extends CollisionObject
 	{
 		return rot;
 	}
+	
+	public boolean isControllable() {
+		return controllable;
+	}
+
 }
