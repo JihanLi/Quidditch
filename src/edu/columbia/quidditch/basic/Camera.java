@@ -155,7 +155,7 @@ public class Camera
 			glRotatef(playerRot.y, 0, 1, 0);
 			glRotatef(playerRot.x, 1, 0, 0);
 	
-			glTranslatef(0, -6, 3);
+			glTranslatef(0, -42, 21);
 			
 			glRotatef(-playerRot.x, 1, 0, 0);
 			glRotatef(-playerRot.y, 0, 1, 0);
