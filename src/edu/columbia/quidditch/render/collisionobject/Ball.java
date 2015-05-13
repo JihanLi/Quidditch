@@ -133,5 +133,12 @@ public class Ball extends CollisionObject
 					holder.getPos().y + 5*vel.y/distance, 
 					holder.getPos().z + 5*vel.z/distance);
 	}
+	
+	@Override
+	public void reset()
+	{
+		super.reset();
+		isHold = false;
+	}
 
 }
