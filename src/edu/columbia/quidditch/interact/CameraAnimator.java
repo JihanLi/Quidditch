@@ -23,7 +23,9 @@ public class CameraAnimator {
 	public static String[] animation1 = {"s 0 -300 -1200 30 0 0 10", "t 0 -300 -1200 0 -300 0 400", "s 0 0 0 -10 180 0 20",
 										 "r -10 180 0 0 90 0 300", "s 0 0 0 -10 0 0 10", "f 0 0 0 0 0 0 0"};
 	
-	public static String[] animation2 = {"t 0 -300 -1200 30 0 0 10", "f 0 0 0 0 0 0 0"};
+	public static String[] animation2 = {"s 0 -200 -1000 30 0 0 10", "t 0 -200 -1000 0 -100 -500 200", "s 0 0 0 10 180 0 20",
+										"t 0 0 0 0 -45 0 300", "s 0 -45 0 10 180 0 20", "s 100 -45 50 0 180 0 20", 
+										"r 0 180 0 0 90 0 300", "s 100 -45 50 0 0 0 20", "f 0 0 0 0 0 0 0"};
 	
 	
 	public CameraAnimator(int index)
