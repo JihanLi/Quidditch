@@ -24,6 +24,11 @@ import edu.columbia.quidditch.util.IQELoader;
 
 public class Player extends CollisionObject
 {
+	public static final int TEAM_GRYFFINDOR = 0;
+	public static final int TEAM_SLYTHERIN = 1;
+	public static final int TEAM_RAVENCLAW = 2;
+	public static final int TEAM_HUFFLEPUFF = 3;
+	
 	private static final float SHINE = 25;
 	private static final float SCALE = 20;
 
@@ -35,8 +40,6 @@ public class Player extends CollisionObject
 	
 	private static final float MIN_V = 0.01f;
 	private static final float MAX_V = 0.2f;
-
-	private static final float RETREAT = 2;
 
 	private static final float MAX_LOOK = 60;
 
@@ -58,6 +61,8 @@ public class Player extends CollisionObject
 	private static FloatBuffer specularBuffer;
 	
 	protected boolean controllable = true;
+	
+	private static HashMap<String, Material[]> mutableMtls;
 	
 	static
 	{
@@ -85,6 +90,102 @@ public class Player extends CollisionObject
 
 			specularBuffer = BufferUtils.createFloatBuffer(4);
 			specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
+			
+			Texture[] coats, emblems, shirts;
+			
+			coats = new Texture[4];
+			emblems = new Texture[4];
+			shirts = new Texture[4];
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				coats[i] = Texture.createFromFile("res/char/textures/coat" + i + ".png");
+				emblems[i] = Texture.createFromFile("res/char/textures/emblem" + i + ".png");
+				shirts[i] = Texture.createFromFile("res/char/textures/shirt" + i + ".png");
+			}
+			
+			mutableMtls = new HashMap<String, Material[]>();
+			
+			Material[] mutableMtl;
+			String mtlName;
+			Material originMtl;
+			
+			mutableMtl = new Material[4];
+			mtlName = "Material7";
+			originMtl = mtlMap.get(mtlName);
+			mutableMtls.put(mtlName, mutableMtl);
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				mutableMtl[i] = originMtl.copy();
+				mutableMtl[i].setTexture(coats[i]);
+			}
+			
+			mutableMtl = new Material[4];
+			mtlName = "Material8";
+			originMtl = mtlMap.get(mtlName);
+			mutableMtls.put(mtlName, mutableMtl);
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				mutableMtl[i] = originMtl.copy();
+				mutableMtl[i].setTexture(coats[i]);
+			}
+			
+			mutableMtl = new Material[4];
+			mtlName = "Material9";
+			originMtl = mtlMap.get(mtlName);
+			mutableMtls.put(mtlName, mutableMtl);
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				mutableMtl[i] = originMtl.copy();
+				mutableMtl[i].setTexture(coats[i]);
+			}
+			
+			mutableMtl = new Material[4];
+			mtlName = "Material10";
+			originMtl = mtlMap.get(mtlName);
+			mutableMtls.put(mtlName, mutableMtl);
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				mutableMtl[i] = originMtl.copy();
+				mutableMtl[i].setTexture(emblems[i]);
+			}
+			
+			mutableMtl = new Material[4];
+			mtlName = "Material11";
+			originMtl = mtlMap.get(mtlName);
+			mutableMtls.put(mtlName, mutableMtl);
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				mutableMtl[i] = originMtl.copy();
+				mutableMtl[i].setTexture(coats[i]);
+			}
+			
+			mutableMtl = new Material[4];
+			mtlName = "Material12";
+			originMtl = mtlMap.get(mtlName);
+			mutableMtls.put(mtlName, mutableMtl);
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				mutableMtl[i] = originMtl.copy();
+				mutableMtl[i].setTexture(coats[i]);
+			}
+			
+			mutableMtl = new Material[4];
+			mtlName = "Material13";
+			originMtl = mtlMap.get(mtlName);
+			mutableMtls.put(mtlName, mutableMtl);
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				mutableMtl[i] = originMtl.copy();
+				mutableMtl[i].setTexture(coats[i]);
+			}
 		}
 		catch (IOException e)
 		{
@@ -102,15 +203,22 @@ public class Player extends CollisionObject
 	private Model broom;
 
 	private Vector3f rot;
-
-	public Player(MainGame game, PlayScreen screen, Vector3f defaultPos)
+	
+	private int team, handUpList;
+	private boolean handDown;
+	
+	public Player(MainGame game, PlayScreen screen, int team, Vector3f defaultPos)
 	{
 		super(game, screen, RADIUS, defaultPos);
 
 		broom = Broom.create(game);
 
-		speed = MIN_V;
 		rot = new Vector3f();
+		
+		handDown = true;
+		this.team = team;
+		
+		handUpList = glGenLists(1);
 
 		links = new Link[linksize];
 		links = new Link[linksize];
@@ -143,7 +251,12 @@ public class Player extends CollisionObject
 		shaderProgram = ShaderProgram.getDefaultShader();
 
 		list = glGenLists(1);
-		handDown();
+		createList();
+	}
+	
+	public int getTeam()
+	{
+		return team;
 	}
 
 	private void initFixedPosture()
@@ -168,14 +281,27 @@ public class Player extends CollisionObject
 
 	public void handDown()
 	{
-		links[60].setTheta(0);
-		createList();
+		handDown = true;
 	}
 
 	public void handUp()
 	{
-		links[60].setTheta(90);
+		handDown = false;
+	}
+	
+	public void setTeam(int team)
+	{
+		this.team = team;
 		createList();
+	}
+	
+	@Override
+	protected void createList()
+	{
+		links[60].setTheta(0);
+		draw(list);		
+		links[60].setTheta(90);
+		draw(handUpList);
 	}
 
 	private void setDefaultTrans()
@@ -249,8 +375,7 @@ public class Player extends CollisionObject
 		}
 	}
 
-	@Override
-	protected void createList()
+	private void draw(int currentList)
 	{
 		Matrix4f[] globalTrans = new Matrix4f[linksize];
 		Matrix4f[] invTranTrans = new Matrix4f[linksize];
@@ -320,7 +445,7 @@ public class Player extends CollisionObject
 			}
 		}
 
-		glNewList(list, GL_COMPILE);
+		glNewList(currentList, GL_COMPILE);
 		{
 			glPushMatrix();
 
@@ -341,8 +466,18 @@ public class Player extends CollisionObject
 			for (ArrayList<ArrayList<Integer>> mesh : meshList)
 			{
 				String mtlName = mtlList.get(idx);
-
-				Material material = mtlMap.get(mtlName);
+				
+				Material material;
+				
+				if (mutableMtls.containsKey(mtlName))
+				{
+					material = mutableMtls.get(mtlName)[team];
+				}
+				else
+				{
+					material = mtlMap.get(mtlName);
+				}
+				
 				material.bind();
 				shaderProgram.setUniformi("hasTex", material.hasTexture() ? 1
 						: 0);
@@ -393,7 +528,7 @@ public class Player extends CollisionObject
 		glRotatef(rot.y, 0, 1, 0);
 		glRotatef(rot.x, 1, 0, 0);
 
-		glCallList(list);
+		glCallList(handDown ? list : handUpList);
 
 		broom.render();
 
@@ -486,22 +621,6 @@ public class Player extends CollisionObject
 		controllable = false;
 	}
 
-	private float normalizeAngle(float angle)
-	{
-		angle %= 360.0f;
-
-		if (angle < -180.0f)
-		{
-			angle += 360.0f;
-		}
-		else if (angle > 180.0f)
-		{
-			angle -= 360.0f;
-		}
-
-		return angle;
-	}
-
 	public Vector3f getRot()
 	{
 		return rot;
@@ -517,5 +636,4 @@ public class Player extends CollisionObject
 		super.reset();
 		rot.set(0, 0, 0);
 	}
-
 }

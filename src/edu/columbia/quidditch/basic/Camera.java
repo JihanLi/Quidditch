@@ -74,6 +74,10 @@ public class Camera
 		else
 		{
 			Player player = screen.getCurrentPlayer();
+			
+			glRotatef(cameraRot.x, 1, 0, 0);
+			glRotatef(cameraRot.y, 0, 1, 0);
+			
 			if (player == null)
 			{
 				return;

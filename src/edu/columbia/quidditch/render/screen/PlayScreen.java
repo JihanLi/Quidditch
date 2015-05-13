@@ -22,7 +22,7 @@ import edu.columbia.quidditch.render.collisionobject.Player;
 /**
  * Camera class
  * 
- * @author Yuqing Guan, Jihan Li, Yilin Xiong
+ * @author Yuqing Guan, Jihan Li
  * 
  */
 
@@ -87,9 +87,8 @@ public class PlayScreen extends Screen
 		sky = new Sky(game);
 		terra = Terra.create(game);
 		stadium = Stadium.create(game);
-		
 		Vector3f a = new Vector3f(0, 0, 0);
-		player = new Player(game, this, a);
+		player = new Player(game, this, 1, a);
 		
 		ball = new Ball(game, this, 0, new Vector3f(0, 200, 0));
 
@@ -174,12 +173,15 @@ public class PlayScreen extends Screen
 	{
 		boolean keyReleased = false;
 		
-		if (gameOn)
-		{
-			return true;
+		if(gameOn) 
+		{ 
+			gameOn = animator1.animate(camera); 
+			if(!gameOn)
+				camera.setRotation(30, 0, 0);
+			return true; 
 		}
 		 
-		if (globalView) 
+		if(globalView) 
 		{ 
 			if(camera.getCameraPos().z >= -1400 && camera.getCameraPos().z <= 400) 
 			{
