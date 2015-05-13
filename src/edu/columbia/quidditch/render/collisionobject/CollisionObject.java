@@ -142,6 +142,13 @@ public abstract class CollisionObject extends Model
 		velocity.set(0, 0, 0);
 		speed = 0;
 	}
+	
+	public float distance(CollisionObject object)
+	{
+		Vector3f dis = new Vector3f();
+		Vector3f.sub(pos, object.getPos(), dis);
+		return dis.length();
+	}
 
 	protected abstract void doOutHeight(Vector3f newPos);
 	protected abstract void doOutOval(Vector3f newPos, float newOvalVal, float delta);

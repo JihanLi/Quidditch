@@ -30,9 +30,9 @@ public class Player extends CollisionObject
 	public static final int TEAM_HUFFLEPUFF = 3;
 	
 	private static final float SHINE = 25;
-	private static final float SCALE = 20;
+	private static final float SCALE = 21;
 
-	private static final float RADIUS = 30;
+	private static final float RADIUS = 42;
 
 	private static final float W = 0.25f;
 	private static final float ACCELERATOR = 0.002f;
@@ -60,7 +60,8 @@ public class Player extends CollisionObject
 
 	private static FloatBuffer specularBuffer;
 	
-	protected boolean controllable = true;
+	private boolean controllable = true;
+	private boolean inUserTeam = true;
 	
 	private static HashMap<String, Material[]> mutableMtls;
 	
@@ -207,13 +208,18 @@ public class Player extends CollisionObject
 	private int team, handUpList;
 	private boolean handDown;
 	
-	public Player(MainGame game, PlayScreen screen, int team, Vector3f defaultPos)
+	public Player(MainGame game, PlayScreen screen, int team, boolean inUserTeam, Vector3f defaultPos)
 	{
 		super(game, screen, RADIUS, defaultPos);
+		
+		this.inUserTeam = inUserTeam;
 
 		broom = Broom.create(game);
 
 		rot = new Vector3f();
+		if(!inUserTeam) {
+			rot.y = 180;
+		}
 		
 		handDown = true;
 		this.team = team;
@@ -614,11 +620,7 @@ public class Player extends CollisionObject
 	@Override
 	protected void doOutOval(Vector3f newPos, float newOvalVal, float delta)
 	{
-		velocity.x = 0;
-		velocity.y = 0;
-		velocity.z = 0;
-		speed = 0;
-		controllable = false;
+		fall();
 	}
 
 	public Vector3f getRot()
@@ -635,6 +637,18 @@ public class Player extends CollisionObject
 	{
 		super.reset();
 		rot.set(0, 0, 0);
+		if(!inUserTeam) 
+		{
+			rot.y = 180;
+		}
+	}
+	
+	public void fall() {
+		velocity.x = 0;
+		velocity.y = 0;
+		velocity.z = 0;
+		speed = 0;
+		controllable = false;
 	}
 	
 }

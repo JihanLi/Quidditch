@@ -73,7 +73,8 @@ public class PlayScreen extends Screen
 	private CameraAnimator animator1;
 
 	private Model sky, terra, stadium;
-	private Player player, player2, currentPlayer;
+	private Player currentPlayer;
+	private int currentIndex;
 	
 	private int numberOfMember = 3;
 	private int teamUser = 0;
@@ -98,13 +99,10 @@ public class PlayScreen extends Screen
 		terra = Terra.create(game);
 		stadium = Stadium.create(game);
 		
-
-		player = new Player(game, this, 2, new Vector3f(0, 0, -300));
-		player2 = new Player(game, this, 3, new Vector3f(0, 0, 300));
 		
 		for (int i = 0; i < numberOfMember; i++) {
-			playersUser.add(new Player(game, this, teamUser, new Vector3f(100 - i * 100, 0, 200)));
-			playersComputer.add(new Player(game, this, teamComputer, new Vector3f(100 - i * 100, 0, -200)));
+			playersUser.add(new Player(game, this, teamUser, true, new Vector3f(100 - i * 100, 0, 200)));
+			playersComputer.add(new Player(game, this, teamComputer, false, new Vector3f(100 - i * 100, 0, -200)));
 		}
 		
 		players.addAll(playersUser);
@@ -112,7 +110,8 @@ public class PlayScreen extends Screen
 		
 		ball = new Ball(game, this, 0, new Vector3f(0, 200, 0));
 
-		currentPlayer = playersUser.get(0);
+		currentIndex = 0;
+		currentPlayer = playersUser.get(currentIndex);
 
 		lightPosBuffer = floats2Buffer(LIGHT_POS);
 
@@ -128,8 +127,6 @@ public class PlayScreen extends Screen
 		
 		children.add(terra);
 		children.add(stadium);
-		children.add(player);
-		children.add(player2);
 		children.add(ball);
 		
 		for (int i = 0; i < numberOfMember; i++) {
@@ -204,6 +201,8 @@ public class PlayScreen extends Screen
 			return true;
 		}
 		 
+		checkPlayer();
+		
 		if (globalView) 
 		{ 
 			if(camera.getCameraPos().z >= -1400 && camera.getCameraPos().z <= 400) 
@@ -403,9 +402,8 @@ public class PlayScreen extends Screen
 					}
 					else
 					{
-						//TODO
-						/*tempPlayer1.fallDown();
-						tempPlayer2.fallDown();*/
+						tempPlayer1.fall();
+						tempPlayer2.fall();
 					}
 				}
 			}
@@ -416,6 +414,11 @@ public class PlayScreen extends Screen
 	@Override
 	public void move(float delta)
 	{
+		if (gameOn) 
+		{
+			return;
+		}
+		
 		for (int i = 0; i < numberOfMember; i++) 
 		{	
 			playersUser.get(i).move(delta);
@@ -423,8 +426,6 @@ public class PlayScreen extends Screen
 		}
 		
 		checkCollision();
-		player2.move(delta);
-		player.move(delta);
 		ball.move(delta);
 	}
 
@@ -473,8 +474,6 @@ public class PlayScreen extends Screen
 	public void resetGame() {
 		camera.reset();
 		ball.reset();
-		player.reset();
-		player2.reset();
 		for (int i = 0; i < numberOfMember; i++) {
 			playersUser.get(i).reset();
 			playersComputer.get(i).reset();
@@ -483,10 +482,44 @@ public class PlayScreen extends Screen
 		camera.setPosition(camera.getGlobalPos());
 		camera.setRotation(camera.getGlobalRot());
 
-		currentPlayer = player;
+		currentIndex = 0;
+		currentPlayer = playersUser.get(currentIndex);
 		
 		animator1 = new CameraAnimator(1);
 		gameOn = true;
 		globalView = true;
+	}
+	
+	private void checkPlayer() {
+		
+		if (ball.isHold()) 
+		{
+			for (int i = 0; i < numberOfMember; i++)
+			{
+				if (ball.getHolder().equals(playersUser.get(i)))
+				{
+					currentIndex = i;
+					currentPlayer = playersUser.get(i);
+					return;
+				}
+			}
+		}
+		
+		if (currentPlayer.distance(ball) < 100)
+		{
+			return;
+		}
+		
+		float max = 30000f;
+		for (int i = 0; i < numberOfMember; i++)
+		{
+			float dis = playersUser.get(i).distance(ball);
+			if (dis < max)
+			{
+				max = dis;
+				currentIndex = i;
+			}
+		}
+		currentPlayer = playersUser.get(currentIndex);
 	}
 }
