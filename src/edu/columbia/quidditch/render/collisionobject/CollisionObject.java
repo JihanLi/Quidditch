@@ -3,7 +3,6 @@ package edu.columbia.quidditch.render.collisionobject;
 import static org.lwjgl.opengl.GL11.glCallList;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import org.lwjgl.util.vector.Vector3f;
@@ -19,16 +18,17 @@ public abstract class CollisionObject extends Model
 	protected PlayScreen screen;
 	
 	protected float radius, speed;
-	protected Vector3f lastPos, pos, v;
+	protected Vector3f defaultPos, lastPos, pos, v;
 	
-	public CollisionObject(MainGame game, PlayScreen screen, float radius)
+	public CollisionObject(MainGame game, PlayScreen screen, float radius, Vector3f defaultPos)
 	{
 		super(game);
 		
 		this.radius = radius;
-
+		this.defaultPos = defaultPos;
+		
 		lastPos = new Vector3f();
-		pos = new Vector3f();
+		pos = new Vector3f(defaultPos);
 		v = new Vector3f();
 		
 		this.screen = screen;
@@ -98,7 +98,7 @@ public abstract class CollisionObject extends Model
 	
 	protected boolean checkHeight(Vector3f pos)
 	{
-		return (pos.z < PlayScreen.TOP && pos.y > PlayScreen.BOTTOM);
+		return (pos.y < PlayScreen.TOP && pos.y > PlayScreen.BOTTOM);
 	}
 	
 	public void setPos(Vector3f newPos)
@@ -109,6 +109,14 @@ public abstract class CollisionObject extends Model
 	public Vector3f getPos()
 	{
 		return pos;
+	}
+	
+	public void reset()
+	{
+		pos.set(defaultPos);
+		lastPos.set(defaultPos);
+		v.set(0, 0, 0);
+		speed = 0;
 	}
 
 	protected abstract void doOutHeight(Vector3f newPos);

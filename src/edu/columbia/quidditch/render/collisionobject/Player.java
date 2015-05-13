@@ -25,16 +25,16 @@ import edu.columbia.quidditch.util.IQELoader;
 public class Player extends CollisionObject
 {
 	private static final float SHINE = 25;
-	private static final float SCALE = 3;
+	private static final float SCALE = 20;
 
-	private static final float RADIUS = 6;
+	private static final float RADIUS = 20;
 
 	private static final float W = 0.25f;
-	private static final float ACCELERATOR = 0.005f;
-	private static final float GRAVITY = -0.05f;
+	private static final float ACCELERATOR = 0.002f;
+	private static final float GRAVITY = -0.02f;
 	
 	private static final float MIN_V = 0.01f;
-	private static final float MAX_V = 0.3f;
+	private static final float MAX_V = 0.2f;
 
 	private static final float RETREAT = 2;
 
@@ -103,9 +103,9 @@ public class Player extends CollisionObject
 
 	private Vector3f rot;
 
-	public Player(MainGame game, PlayScreen screen)
+	public Player(MainGame game, PlayScreen screen, Vector3f defaultPos)
 	{
-		super(game, screen, RADIUS);
+		super(game, screen, RADIUS, defaultPos);
 
 		broom = Broom.create(game);
 
@@ -509,6 +509,13 @@ public class Player extends CollisionObject
 	
 	public boolean isControllable() {
 		return controllable;
+	}
+	
+	@Override
+	public void reset()
+	{
+		super.reset();
+		rot.set(0, 0, 0);
 	}
 
 }

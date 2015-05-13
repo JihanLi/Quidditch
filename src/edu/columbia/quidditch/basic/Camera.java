@@ -16,7 +16,7 @@ import edu.columbia.quidditch.render.screen.PlayScreen;
 /**
  * Camera class
  * 
- * @author Jihan Li, Yuqing Guan
+ * @author Jihan Li, Yuqing Guan, Yilin Xiong
  * 
  */
 public class Camera
@@ -306,6 +306,17 @@ public class Camera
 	public Vector3f getCameraPos()
 	{
 		return cameraPos;
+	}
+	
+	public void reset()
+	{
+		cameraRot.set(0, 0, 0);
+		cameraPos.set(0, 0, 0);
+		globalRot.set(30, 0, 0);
+		globalPos.set(0, -300, -1200);
+
+		swing = false;
+		matrix = new Matrix4f();
 	}
 
 }

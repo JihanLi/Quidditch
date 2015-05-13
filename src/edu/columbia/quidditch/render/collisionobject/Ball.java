@@ -23,10 +23,11 @@ public class Ball extends CollisionObject
 	}
 	
 	private int type;
+	private boolean isHold = false;
 
-	public Ball(MainGame game, PlayScreen screen, int type)
+	public Ball(MainGame game, PlayScreen screen, int type, Vector3f defaultPos)
 	{
-		super(game, screen, RADIUSES[type]);
+		super(game, screen, RADIUSES[type], defaultPos);
 		this.type = type;
 	}
 
@@ -38,19 +39,30 @@ public class Ball extends CollisionObject
 	private static final float[] RADIUSES =
 	{ 5, 5, 2 };
 
-	private static final float GRAVITY = 0.001f;
+	private static final float GRAVITY = -0.02f;
 
 	@Override
 	protected void refreshVelocity()
-	{
-		v.y -= GRAVITY;
+	{	
+		if(!isHold) {
+			v.y += GRAVITY;
+		}
+	}
+
+	public boolean isHold() {
+		return isHold;
+	}
+
+	public void setHold(boolean isHold) {
+		this.isHold = isHold;
 	}
 
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
-		// TODO Auto-generated method stub
-
+		if(!isHold) {
+			v.y *= -1.0f;
+		}
 	}
 
 	@Override

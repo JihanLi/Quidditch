@@ -28,7 +28,7 @@ import edu.columbia.quidditch.render.screen.StartScreen;
 /**
  * The main game class
  * 
- * @author Jihan Li, Yuqing Guan
+ * @author Jihan Li, Yuqing Guan, Yilin Xiong
  * 
  */
 public class MainGame
@@ -254,6 +254,7 @@ public class MainGame
 			@Override
 			public void onClick()
 			{
+				playScreen.resetGame();
 				status = STATUS_START;
 				showModal = false;
 			}
@@ -496,8 +497,7 @@ public class MainGame
 		modal.setModalInStart();
 		showModal = true;
 	}
-	
-	//TODO return Modal
+
 	public void requestReturn()
 	{
 		modal.setListener(0, returnListener);

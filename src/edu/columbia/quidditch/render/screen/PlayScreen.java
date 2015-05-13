@@ -22,7 +22,7 @@ import edu.columbia.quidditch.render.collisionobject.Player;
 /**
  * Camera class
  * 
- * @author Yuqing Guan, Jihan Li
+ * @author Yuqing Guan, Jihan Li, Yilin Xiong
  * 
  */
 
@@ -31,8 +31,8 @@ public class PlayScreen extends Screen
 	public static final float LONG_AXIS = 1100;
 	public static final float SHORT_AXIS = 420;
 
-	public static final float TOP = 2500;
-	public static final float BOTTOM = -50;
+	public static final float TOP = 250.0f;
+	public static final float BOTTOM = -50.0f;
 
 	private static final float MOUSE_SENSITIVITY = 0.05f;
 
@@ -87,10 +87,11 @@ public class PlayScreen extends Screen
 		sky = new Sky(game);
 		terra = Terra.create(game);
 		stadium = Stadium.create(game);
-		player = new Player(game, this);
 		
-		ball = new Ball(game, this, 0);
-		ball.setPos(new Vector3f(0, 300, -500));
+		Vector3f a = new Vector3f(0, 0, 0);
+		player = new Player(game, this, a);
+		
+		ball = new Ball(game, this, 0, new Vector3f(0, 200, 0));
 
 		currentPlayer = player;
 
@@ -120,6 +121,13 @@ public class PlayScreen extends Screen
 	@Override
 	public void render()
 	{
+		if(gameOn) 
+		{ 
+			gameOn = animator1.animate(camera); 
+			if(!gameOn)
+				camera.setRotation(30, 0, 0);
+		}
+		
 		camera.applyRotation();
 		sky.render();
 		camera.applyTranslation();
@@ -165,17 +173,13 @@ public class PlayScreen extends Screen
 	public boolean checkKeyboardInput(float delta)
 	{
 		boolean keyReleased = false;
-
 		
-		if(gameOn) 
-		{ 
-			gameOn = animator1.animate(camera); 
-			if(!gameOn)
-				camera.setRotation(30, 0, 0);
-			return true; 
+		if (gameOn)
+		{
+			return true;
 		}
 		 
-		if(globalView) 
+		if (globalView) 
 		{ 
 			if(camera.getCameraPos().z >= -1400 && camera.getCameraPos().z <= 400) 
 			{
@@ -396,5 +400,20 @@ public class PlayScreen extends Screen
 
 	public void setGameOn(boolean gameOn) {
 		this.gameOn = gameOn;
+	}
+	
+	public void resetGame() {
+		camera.reset();
+		ball.reset();
+		player.reset();
+		
+		camera.setPosition(camera.getGlobalPos());
+		camera.setRotation(camera.getGlobalRot());
+
+		currentPlayer = player;
+		
+		animator1 = new CameraAnimator(1);
+		gameOn = true;
+		globalView = true;
 	}
 }
