@@ -24,7 +24,7 @@ public class Ball extends CollisionObject
 	
 	private int type;
 	private boolean isHold = false;
-	private Vector3f holderSpeed = new Vector3f();
+	private Player holder;
 
 	public Ball(MainGame game, PlayScreen screen, int type, Vector3f defaultPos)
 	{
@@ -38,7 +38,7 @@ public class Ball extends CollisionObject
 	{ new Vector3f(0.25f, 0, 0), new Vector3f(0, 0, 0.25f), new Vector3f(0.5f, 0.5f, 0) };
 	
 	private static final float[] RADIUSES =
-	{ 5, 5, 2 };
+	{ 10, 10, 5 };
 
 	private static final float GRAVITY = -0.02f;
 
@@ -46,7 +46,7 @@ public class Ball extends CollisionObject
 	protected void refreshVelocity()
 	{	
 		if(isHold) {
-			velocity.set(holderSpeed);
+			setVelocity(holder.getVelocity());
 		}
 		else
 		{
@@ -119,17 +119,19 @@ public class Ball extends CollisionObject
 		
 		glEndList();
 	}
-	
-	public void setVelocity(float x, float y, float z)
-	{
-		velocity.x = x;
-		velocity.y = y;
-		velocity.z = z;
+
+	public Player getHolder() {
+		return holder;
 	}
-	
-	public Vector3f getVelocity()
-	{
-		return velocity;
+
+	public void setHolder(Player holder) {
+		isHold = true;
+		this.holder = holder;
+		Vector3f vel = holder.getVelocity();
+		float distance = vel.length();
+		setPos(holder.getPos().x + 10*vel.x/distance, 
+					holder.getPos().y + 5*vel.y/distance, 
+					holder.getPos().z + 5*vel.z/distance);
 	}
 
 }

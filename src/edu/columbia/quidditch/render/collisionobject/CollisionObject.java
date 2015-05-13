@@ -106,9 +106,33 @@ public abstract class CollisionObject extends Model
 		pos.set(newPos);
 	}
 	
+	public void setPos(float x, float y, float z)
+	{
+		pos.set(x, y, z);
+	}
+	
 	public Vector3f getPos()
 	{
 		return pos;
+	}
+	
+	public void setVelocity(Vector3f vec)
+	{
+		velocity.x = vec.x;
+		velocity.y = vec.y;
+		velocity.z = vec.z;
+	}
+	
+	public void setVelocity(float x, float y, float z)
+	{
+		velocity.x = x;
+		velocity.y = y;
+		velocity.z = z;
+	}
+	
+	public Vector3f getVelocity()
+	{
+		return velocity;
 	}
 	
 	public void reset()

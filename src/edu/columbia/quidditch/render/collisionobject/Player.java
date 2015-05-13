@@ -32,7 +32,7 @@ public class Player extends CollisionObject
 	private static final float SHINE = 25;
 	private static final float SCALE = 20;
 
-	private static final float RADIUS = 20;
+	private static final float RADIUS = 30;
 
 	private static final float W = 0.25f;
 	private static final float ACCELERATOR = 0.002f;
@@ -636,4 +636,5 @@ public class Player extends CollisionObject
 		super.reset();
 		rot.set(0, 0, 0);
 	}
+	
 }
