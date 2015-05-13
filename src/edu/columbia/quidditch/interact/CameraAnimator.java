@@ -24,8 +24,14 @@ public class CameraAnimator {
 										 "r -10 180 0 0 90 0 300", "s 0 0 0 -10 0 0 10", "f 0 0 0 0 0 0 0"};
 	
 	public static String[] animation2 = {"s 0 -200 -1000 30 0 0 10", "t 0 -200 -1000 0 -100 -500 200", "s 0 0 0 10 180 0 20",
-										"t 0 0 0 0 -45 0 300", "s 0 -45 0 10 180 0 20", "s 100 -45 50 0 180 0 20", 
-										"r 0 180 0 0 90 0 300", "s 100 -45 50 0 0 0 20", "f 0 0 0 0 0 0 0"};
+										 "t 0 0 0 0 -45 0 300", "s 0 -45 0 10 180 0 20", "s 100 -45 50 0 180 0 20", 
+										 "r 0 180 0 0 90 0 300", "s 100 -45 50 0 0 0 20", "f 0 0 0 0 0 0 0"};
+	public static String[] animation3 = {"s 0 -200 -1000 30 0 0 10", "t 0 -200 -1000 0 -100 -500 200", "s 0 0 0 10 180 0 20",
+										 "t 0 0 0 0 -45 0 300", "s 0 -45 0 10 180 0 20", "s 100 -45 50 0 180 0 20", 
+										 "r 0 180 0 0 90 0 300", "s 100 -45 50 0 0 0 20", "f 0 0 0 0 0 0 0"};
+	public static String[] animation4 = {"s 0 -200 -1000 30 0 0 10", "t 0 -200 -1000 0 -100 -500 200", "s 0 0 0 10 180 0 20",
+										 "t 0 0 0 0 -45 0 300", "s 0 -45 0 10 180 0 20", "s 100 -45 50 0 180 0 20", 
+										 "r 0 180 0 0 90 0 300", "s 100 -45 50 0 0 0 20", "f 0 0 0 0 0 0 0"};
 	
 	
 	public CameraAnimator(int index)
@@ -37,6 +43,12 @@ public class CameraAnimator {
 			break;
 		case 2:
 			current = animation2;
+			break;
+		case 3:
+			current = animation3;
+			break;
+		case 4:
+			current = animation4;
 			break;
 		}
 	}
@@ -75,62 +87,6 @@ public class CameraAnimator {
 			initial.m01 = angle2Pi(Float.parseFloat(motion[2]));
 			initial.m02 = angle2Pi(Float.parseFloat(motion[3]));
 			Matrix3f rotMatrix = new Matrix3f();
-			
-			/*
-			Matrix3f eulerZ = new Matrix3f();
-			
-			eulerZ.m00 = (float) (Math.cos(phi));
-			eulerZ.m10 = (float) (Math.sin(phi));
-			eulerZ.m20 = 0;
-			
-			eulerZ.m01 = (float) (-Math.sin(phi));
-			eulerZ.m11 = (float) (Math.cos(phi));
-			eulerZ.m21 = 0;
-			
-			eulerZ.m02 = 0;
-			eulerZ.m12 = 0;
-			eulerZ.m22 = 1;
-			
-			Matrix3f.mul(eulerZ, initial, initial);
-			
-			
-			Matrix3f eulerX = new Matrix3f();
-			
-			eulerX.m00 = 1;
-			eulerX.m10 = 0;
-			eulerX.m20 = 0;
-			
-			eulerX.m01 = 0;
-			eulerX.m11 = (float) (Math.cos(theta));
-			eulerX.m21 = (float) (Math.sin(theta));
-			
-			eulerX.m02 = 0;
-			eulerX.m12 = (float) (-Math.sin(theta));
-			eulerX.m22 = (float) (Math.cos(theta));
-			
-			
-			Matrix3f.mul(eulerX, initial, initial);
-			
-			
-			Matrix3f eulerY = new Matrix3f();
-			
-			eulerY.m00 = (float) (Math.cos(psi));
-			eulerY.m10 = (float) (Math.sin(psi));
-			eulerY.m20 = 0;
-			
-			eulerY.m01 = (float) (-Math.sin(psi));
-			eulerY.m11 = (float) (Math.cos(psi));
-			eulerY.m21 = 0;
-			
-			eulerY.m02 = 0;
-			eulerY.m12 = 0;
-			eulerY.m22 = 1;
-			
-			Matrix3f.mul(eulerY, initial, rotMatrix);*/
-			
-			
-			
-			
 			
 			Matrix3f euler = new Matrix3f();
 			

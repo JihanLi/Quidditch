@@ -70,7 +70,8 @@ public class PlayScreen extends Screen
 	private boolean gameOn = true;
 	private boolean gameOff = false;
 	private float offset = 500;
-	private CameraAnimator animator1, animator2;
+	private CameraAnimator startAnimator, winAnimator, loseAnimator, drawAnimator;
+	private int score1, score2;
 
 	private Model sky, terra, stadium;
 	private Player currentPlayer;
@@ -93,8 +94,13 @@ public class PlayScreen extends Screen
 		camera.setPosition(camera.getGlobalPos());
 		camera.setRotation(camera.getGlobalRot());
 
-		animator1 = new CameraAnimator(1);
-		animator2 = new CameraAnimator(2);
+		startAnimator = new CameraAnimator(1);
+		winAnimator = new CameraAnimator(2);
+		drawAnimator = new CameraAnimator(3);
+		loseAnimator = new CameraAnimator(4);
+		
+		setScore1(0);
+		setScore2(0);
 
 		sky = new Sky(game);
 		terra = Terra.create(game);
@@ -146,14 +152,26 @@ public class PlayScreen extends Screen
 	{
 		if(gameOn) 
 		{ 
-			gameOn = animator1.animate(camera); 
+			gameOn = startAnimator.animate(camera); 
 			if(!gameOn)
 				camera.setRotation(30, 0, 0);
 		}
 		
 		if(gameOff) 
 		{ 
-			gameOff = animator2.animate(camera); 
+			if(score1 > score2)
+			{
+				gameOff = winAnimator.animate(camera); 
+			}
+			else if(score1 == score2)
+			{
+				gameOff = drawAnimator.animate(camera); 
+			}
+			else
+			{
+				gameOff = loseAnimator.animate(camera); 
+			}
+			
 			if(!gameOff)
 			{
 				resetGame();
@@ -504,8 +522,13 @@ public class PlayScreen extends Screen
 		currentIndex = 0;
 		currentPlayer = playersUser.get(currentIndex);
 		
-		animator1 = new CameraAnimator(1);
-		animator2 = new CameraAnimator(2);
+		startAnimator = new CameraAnimator(1);
+		winAnimator = new CameraAnimator(2);
+		drawAnimator = new CameraAnimator(3);
+		loseAnimator = new CameraAnimator(4);
+		
+		setScore1(0);
+		setScore2(0);
 		gameOn = true;
 		gameOff = false;
 		globalView = true;
@@ -542,5 +565,21 @@ public class PlayScreen extends Screen
 			}
 		}
 		currentPlayer = playersUser.get(currentIndex);
+	}
+
+	public int getScore1() {
+		return score1;
+	}
+
+	public void setScore1(int score1) {
+		this.score1 = score1;
+	}
+
+	public int getScore2() {
+		return score2;
+	}
+
+	public void setScore2(int score2) {
+		this.score2 = score2;
 	}
 }
