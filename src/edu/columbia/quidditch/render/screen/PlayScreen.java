@@ -1,6 +1,8 @@
 package edu.columbia.quidditch.render.screen;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
@@ -22,7 +24,7 @@ import edu.columbia.quidditch.render.collisionobject.Player;
 /**
  * Camera class
  * 
- * @author Yuqing Guan, Jihan Li
+ * @author Yuqing Guan, Jihan Li, Yilin Xiong
  * 
  */
 
@@ -66,12 +68,19 @@ public class PlayScreen extends Screen
 	private Camera camera;
 	private boolean globalView = true;
 	private boolean gameOn = true;
-	private boolean gameOff = false;
+	private float velocity = 5;
 	private float offset = 500;
-	private CameraAnimator animator1, animator2;
+	private CameraAnimator animator1;
 
 	private Model sky, terra, stadium;
-	private Player player, currentPlayer;
+	private Player player, player2, currentPlayer;
+	
+	private int numberOfMember = 3;
+	private int teamUser = 0;
+	private int teamComputer = 1;
+	private ArrayList<Player> playersUser = new ArrayList<Player>();
+	private ArrayList<Player> playersComputer = new ArrayList<Player>();
+	
 	private Ball ball;
 
 	public PlayScreen(MainGame game)
@@ -83,13 +92,19 @@ public class PlayScreen extends Screen
 		camera.setRotation(camera.getGlobalRot());
 
 		animator1 = new CameraAnimator(1);
-		animator2 = new CameraAnimator(2);
 
 		sky = new Sky(game);
 		terra = Terra.create(game);
 		stadium = Stadium.create(game);
-		Vector3f a = new Vector3f(0, 0, 0);
-		player = new Player(game, this, 1, a);
+		
+
+		player = new Player(game, this, 2, new Vector3f(0, 0, -300));
+		player2 = new Player(game, this, 3, new Vector3f(0, 0, 300));
+		
+		for (int i = 0; i < numberOfMember; i++) {
+			playersUser.add(new Player(game, this, teamUser, new Vector3f(100 - i * 100, 0, 200)));
+			playersComputer.add(new Player(game, this, teamComputer, new Vector3f(100 - i * 100, 0, -200)));
+		}
 		
 		ball = new Ball(game, this, 0, new Vector3f(0, 200, 0));
 
@@ -110,7 +125,13 @@ public class PlayScreen extends Screen
 		children.add(terra);
 		children.add(stadium);
 		children.add(player);
+		children.add(player2);
 		children.add(ball);
+		
+		for (int i = 0; i < numberOfMember; i++) {
+			children.add(playersUser.get(i));
+			children.add(playersComputer.get(i));
+		}
 	}
 
 	public Player getCurrentPlayer()
@@ -126,16 +147,6 @@ public class PlayScreen extends Screen
 			gameOn = animator1.animate(camera); 
 			if(!gameOn)
 				camera.setRotation(30, 0, 0);
-		}
-		
-		if(gameOff) 
-		{ 
-			gameOff = animator2.animate(camera); 
-			if(!gameOff)
-			{
-				resetGame();
-				game.terminate();
-			}
 		}
 		
 		camera.applyRotation();
@@ -184,12 +195,12 @@ public class PlayScreen extends Screen
 	{
 		boolean keyReleased = false;
 		
-		if(gameOn || gameOff) 
-		{ 
-			return true; 
+		if (gameOn)
+		{
+			return true;
 		}
 		 
-		if(globalView) 
+		if (globalView) 
 		{ 
 			if(camera.getCameraPos().z >= -1400 && camera.getCameraPos().z <= 400) 
 			{
@@ -366,6 +377,11 @@ public class PlayScreen extends Screen
 	@Override
 	public void move(float delta)
 	{
+		for (int i = 0; i < numberOfMember; i++) {
+			playersUser.get(i).move(delta);
+			playersComputer.get(i).move(delta);
+		}
+		player2.move(delta);
 		player.move(delta);
 		ball.move(delta);
 	}
@@ -412,18 +428,15 @@ public class PlayScreen extends Screen
 		this.gameOn = gameOn;
 	}
 	
-	public boolean isGameOff() {
-		return gameOff;
-	}
-
-	public void setGameOff(boolean gameOff) {
-		this.gameOff = gameOff;
-	}
-	
 	public void resetGame() {
 		camera.reset();
 		ball.reset();
 		player.reset();
+		player2.reset();
+		for (int i = 0; i < numberOfMember; i++) {
+			playersUser.get(i).reset();
+			playersComputer.get(i).reset();
+		}
 		
 		camera.setPosition(camera.getGlobalPos());
 		camera.setRotation(camera.getGlobalRot());
@@ -431,9 +444,7 @@ public class PlayScreen extends Screen
 		currentPlayer = player;
 		
 		animator1 = new CameraAnimator(1);
-		animator2 = new CameraAnimator(2);
 		gameOn = true;
-		gameOff = false;
 		globalView = true;
 	}
 }
