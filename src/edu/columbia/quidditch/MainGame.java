@@ -526,6 +526,11 @@ public class MainGame
 		}
 	}
 	
+	public void terminate()
+	{
+		status = STATUS_START;
+	}
+	
 	public static void main(String[] args)
 	{
 		new MainGame().run();

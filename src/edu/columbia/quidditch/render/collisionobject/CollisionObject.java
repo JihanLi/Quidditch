@@ -18,7 +18,7 @@ public abstract class CollisionObject extends Model
 	protected PlayScreen screen;
 	
 	protected float radius, speed;
-	protected Vector3f defaultPos, lastPos, pos, v;
+	protected Vector3f defaultPos, lastPos, pos, velocity;
 	
 	public CollisionObject(MainGame game, PlayScreen screen, float radius, Vector3f defaultPos)
 	{
@@ -29,7 +29,7 @@ public abstract class CollisionObject extends Model
 		
 		lastPos = new Vector3f();
 		pos = new Vector3f(defaultPos);
-		v = new Vector3f();
+		velocity = new Vector3f();
 		
 		this.screen = screen;
 	}
@@ -68,9 +68,9 @@ public abstract class CollisionObject extends Model
 		refreshVelocity();
 		newPos.set(pos);
 		
-		newPos.x += v.x * delta;
-		newPos.y += v.y * delta;
-		newPos.z += v.z * delta;
+		newPos.x += velocity.x * delta;
+		newPos.y += velocity.y * delta;
+		newPos.z += velocity.z * delta;
 		
 		if (!checkHeight(newPos))
 		{
@@ -115,7 +115,7 @@ public abstract class CollisionObject extends Model
 	{
 		pos.set(defaultPos);
 		lastPos.set(defaultPos);
-		v.set(0, 0, 0);
+		velocity.set(0, 0, 0);
 		speed = 0;
 	}
 

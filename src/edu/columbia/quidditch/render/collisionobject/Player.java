@@ -581,15 +581,15 @@ public class Player extends CollisionObject
 	{
 		if (controllable)
 		{
-			v.x = (float) (-Math.sin(Math.toRadians(rot.y))
+			velocity.x = (float) (-Math.sin(Math.toRadians(rot.y))
 					* Math.cos(Math.toRadians(rot.x)) * speed);
-			v.y = (float) (Math.sin(Math.toRadians(rot.x)) * speed);
-			v.z = (float) (-Math.cos(Math.toRadians(rot.y))
+			velocity.y = (float) (Math.sin(Math.toRadians(rot.x)) * speed);
+			velocity.z = (float) (-Math.cos(Math.toRadians(rot.y))
 					* Math.cos(Math.toRadians(rot.x)) * speed);
 		}
 		else
 		{
-			v.y += GRAVITY;
+			velocity.y += GRAVITY;
 		}
 	}
 
@@ -606,7 +606,7 @@ public class Player extends CollisionObject
 			controllable = false;
 		}
 		
-		v.y = 0;
+		velocity.y = 0;
 		speed = 0;
 		rot.x = 0;
 	}
@@ -614,9 +614,9 @@ public class Player extends CollisionObject
 	@Override
 	protected void doOutOval(Vector3f newPos, float newOvalVal, float delta)
 	{
-		v.x = 0;
-		v.y = 0;
-		v.z = 0;
+		velocity.x = 0;
+		velocity.y = 0;
+		velocity.z = 0;
 		speed = 0;
 		controllable = false;
 	}
