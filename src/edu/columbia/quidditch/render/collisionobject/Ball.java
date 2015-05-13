@@ -15,13 +15,13 @@ public class Ball extends CollisionObject
 {
 	private static FloatBuffer specularBuffer;
 	private static final float SHINE = 25;
-	
+
 	static
 	{
 		specularBuffer = BufferUtils.createFloatBuffer(4);
 		specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
 	}
-	
+
 	private int type;
 	private boolean isHold = false;
 	private Player holder;
@@ -35,8 +35,9 @@ public class Ball extends CollisionObject
 	private static Sphere sphere = new Sphere();
 
 	private static final Vector3f[] COLORS =
-	{ new Vector3f(0.25f, 0, 0), new Vector3f(0, 0, 0.25f), new Vector3f(0.5f, 0.5f, 0) };
-	
+	{ new Vector3f(0.25f, 0, 0), new Vector3f(0, 0, 0.25f),
+			new Vector3f(0.5f, 0.5f, 0) };
+
 	private static final float[] RADIUSES =
 	{ 10, 10, 5 };
 
@@ -44,8 +45,9 @@ public class Ball extends CollisionObject
 
 	@Override
 	protected void refreshVelocity()
-	{	
-		if(isHold) {
+	{
+		if (isHold)
+		{
 			setVelocity(holder.getVelocity());
 		}
 		else
@@ -54,18 +56,21 @@ public class Ball extends CollisionObject
 		}
 	}
 
-	public boolean isHold() {
+	public boolean isHold()
+	{
 		return isHold;
 	}
 
-	public void setHold(boolean isHold) {
+	public void setHold(boolean isHold)
+	{
 		this.isHold = isHold;
 	}
 
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
-		if(!isHold) {
+		if (!isHold)
+		{
 			velocity.y *= -1.0f;
 		}
 	}
@@ -73,7 +78,8 @@ public class Ball extends CollisionObject
 	@Override
 	protected void doOutOval(Vector3f newPos, float newOvalVal, float delta)
 	{
-		if(isHold) {
+		if (isHold)
+		{
 			velocity.x *= -1.0f;
 			velocity.z *= -1.0f;
 			velocity.y += GRAVITY;
@@ -84,7 +90,7 @@ public class Ball extends CollisionObject
 			velocity.y *= -1.0f;
 			velocity.z *= -1.0f;
 		}
-		
+
 	}
 
 	@Override
@@ -92,53 +98,47 @@ public class Ball extends CollisionObject
 	{
 		Vector3f color = COLORS[type];
 		ShaderProgram shaderProgram = ShaderProgram.getDefaultShader();
-		
-		list = glGenLists(1);
-		
-		glNewList(list, GL_COMPILE);
-		
-		shaderProgram.bind();
-		shaderProgram.setUniformi("tex", 0);
-		shaderProgram.setUniformi("hasTex", 0);
-				
-		glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
-		glMaterial(GL_FRONT, GL_SPECULAR, specularBuffer);
 
-		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
-		glColor3f(color.x, color.y, color.z);
-		
-		glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-		glColor3f(color.x, color.y, color.z);
-		
-		glColorMaterial(GL_FRONT_AND_BACK, GL_SPECULAR);
-		glColor3f(color.x, color.y, color.z);
-		
-		sphere.draw(radius, 64, 64);
-		
-		ShaderProgram.unbind();
-		
+		list = glGenLists(1);
+
+		glNewList(list, GL_COMPILE);
+		{
+			shaderProgram.bind();
+			shaderProgram.setUniformi("tex", 0);
+			shaderProgram.setUniformi("hasTex", 0);
+
+			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
+			glMaterial(GL_FRONT, GL_SPECULAR, specularBuffer);
+
+			glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
+			glColor3f(color.x, color.y, color.z);
+
+			glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+			glColor3f(color.x, color.y, color.z);
+
+			glColorMaterial(GL_FRONT_AND_BACK, GL_SPECULAR);
+			glColor3f(color.x, color.y, color.z);
+
+			sphere.draw(radius, 64, 64);
+
+			ShaderProgram.unbind();
+		}
 		glEndList();
 	}
 
-	public Player getHolder() {
+	public Player getHolder()
+	{
 		return holder;
 	}
 
-	public void setHolder(Player holder) {
+	public void setHolder(Player holder)
+	{
 		isHold = true;
 		this.holder = holder;
 		Vector3f vel = holder.getVelocity();
 		float distance = vel.length();
-		setPos(holder.getPos().x + 10*vel.x/distance, 
-					holder.getPos().y + 5*vel.y/distance, 
-					holder.getPos().z + 5*vel.z/distance);
-	}
-	
-	@Override
-	public void reset()
-	{
-		super.reset();
-		isHold = false;
+		setPos(holder.getPos().x + 10 * vel.x / distance, holder.getPos().y + 5
+				* vel.y / distance, holder.getPos().z + 5 * vel.z / distance);
 	}
 
 }

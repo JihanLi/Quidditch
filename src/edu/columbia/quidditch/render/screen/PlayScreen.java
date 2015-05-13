@@ -68,9 +68,9 @@ public class PlayScreen extends Screen
 	private Camera camera;
 	private boolean globalView = true;
 	private boolean gameOn = true;
-	private boolean gameOff = false;
+	private float velocity = 5;
 	private float offset = 500;
-	private CameraAnimator animator1, animator2;
+	private CameraAnimator animator1;
 
 	private Model sky, terra, stadium;
 	private Player currentPlayer;
@@ -94,7 +94,6 @@ public class PlayScreen extends Screen
 		camera.setRotation(camera.getGlobalRot());
 
 		animator1 = new CameraAnimator(1);
-		animator2 = new CameraAnimator(2);
 
 		sky = new Sky(game);
 		terra = Terra.create(game);
@@ -149,16 +148,6 @@ public class PlayScreen extends Screen
 			gameOn = animator1.animate(camera); 
 			if(!gameOn)
 				camera.setRotation(30, 0, 0);
-		}
-		
-		if(gameOff) 
-		{ 
-			gameOff = animator2.animate(camera); 
-			if(!gameOff)
-			{
-				resetGame();
-				game.terminate();
-			}
 		}
 		
 		camera.applyRotation();
@@ -482,15 +471,6 @@ public class PlayScreen extends Screen
 		this.gameOn = gameOn;
 	}
 	
-	public boolean isGameOff() {
-		return gameOff;
-	}
-
-	public void setGameOff(boolean gameOff) {
-		this.gameOff = gameOff;
-	}
-
-	
 	public void resetGame() {
 		camera.reset();
 		ball.reset();
@@ -506,9 +486,7 @@ public class PlayScreen extends Screen
 		currentPlayer = playersUser.get(currentIndex);
 		
 		animator1 = new CameraAnimator(1);
-		animator2 = new CameraAnimator(2);
 		gameOn = true;
-		gameOff = false;
 		globalView = true;
 	}
 	

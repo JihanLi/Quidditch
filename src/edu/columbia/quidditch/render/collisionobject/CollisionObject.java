@@ -13,7 +13,7 @@ import edu.columbia.quidditch.render.screen.PlayScreen;
 
 public abstract class CollisionObject extends Model
 {
-	private static final float COLLISION_DELTA = 1e-3f;
+	protected static final float COLLISION_DELTA = 1e-3f;
 	
 	protected PlayScreen screen;
 	

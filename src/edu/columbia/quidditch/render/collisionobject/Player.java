@@ -8,6 +8,7 @@ import java.util.HashMap;
 import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.glu.Sphere;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -33,6 +34,7 @@ public class Player extends CollisionObject
 	private static final float SCALE = 21;
 
 	private static final float RADIUS = 42;
+	private static final float SECOND_RADIUS = 32;
 
 	private static final float W = 0.25f;
 	private static final float ACCELERATOR = 0.002f;
@@ -538,7 +540,31 @@ public class Player extends CollisionObject
 
 		broom.render();
 
+		glDisable(GL_LIGHTING);
+
+		glColor4f(1, 0, 0, 0.2f);
+
+		new Sphere().draw(32, 64, 64);
+		
+		glEnable(GL_LIGHTING);
+
 		glPopMatrix();
+	}
+	
+	@Override
+	public boolean checkCollision(CollisionObject other)
+	{
+		Vector3f vec = new Vector3f();
+		Vector3f.sub(pos, other.pos, vec);
+		
+		if (other instanceof Player)
+		{
+			return vec.length() < 2 * SECOND_RADIUS + COLLISION_DELTA;
+		}
+		else
+		{
+			return vec.length() < radius + other.radius + COLLISION_DELTA;
+		}
 	}
 
 	public void rotX(int sign, float delta)
