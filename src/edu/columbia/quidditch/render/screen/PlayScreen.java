@@ -69,7 +69,7 @@ public class PlayScreen extends Screen
 
 	private Camera camera;
 	private boolean globalView = true;
-	private boolean gameOn = true;
+	private boolean gameOn = false;
 	private boolean gameOff = false;
 	private float offset = 500;
 	private CameraAnimator startAnimator, winAnimator, loseAnimator, drawAnimator;
@@ -275,16 +275,8 @@ public class PlayScreen extends Screen
 				case Keyboard.KEY_F11:
 					game.toggleFullscreen();
 					break;
-
 				case Keyboard.KEY_C:
-					globalView = false;
-					//camera.setRotation(player.getRot());
-					//camera.setPosition(player.getPos());
-					break;
-				case Keyboard.KEY_R:
-					globalView = true;
-					//camera.setRotation(camera.getGlobalRot());
-					//camera.setPosition(camera.getGlobalPos());
+					globalView = !globalView;
 					break;
 				}
 			}
@@ -315,6 +307,8 @@ public class PlayScreen extends Screen
 				|| Keyboard.isKeyDown(Keyboard.KEY_LEFT);
 		boolean keyRight = Keyboard.isKeyDown(Keyboard.KEY_D)
 				|| Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
+		
+		boolean keyThrow = Keyboard.isKeyDown(Keyboard.KEY_RETURN);
 
 		boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_SPACE);
 		boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
@@ -364,7 +358,31 @@ public class PlayScreen extends Screen
 		{
 			currentPlayer.decelerate();
 		}
-
+		
+		// Throw the ball
+		if(keyThrow)
+		{
+			if(ball.isHold() && ball.getHolder().equals(currentPlayer))
+			{
+				currentPlayer.handDown();
+			}
+			else
+			{
+				currentPlayer.handUp();
+			}
+		}
+		else
+		{
+			if(!ball.isHold() || !ball.getHolder().equals(currentPlayer))
+			{
+				currentPlayer.handDown();
+			}
+			else
+			{
+				currentPlayer.handUp();
+			}
+		}
+		
 		return keyReleased;
 	}
 
@@ -419,9 +437,12 @@ public class PlayScreen extends Screen
 		for(int i = 0; i < players.size(); i++)
 		{
 			Player tempPlayer1 = players.get(i);
-			if(ball.checkCollision(tempPlayer1))
+			if(!ball.isHold())
 			{
-				ball.setHolder(tempPlayer1);
+				if(ball.checkCollision(tempPlayer1))
+				{
+					ball.setHolder(tempPlayer1);
+				}
 			}
 			
 			for(int j = i+1; j < players.size(); j++)
@@ -429,18 +450,25 @@ public class PlayScreen extends Screen
 				Player tempPlayer2 = players.get(j);
 				if(tempPlayer1.checkCollision(tempPlayer2))
 				{
-					if(ball.getHolder().equals(tempPlayer1))
+					if(ball.isHold())
 					{
-						ball.setHolder(tempPlayer2);
-					}
-					else if(ball.getHolder().equals(tempPlayer2))
-					{
-						ball.setHolder(tempPlayer1);
-					}
-					else
-					{
-						tempPlayer1.fall();
-						tempPlayer2.fall();
+						if(ball.getHolder().equals(tempPlayer1))
+						{
+							ball.setHolder(tempPlayer2);
+							tempPlayer2.handUp();
+							tempPlayer1.handDown();
+						}
+						else if(ball.getHolder().equals(tempPlayer2))
+						{
+							ball.setHolder(tempPlayer1);
+							tempPlayer1.handUp();
+							tempPlayer2.handDown();
+						}
+						else
+						{
+							tempPlayer1.fall();
+							tempPlayer2.fall();
+						}
 					}
 				}
 			}
