@@ -1,12 +1,12 @@
 package edu.columbia.quidditch.render;
 
+import java.awt.Color;
 import java.util.HashMap;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import static org.lwjgl.opengl.GL11.*;
-
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Fonts;
 import edu.columbia.quidditch.basic.Texture;
@@ -145,7 +145,7 @@ public class Button extends Model
 			glCallList(pressedBgList);
 		}
 		
-		Fonts.draw(x + width / 2, y + height / 2 + textCenterHeight, text, fontSize);
+		Fonts.draw(x + width / 2, y + height / 2 + textCenterHeight, text, "Castellar", Color.yellow, fontSize);
 	}
 
 	/**

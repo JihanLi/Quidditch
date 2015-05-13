@@ -1,5 +1,6 @@
 package edu.columbia.quidditch.render.screen;
 
+import java.awt.Color;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.lwjgl.util.vector.Vector3f;
 import static org.lwjgl.opengl.GL11.*;
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Camera;
+import edu.columbia.quidditch.basic.Fonts;
 import edu.columbia.quidditch.interact.CameraAnimator;
 import edu.columbia.quidditch.render.Model;
 import edu.columbia.quidditch.render.Sky;
@@ -188,7 +190,13 @@ public class PlayScreen extends Screen
 		super.render();
 
 		glDisable(GL_LIGHTING);
-
+		
+		if(!gameOn && !gameOff)
+		{
+			Fonts.draw(130 , 500, "Your Team Score: " + score1, "Times New Roman", Color.white, 20);
+			Fonts.draw(800 , 500, "Your Enemy Score: " + score2, "Times New Roman", Color.white, 20);
+		}
+		
 		glColor4f(0, 0, 1, 0.5f);
 
 		for (Vector3f door : HOME_DOORS)

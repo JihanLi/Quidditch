@@ -1,5 +1,7 @@
 package edu.columbia.quidditch.render.screen;
 
+import java.awt.Color;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.Drawable;
@@ -114,7 +116,7 @@ public class LoadScreen extends Screen implements Runnable
 
 		Texture.unbind();
 		
-		Fonts.draw(480, 150, lastLog, 16);
+		Fonts.draw(480, 150, lastLog, "Times New Roman", Color.white, 16);
 	}
 
 	/**
