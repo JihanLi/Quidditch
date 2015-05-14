@@ -167,6 +167,12 @@ public class Ball extends CollisionObject
 		isHold = false;
 		this.holder = null;
 	}
-
+	
+	@Override
+	public void reset()
+	{
+		super.reset();
+		isHold = false;
+	}
 
 }

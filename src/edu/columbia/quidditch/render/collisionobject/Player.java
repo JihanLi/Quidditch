@@ -559,16 +559,28 @@ public class Player extends CollisionObject
 	@Override
 	public boolean checkCollision(CollisionObject other)
 	{
-		Vector3f vec = new Vector3f();
-		Vector3f.sub(pos, other.pos, vec);
+		Vector3f dPos = new Vector3f();
+		Vector3f dVel = new Vector3f();
+		Vector3f.sub(pos, other.pos, dPos);
+		Vector3f.sub(velocity, other.velocity, dVel);
+
+		float dotPro = Vector3f.dot(dPos, dVel);
+		
+		if (dotPro >= -0.01f)
+		{
+			return false;
+		}
+		
+		if (dPos.length() < 2 * SECOND_RADIUS + COLLISION_DELTA)	
+			System.out.println(dotPro);
 		
 		if (other instanceof Player)
 		{
-			return vec.length() < 2 * SECOND_RADIUS + COLLISION_DELTA;
+			return dPos.length() < 2 * SECOND_RADIUS + COLLISION_DELTA;
 		}
 		else
 		{
-			return vec.length() < radius + other.radius + COLLISION_DELTA;
+			return dPos.length() < radius + other.radius + COLLISION_DELTA;
 		}
 	}
 
@@ -645,6 +657,9 @@ public class Player extends CollisionObject
 	@Override
 	protected void doOutOval(Vector3f newPos, float newOvalVal, float delta)
 	{
+		velocity.x = 0;
+		velocity.y = 0;
+		velocity.z = 0;
 		fall();
 	}
 
@@ -669,11 +684,32 @@ public class Player extends CollisionObject
 	}
 	
 	public void fall() {
-		velocity.x = 0;
-		velocity.y = 0;
-		velocity.z = 0;
 		speed = 0;
 		controllable = false;
 	}
 	
+	public void setBasedOnV()
+	{
+		speed = velocity.length();
+		if (speed < 0.001f)
+		{
+			return;
+		}
+		rot.x = (float) Math.asin(velocity.y / speed);
+		rot.y = (float) Math.asin(-velocity.x / (speed * Math.cos(rot.x)));
+		
+		if (velocity.z > 0)
+		{
+			rot.y *= -1;
+		}
+		
+		rot.x = (float) Math.toDegrees(rot.x);
+		rot.y = (float) Math.toDegrees(rot.y);
+		
+		rot.x = rot.x > 90 ? (rot.x - 180) : rot.x;
+		
+		System.out.println("Velocity:" + velocity);
+		System.out.println("Speed:" + speed);
+		System.out.println("rot:" + rot);
+	}
 }

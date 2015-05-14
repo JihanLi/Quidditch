@@ -450,7 +450,7 @@ public class PlayScreen extends Screen
 			Vector3f.sub(ball.getPos(), tempPlayer1.getPos(), temp2);
 			float dotPro = Vector3f.dot(temp1, temp2);
 			
-			if(!ball.isHold() && dotPro < 0)
+			if(!ball.isHold())
 			{
 				if(ball.checkCollision(tempPlayer1))
 				{
@@ -461,33 +461,45 @@ public class PlayScreen extends Screen
 			for(int j = i+1; j < players.size(); j++)
 			{
 				Player tempPlayer2 = players.get(j);
+
 				if(tempPlayer1.checkCollision(tempPlayer2))
 				{
-					if(ball.isHold())
+					setVAfterCollision(tempPlayer1, tempPlayer2);
+					if (!ball.isHold())
 					{
-						if(ball.getHolder().equals(tempPlayer1))
-						{
-							ball.setHolder(tempPlayer2);
-							tempPlayer2.handUp();
-							tempPlayer1.handDown();
-						}
-						else if(ball.getHolder().equals(tempPlayer2))
-						{
-							ball.setHolder(tempPlayer1);
-							tempPlayer1.handUp();
-							tempPlayer2.handDown();
-						}
-						else
-						{
-							tempPlayer1.fall();
-							tempPlayer2.fall();
-						}
+						tempPlayer1.fall();
+						tempPlayer2.fall();
+						continue;
+					}
+					
+					if(ball.getHolder().equals(tempPlayer1))
+					{
+						ball.setHolder(tempPlayer2);
+						tempPlayer2.handUp();
+						tempPlayer1.handDown();
+
+						tempPlayer1.setBasedOnV();
+						tempPlayer2.setBasedOnV();
+					}
+					else if(ball.getHolder().equals(tempPlayer2))
+					{
+						ball.setHolder(tempPlayer1);
+						tempPlayer1.handUp();
+						tempPlayer2.handDown();
+
+						tempPlayer1.setBasedOnV();
+						tempPlayer2.setBasedOnV();
+					}
+					else
+					{
+						tempPlayer1.fall();
+						tempPlayer2.fall();
 					}
 				}
 			}
 		}
-		
 	}
+		
 	
 	@Override
 	public void move(float delta)
@@ -598,7 +610,7 @@ public class PlayScreen extends Screen
 			}
 		}
 		
-		if (currentPlayer.distance(ball) < 100)
+		if (currentPlayer.distance(ball) < 200)
 		{
 			return;
 		}
@@ -630,5 +642,23 @@ public class PlayScreen extends Screen
 
 	public void setScore2(int score2) {
 		this.score2 = score2;
+	}
+	
+	private void setVAfterCollision(Player player1, Player player2)
+	{	
+		Vector3f v1 = new Vector3f(player1.getVelocity());
+		Vector3f v2 = new Vector3f(player2.getVelocity());
+		float alpha = 0.5f;
+		
+		// Get the normal vector of the collision.
+		Vector3f dv = Vector3f.sub(v2, v1, null);
+		Vector3f norm = dv.normalise(null);
+		
+		float factor = Vector3f.dot(dv, norm);
+		norm.scale(factor * alpha);
+		v1 = Vector3f.add(v1, norm, v1);
+		v2 = Vector3f.sub(v2, norm, v2);
+		player1.setVelocity(v1);
+		player2.setVelocity(v2);
 	}
 }

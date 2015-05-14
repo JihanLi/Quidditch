@@ -53,10 +53,20 @@ public abstract class CollisionObject extends Model
 	
 	public boolean checkCollision(CollisionObject other)
 	{
-		Vector3f vec = new Vector3f();
-		Vector3f.sub(pos, other.pos, vec);
+		Vector3f dPos = new Vector3f();
+		Vector3f dVel = new Vector3f();
+		Vector3f.sub(pos, other.pos, dPos);
+		Vector3f.sub(velocity, other.velocity, dVel);
+
+		float dotPro = Vector3f.dot(dPos, dVel);
 		
-		return vec.length() < radius + other.radius + COLLISION_DELTA;
+		if( (dotPro < 0) && (dVel.length() < radius + other.radius + COLLISION_DELTA)) {
+			System.out.println("Collide!");
+			System.out.println(dotPro);
+			System.out.println(dPos);
+			System.out.println(dVel);
+		}
+		return ((dotPro < -0.001f) && (dPos.length() < radius + other.radius + COLLISION_DELTA)); 
 	}
 	
 	public void move(float delta)
