@@ -27,6 +27,7 @@ public class Ball extends CollisionObject
 	private boolean isHold = false;
 	private Player holder;
 	private boolean holderCollided = false;
+	private float BETA = 0.8f; //Lost energy during collision.
 
 	public Ball(MainGame game, PlayScreen screen, int type, Vector3f defaultPos)
 	{
@@ -97,7 +98,7 @@ public class Ball extends CollisionObject
 	{
 		if (!isHold)
 		{
-			velocity.y *= -1.0f;
+			velocity.y *= -BETA;
 		}
 	}
 
@@ -106,15 +107,16 @@ public class Ball extends CollisionObject
 	{
 		if (isHold)
 		{
-			velocity.x *= -1.0f;
-			velocity.z *= -1.0f;
+			isHold = false;
+			velocity.x *= -BETA;
+			velocity.z *= -BETA;
 			velocity.y += GRAVITY;
 		}
 		else
 		{
-			velocity.x *= -1.0f;
-			velocity.y *= -1.0f;
-			velocity.z *= -1.0f;
+			velocity.x *= -BETA;
+			velocity.y *= -BETA;
+			velocity.z *= -BETA;
 		}
 
 	}
@@ -174,6 +176,7 @@ public class Ball extends CollisionObject
 	{
 		super.reset();
 		isHold = false;
+		holderCollided = false;
 	}
 	
 	public boolean isHolderCollided() {

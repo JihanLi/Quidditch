@@ -11,6 +11,13 @@ import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.render.Model;
 import edu.columbia.quidditch.render.screen.PlayScreen;
 
+/**
+ * Collision object class
+ * 
+ * @author Yuqing Guan, Yilin Xiong, Jihan Li
+ * 
+ */
+
 public abstract class CollisionObject extends Model
 {
 	protected static final float COLLISION_DELTA = 1e-3f;
@@ -110,7 +117,7 @@ public abstract class CollisionObject extends Model
 	
 	protected boolean checkHeight(Vector3f pos)
 	{
-		return (pos.y < PlayScreen.TOP && pos.y > PlayScreen.BOTTOM);
+		return (pos.y <= PlayScreen.TOP && pos.y >= PlayScreen.BOTTOM);
 	}
 	
 	public void setPos(Vector3f newPos)

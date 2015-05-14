@@ -24,10 +24,12 @@ import edu.columbia.quidditch.render.screen.PlayScreen;
 import edu.columbia.quidditch.util.IQELoader;
 
 /**
+ * Player class
  * 
- * @author Yuqing Guan
+ * @author Yuqing Guan, Yilin Xiong
  *
  */
+
 public class Player extends CollisionObject
 {
 	public static final int TEAM_GRYFFINDOR = 0;
@@ -42,6 +44,8 @@ public class Player extends CollisionObject
 	private static final float SECOND_RADIUS = 32;
 
 	private static final float W = 0.25f;
+	private static final float DY = 0.1f;
+	private static final float BETA = 0.1f;
 	private static final float ACCELERATOR = 0.002f;
 	private static final float GRAVITY = -0.02f;
 	
@@ -581,10 +585,24 @@ public class Player extends CollisionObject
 		}
 	}
 
-	public void rotX(int sign, float delta)
+//	public void rotX(int sign, float delta)
+//	{
+//		rot.x += sign * delta * W;
+//		rot.x = Math.max(-MAX_LOOK, Math.min(MAX_LOOK, rot.x));
+//	}
+	
+	public void moveY(int sign, float delta)
 	{
-		rot.x += sign * delta * W;
-		rot.x = Math.max(-MAX_LOOK, Math.min(MAX_LOOK, rot.x));
+		pos.y += sign * delta * DY;
+		
+		if (pos.y > PlayScreen.TOP)
+		{
+			pos.y = PlayScreen.TOP;
+		}
+		else if (pos.y < PlayScreen.BOTTOM)
+		{
+			pos.y = PlayScreen.BOTTOM;
+		}
 	}
 
 	public void rotY(int sign, float delta)
@@ -627,11 +645,14 @@ public class Player extends CollisionObject
 	{
 		if (controllable)
 		{
-			velocity.x = (float) (-Math.sin(Math.toRadians(rot.y))
-					* Math.cos(Math.toRadians(rot.x)) * speed);
-			velocity.y = (float) (Math.sin(Math.toRadians(rot.x)) * speed);
-			velocity.z = (float) (-Math.cos(Math.toRadians(rot.y))
-					* Math.cos(Math.toRadians(rot.x)) * speed);
+//			velocity.x = (float) (-Math.sin(Math.toRadians(rot.y))
+//					* Math.cos(Math.toRadians(rot.x)) * speed);
+//			velocity.y = (float) (Math.sin(Math.toRadians(rot.x)) * speed);
+//			velocity.z = (float) (-Math.cos(Math.toRadians(rot.y))
+//					* Math.cos(Math.toRadians(rot.x)) * speed);
+			velocity.x = (float) (-Math.sin(Math.toRadians(rot.y)) * speed);
+			velocity.z = (float) (-Math.cos(Math.toRadians(rot.y)) * speed);
+			velocity.y = 0;
 		}
 		else
 		{
@@ -642,20 +663,30 @@ public class Player extends CollisionObject
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
+		System.out.println(newPos);
 		if (newPos.y < PlayScreen.BOTTOM)
 		{
 			controllable = true;
+			newPos.y = PlayScreen.BOTTOM;
 		} 
 		
-		rot.x = -rot.x * 0.25f;
+		if (newPos.y > PlayScreen.TOP)
+		{
+			newPos.y = PlayScreen.TOP;
+		}
+		
+		rot.x = 0;
+		
+//		rot.x = -rot.x * 0.25f;
+		
 	}
 
 	@Override
 	protected void doOutOval(Vector3f newPos, float newOvalVal, float delta)
 	{
-		velocity.x = 0;
+		velocity.x *= -BETA;
 		velocity.y = 0;
-		velocity.z = 0;
+		velocity.z *= -BETA;
 		fall();
 	}
 
@@ -681,7 +712,6 @@ public class Player extends CollisionObject
 	
 	public void fall() {
 		
-		velocity.x = velocity.y = velocity.z = 0;
 		speed = 0;
 		rot.x = -90;
 		

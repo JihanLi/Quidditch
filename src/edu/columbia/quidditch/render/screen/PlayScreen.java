@@ -24,7 +24,7 @@ import edu.columbia.quidditch.render.collisionobject.Ball;
 import edu.columbia.quidditch.render.collisionobject.Player;
 
 /**
- * Camera class
+ * Playscreen class
  * 
  * @author Yuqing Guan, Jihan Li, Yilin Xiong
  * 
@@ -339,13 +339,13 @@ public class PlayScreen extends Screen
 		// Turn up myself
 		if (keyUp)
 		{
-			currentPlayer.rotX(1, delta);
+			currentPlayer.moveY(1, delta);
 		}
 
 		// Turn down myself
 		if (keyDown)
 		{
-			currentPlayer.rotX(-1, delta);
+			currentPlayer.moveY(-1, delta);
 		}
 
 		// Reset myself to a horizontal direction
