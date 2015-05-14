@@ -645,7 +645,6 @@ public class Player extends CollisionObject
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
-		
 		if (newPos.y < PlayScreen.BOTTOM)
 		{
 			controllable = true;
@@ -684,7 +683,11 @@ public class Player extends CollisionObject
 	}
 	
 	public void fall() {
+		
+		velocity.x = velocity.y = velocity.z = 0;
 		speed = 0;
+		rot.x = -90;
+		
 		controllable = false;
 	}
 	
