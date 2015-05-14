@@ -633,6 +633,8 @@ public class Player extends CollisionObject
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
+		controllable = true;
+		
 		rot.x = -rot.x * 0.25f;
 	}
 
