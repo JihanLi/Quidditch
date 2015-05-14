@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.glu.Sphere;
+import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -53,6 +54,30 @@ public class Ball extends CollisionObject
 		else
 		{
 			velocity.y += GRAVITY;
+		}
+	}
+	
+	public void move(float delta)
+	{
+		if(isHold)
+		{
+			Matrix4f ballPos = new Matrix4f();
+			ballPos.setIdentity();
+
+			ballPos.m03 = -10;
+			ballPos.m13 = 30;
+			ballPos.m23 = -25;
+			
+			Matrix4f.rotate((float) Math.toRadians(-holder.getRot().x), new Vector3f(1, 0, 0), ballPos, ballPos);
+			//Matrix4f.rotate((float) Math.toRadians(holder.getRot().z), new Vector3f(0, 0, 1), ballPos, ballPos);
+			Matrix4f.rotate((float) Math.toRadians(-holder.getRot().y), new Vector3f(0, 1, 0), ballPos, ballPos);
+			
+
+			setPos(holder.getPos().x + ballPos.m03, holder.getPos().y + ballPos.m13, holder.getPos().z + ballPos.m23);
+		}
+		else
+		{
+			super.move(delta);
 		}
 	}
 
@@ -135,10 +160,7 @@ public class Ball extends CollisionObject
 	{
 		isHold = true;
 		this.holder = holder;
-		Vector3f vel = holder.getVelocity();
-		float distance = vel.length();
-		setPos(holder.getPos().x + 10 * vel.x / distance, holder.getPos().y + 5
-				* vel.y / distance, holder.getPos().z + 5 * vel.z / distance);
 	}
+
 
 }
