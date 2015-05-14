@@ -440,7 +440,12 @@ public class PlayScreen extends Screen
 		for(int i = 0; i < players.size(); i++)
 		{
 			Player tempPlayer1 = players.get(i);
-			if(!ball.isHold())
+			Vector3f temp1 = new Vector3f(), temp2 = new Vector3f();
+			Vector3f.sub(ball.getVelocity(), tempPlayer1.getVelocity(), temp1);
+			Vector3f.sub(ball.getPos(), tempPlayer1.getPos(), temp2);
+			float dotPro = Vector3f.dot(temp1, temp2);
+			
+			if(!ball.isHold() && dotPro < 0)
 			{
 				if(ball.checkCollision(tempPlayer1))
 				{
