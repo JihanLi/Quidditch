@@ -571,9 +571,6 @@ public class Player extends CollisionObject
 			return false;
 		}
 		
-		if (dPos.length() < 2 * SECOND_RADIUS + COLLISION_DELTA)	
-			System.out.println(dotPro);
-		
 		if (other instanceof Player)
 		{
 			return dPos.length() < 2 * SECOND_RADIUS + COLLISION_DELTA;
@@ -698,21 +695,18 @@ public class Player extends CollisionObject
 		{
 			return;
 		}
-		rot.x = (float) Math.asin(velocity.y / speed);
-		rot.y = (float) Math.asin(-velocity.x / (speed * Math.cos(rot.x)));
+		
+		rot.y = (float) Math.asin( velocity.x / speed);
 		
 		if (velocity.z > 0)
+		{
+			rot.y -= Math.PI;
+		} 
+		else
 		{
 			rot.y *= -1;
 		}
 		
-		rot.x = (float) Math.toDegrees(rot.x);
 		rot.y = (float) Math.toDegrees(rot.y);
-		
-		rot.x = rot.x > 90 ? (rot.x - 180) : rot.x;
-		
-		System.out.println("Velocity:" + velocity);
-		System.out.println("Speed:" + speed);
-		System.out.println("rot:" + rot);
 	}
 }

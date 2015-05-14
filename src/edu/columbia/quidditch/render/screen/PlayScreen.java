@@ -62,8 +62,8 @@ public class PlayScreen extends Screen
 	{ new Vector3f(0, 151, 990), new Vector3f(-75, 117, 990),
 			new Vector3f(73, 74, 986) };
 
-	private static final float DOOR_RADIUS = 16.0f;
-	private static final float DOOR_EXT_RADIUS = 19.0f;
+	private static final float DOOR_RADIUS = 100.0f;
+	private static final float DOOR_EXT_RADIUS = 150.0f;
 
 	private FloatBuffer lightPosBuffer;
 
@@ -244,7 +244,14 @@ public class PlayScreen extends Screen
 		{ 
 			if(camera.getCameraPos().z >= -1400 && camera.getCameraPos().z <= 400) 
 			{
-				camera.setPosition(camera.getGlobalPos().x, camera.getGlobalPos().y, -(currentPlayer.getPos().z + offset)); 
+				if(!ball.isHold())
+				{
+					camera.setPosition(camera.getGlobalPos().x, camera.getGlobalPos().y, -(ball.getPos().z + offset)); 
+				}
+				else
+				{
+					camera.setPosition(camera.getGlobalPos().x, camera.getGlobalPos().y, -(currentPlayer.getPos().z + offset)); 
+				}
 			}
 			
 			if(camera.getCameraPos().z < -1400)
@@ -442,13 +449,26 @@ public class PlayScreen extends Screen
 	
 	public void checkCollision()
 	{
+		for(int i = 0; i < 3; i++)
+		{
+			if(!ball.isHold())
+			{
+				if(ball.checkCollision(AWAY_DOORS[i], DOOR_RADIUS))
+				{
+					score1 += 10;
+				}
+				if(ball.checkCollision(HOME_DOORS[i], DOOR_RADIUS))
+				{
+					score2 += 10;
+				}
+			}
+		}
+		
+		
 		for(int i = 0; i < players.size(); i++)
 		{
 			Player tempPlayer1 = players.get(i);
-			Vector3f temp1 = new Vector3f(), temp2 = new Vector3f();
-			Vector3f.sub(ball.getVelocity(), tempPlayer1.getVelocity(), temp1);
-			Vector3f.sub(ball.getPos(), tempPlayer1.getPos(), temp2);
-			float dotPro = Vector3f.dot(temp1, temp2);
+			boolean currentCollision = false;
 			
 			if(!ball.isHold())
 			{
@@ -474,21 +494,29 @@ public class PlayScreen extends Screen
 					
 					if(ball.getHolder().equals(tempPlayer1))
 					{
-						ball.setHolder(tempPlayer2);
-						tempPlayer2.handUp();
-						tempPlayer1.handDown();
+						if (!ball.isHolderCollided())
+						{
+							ball.setHolder(tempPlayer2);
+							tempPlayer2.handUp();
+							tempPlayer1.handDown();
+						}
 
 						tempPlayer1.setBasedOnV();
 						tempPlayer2.setBasedOnV();
+						currentCollision = true;
 					}
 					else if(ball.getHolder().equals(tempPlayer2))
 					{
-						ball.setHolder(tempPlayer1);
-						tempPlayer1.handUp();
-						tempPlayer2.handDown();
+						if (!ball.isHolderCollided())
+						{
+							ball.setHolder(tempPlayer1);
+							tempPlayer1.handUp();
+							tempPlayer2.handDown();
+						}
 
 						tempPlayer1.setBasedOnV();
 						tempPlayer2.setBasedOnV();
+						currentCollision = true;
 					}
 					else
 					{
@@ -497,6 +525,8 @@ public class PlayScreen extends Screen
 					}
 				}
 			}
+			
+			ball.setHolderCollided(currentCollision);
 		}
 	}
 		

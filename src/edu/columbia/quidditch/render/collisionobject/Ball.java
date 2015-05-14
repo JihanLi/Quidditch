@@ -26,6 +26,7 @@ public class Ball extends CollisionObject
 	private int type;
 	private boolean isHold = false;
 	private Player holder;
+	private boolean holderCollided = false;
 
 	public Ball(MainGame game, PlayScreen screen, int type, Vector3f defaultPos)
 	{
@@ -173,6 +174,14 @@ public class Ball extends CollisionObject
 	{
 		super.reset();
 		isHold = false;
+	}
+	
+	public boolean isHolderCollided() {
+		return holderCollided;
+	}
+
+	public void setHolderCollided(boolean holderCollided) {
+		this.holderCollided = holderCollided;
 	}
 
 }
