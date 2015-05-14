@@ -303,7 +303,6 @@ public class Player extends CollisionObject
 		createList();
 	}
 	
-	
 	@Override
 	protected void createList()
 	{
