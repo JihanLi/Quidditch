@@ -366,7 +366,12 @@ public class PlayScreen extends Screen
 			{
 				currentPlayer.handDown();
 				Vector3f vel = currentPlayer.getVelocity();
-				ball.setVelocity(2*vel.x, 2*vel.y, 2*vel.z);
+				Vector3f rot = currentPlayer.getRot();
+				float mod = vel.length();
+				if(vel.x == 0 && vel.y == 0 && vel.z == 0)
+					ball.setVelocity(0.5f*rot.x, 0.5f*rot.y, 0.5f*rot.z);
+				else
+					ball.setVelocity(0.8f*vel.x/mod, 0.8f*vel.y/mod, 0.8f*vel.z/mod);
 				ball.clearHolder();
 			}
 			else
