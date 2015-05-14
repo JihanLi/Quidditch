@@ -16,6 +16,7 @@ import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Camera;
 import edu.columbia.quidditch.basic.Fonts;
 import edu.columbia.quidditch.interact.CameraAnimator;
+import edu.columbia.quidditch.interact.ModelAnimator;
 import edu.columbia.quidditch.render.Model;
 import edu.columbia.quidditch.render.Sky;
 import edu.columbia.quidditch.render.Stadium;
@@ -62,8 +63,8 @@ public class PlayScreen extends Screen
 	{ new Vector3f(0, 151, 990), new Vector3f(-75, 117, 990),
 			new Vector3f(73, 74, 986) };
 
-	private static final float DOOR_RADIUS = 100.0f;
-	private static final float DOOR_EXT_RADIUS = 150.0f;
+	private static final float DOOR_RADIUS = 16.0f;
+	private static final float DOOR_EXT_RADIUS = 19.0f;
 
 	private FloatBuffer lightPosBuffer;
 
@@ -74,6 +75,8 @@ public class PlayScreen extends Screen
 	private float offset = 500;
 	private CameraAnimator startAnimator, winAnimator, loseAnimator, drawAnimator;
 	private int score1, score2;
+	private ModelAnimator shootAnimator1, shootAnimator2;
+	private boolean animate1 = false, animate2 = false;
 
 	private Model sky, terra, stadium;
 	private Player currentPlayer;
@@ -121,6 +124,9 @@ public class PlayScreen extends Screen
 
 		currentIndex = 0;
 		currentPlayer = playersUser.get(currentIndex);
+		
+		shootAnimator1 = new ModelAnimator(1, ball);
+		shootAnimator2 = new ModelAnimator(2, ball);
 
 		lightPosBuffer = floats2Buffer(LIGHT_POS);
 
@@ -181,6 +187,30 @@ public class PlayScreen extends Screen
 			}
 		}
 		
+		if(animate1)
+		{
+			animate1 = shootAnimator1.animate(); 
+			if(!animate1)
+			{
+				shootAnimator1.reset();
+				ball.setHold(true);
+				ball.setHolder(playersComputer.get(0));
+				score1 += 10;
+			}
+		}
+		
+		if(animate2)
+		{
+			animate2 = shootAnimator2.animate(); 
+			if(!animate2)
+			{
+				shootAnimator2.reset();
+				ball.setHold(true);
+				ball.setHolder(playersUser.get(0));
+				score2 += 10;
+			}
+		}
+		
 		camera.applyRotation();
 		sky.render();
 		camera.applyTranslation();
@@ -233,7 +263,7 @@ public class PlayScreen extends Screen
 	{
 		boolean keyReleased = false;
 		
-		if (gameOn)
+		if (gameOn || gameOff)
 		{
 			return true;
 		}
@@ -264,6 +294,11 @@ public class PlayScreen extends Screen
 			}
 		}
 		
+		if(animate1 || animate2)
+		{
+			return true;
+		}
+		
 		while (Keyboard.next())
 		{
 			if (!Keyboard.getEventKeyState())
@@ -285,6 +320,19 @@ public class PlayScreen extends Screen
 
 				case Keyboard.KEY_C:
 					globalView = !globalView;
+					break;
+					
+				case Keyboard.KEY_M:
+					animate1 = true;
+					ball.getHolder().handDown();
+					ball.setHold(false);
+					shootAnimator1.initiate();
+					break;
+				case Keyboard.KEY_N:
+					animate2 = true;
+					ball.getHolder().handDown();
+					ball.setHold(false);
+					shootAnimator2.initiate();
 					break;
 				}
 			}
@@ -618,10 +666,15 @@ public class PlayScreen extends Screen
 		drawAnimator = new CameraAnimator(3);
 		loseAnimator = new CameraAnimator(4);
 		
+		shootAnimator1 = new ModelAnimator(1, ball);
+		shootAnimator2 = new ModelAnimator(2, ball);
+		
 		setScore1(0);
 		setScore2(0);
 		gameOn = true;
 		gameOff = false;
+		animate1 = false;
+		animate2 = false;
 		globalView = true;
 	}
 	

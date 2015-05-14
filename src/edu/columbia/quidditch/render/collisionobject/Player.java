@@ -26,7 +26,7 @@ import edu.columbia.quidditch.util.IQELoader;
 /**
  * Player class
  * 
- * @author Yuqing Guan, Yilin Xiong
+ * @author Yuqing Guan, Yilin Xiong, Jihan Li
  *
  */
 
@@ -213,8 +213,6 @@ public class Player extends CollisionObject
 
 	private Link[] links;
 	private Model broom;
-
-	private Vector3f rot;
 	
 	private int team, handUpList;
 	private boolean handDown;
@@ -227,7 +225,6 @@ public class Player extends CollisionObject
 
 		broom = Broom.create(game);
 
-		rot = new Vector3f();
 		if(!inUserTeam) {
 			rot.y = 180;
 		}
@@ -690,10 +687,6 @@ public class Player extends CollisionObject
 		fall();
 	}
 
-	public Vector3f getRot()
-	{
-		return rot;
-	}
 	
 	public boolean isControllable() {
 		return controllable;

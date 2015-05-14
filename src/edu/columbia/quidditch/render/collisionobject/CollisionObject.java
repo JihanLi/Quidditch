@@ -26,6 +26,7 @@ public abstract class CollisionObject extends Model
 	
 	protected float radius, speed;
 	protected Vector3f defaultPos, lastPos, pos, velocity;
+	protected Vector3f rot;
 	
 	public CollisionObject(MainGame game, PlayScreen screen, float radius, Vector3f defaultPos)
 	{
@@ -37,6 +38,7 @@ public abstract class CollisionObject extends Model
 		lastPos = new Vector3f();
 		pos = new Vector3f(defaultPos);
 		velocity = new Vector3f();
+		rot = new Vector3f();
 		
 		this.screen = screen;
 	}
@@ -135,6 +137,25 @@ public abstract class CollisionObject extends Model
 		return pos;
 	}
 	
+	public void setRot(float x, float y, float z)
+	{
+		rot.x = x;
+		rot.y = y;
+		rot.z = z;
+	}
+	
+	public void setRot(Vector3f val)
+	{
+		rot.x = val.x;
+		rot.y = val.y;
+		rot.z = val.z;
+	}
+
+	public Vector3f getRot()
+	{
+		return rot;
+	}
+	
 	public void setVelocity(Vector3f vec)
 	{
 		velocity.x = vec.x;
@@ -159,6 +180,7 @@ public abstract class CollisionObject extends Model
 		pos.set(defaultPos);
 		lastPos.set(defaultPos);
 		velocity.set(0, 0, 0);
+		rot.set(0, 0, 0);
 		speed = 0;
 	}
 	
