@@ -161,6 +161,12 @@ public class Ball extends CollisionObject
 		isHold = true;
 		this.holder = holder;
 	}
+	
+	public void clearHolder()
+	{
+		isHold = false;
+		this.holder = null;
+	}
 
 
 }

@@ -365,6 +365,9 @@ public class PlayScreen extends Screen
 			if(ball.isHold() && ball.getHolder().equals(currentPlayer))
 			{
 				currentPlayer.handDown();
+				Vector3f vel = currentPlayer.getVelocity();
+				ball.setVelocity(2*vel.x, 2*vel.y, 2*vel.z);
+				ball.clearHolder();
 			}
 			else
 			{
