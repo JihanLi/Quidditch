@@ -20,7 +20,7 @@ import edu.columbia.quidditch.basic.Texture;
  */
 public class LoadScreen extends Screen implements Runnable
 {
-	private static final float ALL_LOAD_COUNT = 200;
+	private static final float ALL_LOAD_COUNT = 144;
 	
 	private static final long INTERVAL = 100;
 	
