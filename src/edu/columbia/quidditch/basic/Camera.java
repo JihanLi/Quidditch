@@ -85,7 +85,7 @@ public class Camera
 	
 			Vector3f playerRot = player.getRot();
 	
-			glRotatef(-playerRot.x, 1, 0, 0);
+			glRotatef(-playerRot.x - 30, 1, 0, 0);
 			glRotatef(-playerRot.y, 0, 1, 0);
 		}
 	}
@@ -155,7 +155,7 @@ public class Camera
 			glRotatef(playerRot.y, 0, 1, 0);
 			glRotatef(playerRot.x, 1, 0, 0);
 	
-			glTranslatef(0, -42, 21);
+			glTranslatef(0, -40, -30);
 			
 			glRotatef(-playerRot.x, 1, 0, 0);
 			glRotatef(-playerRot.y, 0, 1, 0);

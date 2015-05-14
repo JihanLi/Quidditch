@@ -232,7 +232,7 @@ public class PlayScreen extends Screen
 			if(ball.checkScope(new Vector3f(0, 85.5f, -975f), 400) && ball.getPos().z > -975f)
 			{
 				count++;
-				if(count < 20)
+				if(count < 40)
 					Fonts.draw(500 , 50, "Press Enter to Shoot the Gate!", "Castellar", Color.yellow, 20);
 				if(count == 60)
 					count = 0;
