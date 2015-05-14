@@ -18,12 +18,14 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.Drawable;
 import org.lwjgl.opengl.SharedDrawable;
+
 import edu.columbia.quidditch.interact.ButtonListener;
 import edu.columbia.quidditch.render.screen.LoadScreen;
 import edu.columbia.quidditch.render.screen.Modal;
 import edu.columbia.quidditch.render.screen.PlayScreen;
 import edu.columbia.quidditch.render.screen.Screen;
 import edu.columbia.quidditch.render.screen.StartScreen;
+import edu.columbia.quidditch.render.screen.TeamScreen;
 
 /**
  * The main game class
@@ -52,6 +54,7 @@ public class MainGame
 	private static final int STATUS_RUNNING = 1;
 	private static final int STATUS_LOADING = 2;
 	private static final int STATUS_EXIT = 3;
+	private static final int STATUS_TEAM = 4;
 
 	private static final int BYTES_PER_PIXEL = 4;
 
@@ -59,6 +62,7 @@ public class MainGame
 	private long lastFrameTime;
 
 	private StartScreen startScreen;
+	private TeamScreen teamScreen;
 
 	// Can be switched between windowed and fullscreen mode
 	private DisplayMode windowed, fullscreen, current;
@@ -236,6 +240,7 @@ public class MainGame
 	private void createModels()
 	{
 		startScreen = new StartScreen(this);
+		teamScreen = new TeamScreen(this);
 
 		modal = Modal.create(this);
 
@@ -334,6 +339,8 @@ public class MainGame
 		case STATUS_START:
 			startScreen.render();
 			break;
+		case STATUS_TEAM:
+			teamScreen.render();
 		}
 
 		if (showModal)
@@ -497,6 +504,11 @@ public class MainGame
 	{
 		status = STATUS_RUNNING;
 	}
+	
+	public void chooseTeam()
+	{
+		status = STATUS_TEAM;
+	}
 
 	public void requestClose()
 	{
@@ -526,12 +538,22 @@ public class MainGame
 			{
 			case STATUS_START:
 				return startScreen;
+			case STATUS_TEAM:
+				return teamScreen;
 			case STATUS_RUNNING:
 				return playScreen;
 			default:
 				return null;
 			}
 		}
+	}
+
+	public PlayScreen getPlayScreen() {
+		return playScreen;
+	}
+
+	public void setPlayScreen(PlayScreen playScreen) {
+		this.playScreen = playScreen;
 	}
 
 	public void terminate()

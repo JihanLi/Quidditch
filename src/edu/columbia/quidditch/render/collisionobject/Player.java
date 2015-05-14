@@ -196,7 +196,7 @@ public class Player extends CollisionObject
 			for (int i = 0; i < 4; ++i)
 			{
 				mutableMtl[i] = originMtl.copy();
-				mutableMtl[i].setTexture(coats[i]);
+				mutableMtl[i].setTexture(shirts[i]);
 			}
 		}
 		catch (IOException e)
@@ -660,7 +660,6 @@ public class Player extends CollisionObject
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
-		System.out.println(newPos);
 		if (newPos.y < PlayScreen.BOTTOM)
 		{
 			controllable = true;
@@ -671,10 +670,6 @@ public class Player extends CollisionObject
 		{
 			newPos.y = PlayScreen.TOP;
 		}
-		
-		rot.x = 0;
-		
-//		rot.x = -rot.x * 0.25f;
 		
 	}
 
@@ -706,7 +701,6 @@ public class Player extends CollisionObject
 	public void fall() {
 		
 		speed = 0;
-		rot.x = -90;
 		
 		controllable = false;
 	}

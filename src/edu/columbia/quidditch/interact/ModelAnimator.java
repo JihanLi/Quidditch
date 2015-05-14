@@ -39,13 +39,13 @@ public class ModelAnimator {
 			current = new String[]{"s "+pos.x+" "+pos.y+" "+pos.z
 								   +" "+rot.x+" "+rot.y+" "+rot.z+" 10", 
 								   "t "+pos.x+" "+pos.y+" "+pos.z
-								   +" 5 171 -975 50", "t 5 171 -975 5 171 -1000 100", "f 0 0 0 0 0 0 0"};
+								   +" 5 171 -975 50", "t 5 171 -975 5 171 -1000 50", "f 0 0 0 0 0 0 0"};
 			break;
 		case 2:
 			current = new String[]{"s "+pos.x+" "+pos.y+" "+pos.z
 								   +" "+rot.x+" "+rot.y+" "+rot.z+" 10", 
 								   "t "+pos.x+" "+pos.y+" "+pos.z
-								   +" 0 151 990 50", "t 0 151 990 0 151 1200 100", "f 0 0 0 0 0 0 0"};
+								   +" 0 151 990 50", "t 0 151 990 0 151 1200 50", "f 0 0 0 0 0 0 0"};
 			break;
 		case 3:
 			float up = pos.y + 10;

@@ -80,6 +80,14 @@ public abstract class CollisionObject extends Model
 		return vec.length() < radius + rad + COLLISION_DELTA;
 	}
 	
+	public boolean checkScope(Vector3f other, float rad)
+	{
+		Vector3f vec = new Vector3f();
+		Vector3f.sub(pos, other, vec);
+		
+		return vec.length() < rad;
+	}
+	
 	public void move(float delta)
 	{
 		lastPos.set(pos);

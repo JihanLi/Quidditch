@@ -35,7 +35,7 @@ public class StartScreen extends Screen
 			@Override
 			public void onClick()
 			{
-				game.startGame();
+				game.chooseTeam();
 			}
 		});
 
@@ -94,7 +94,7 @@ public class StartScreen extends Screen
 					break;
 				case Keyboard.KEY_RETURN:
 					keyReleased = true;
-					game.startGame();
+					game.chooseTeam();
 				}
 			}
 		}

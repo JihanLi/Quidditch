@@ -61,7 +61,7 @@ public class PlayScreen extends Screen
 
 	private static final Vector3f[] AWAY_DOORS =
 	{ new Vector3f(0, 151, 990), new Vector3f(-75, 117, 990),
-			new Vector3f(73, 74, 986) };
+			new Vector3f(73, 74, 990) };
 
 	private static final float DOOR_RADIUS = 16.0f;
 	private static final float DOOR_EXT_RADIUS = 19.0f;
@@ -70,19 +70,21 @@ public class PlayScreen extends Screen
 
 	private Camera camera;
 	private boolean globalView = true;
-	private boolean gameOn = false;
+	private boolean gameOn = true;
 	private boolean gameOff = false;
 	private float offset = 500;
 	private CameraAnimator startAnimator, winAnimator, loseAnimator, drawAnimator;
 	private int score1, score2;
 	private ModelAnimator shootAnimator1, shootAnimator2;
 	private boolean animate1 = false, animate2 = false;
+	private int count = 0;
 
 	private Model sky, terra, stadium;
 	private Player currentPlayer;
 	private int currentIndex;
 	
 	private int numberOfMember = 3;
+	private String[] teamName = {"Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"};
 	private int teamUser = 0;
 	private int teamComputer = 1;
 	private ArrayList<Player> playersUser = new ArrayList<Player>();
@@ -193,7 +195,6 @@ public class PlayScreen extends Screen
 			if(!animate1)
 			{
 				shootAnimator1.reset();
-				ball.setHold(true);
 				ball.setHolder(playersComputer.get(0));
 				score1 += 10;
 			}
@@ -205,7 +206,6 @@ public class PlayScreen extends Screen
 			if(!animate2)
 			{
 				shootAnimator2.reset();
-				ball.setHold(true);
 				ball.setHolder(playersUser.get(0));
 				score2 += 10;
 			}
@@ -223,8 +223,20 @@ public class PlayScreen extends Screen
 		
 		if(!gameOn && !gameOff)
 		{
-			Fonts.draw(130 , 500, "Your Team Score: " + score1, "Times New Roman", Color.white, 20);
-			Fonts.draw(800 , 500, "Your Enemy Score: " + score2, "Times New Roman", Color.white, 20);
+			Fonts.draw(120 , 500, teamName[teamUser] + "(You): " + score1, "Times New Roman", Color.white, 20);
+			Fonts.draw(800 , 500, teamName[teamComputer] + "(Computer): " + score2, "Times New Roman", Color.white, 20);
+		}
+		
+		if(ball.isHold() && ball.getHolder().equals(currentPlayer))
+		{
+			if(ball.checkScope(new Vector3f(0, 85.5f, -975f), 400) && ball.getPos().z > -975f)
+			{
+				count++;
+				if(count < 20)
+					Fonts.draw(500 , 50, "Press Enter to Shoot the Gate!", "Castellar", Color.yellow, 20);
+				if(count == 60)
+					count = 0;
+			}
 		}
 		
 		glColor4f(0, 0, 1, 0.5f);
@@ -321,17 +333,10 @@ public class PlayScreen extends Screen
 				case Keyboard.KEY_C:
 					globalView = !globalView;
 					break;
-					
-				case Keyboard.KEY_M:
-					animate1 = true;
-					ball.getHolder().handDown();
-					ball.setHold(false);
-					shootAnimator1.initiate();
-					break;
 				case Keyboard.KEY_N:
 					animate2 = true;
 					ball.getHolder().handDown();
-					ball.setHold(false);
+					ball.clearHolder();
 					shootAnimator2.initiate();
 					break;
 				}
@@ -420,14 +425,23 @@ public class PlayScreen extends Screen
 			if(ball.isHold() && ball.getHolder().equals(currentPlayer))
 			{
 				currentPlayer.handDown();
-				Vector3f vel = currentPlayer.getVelocity();
-				Vector3f rot = currentPlayer.getRot();
-				float mod = vel.length();
-				if(vel.x == 0 && vel.y == 0 && vel.z == 0)
-					ball.setVelocity(0.5f*rot.x, 0.5f*rot.y, 0.5f*rot.z);
+				if(ball.checkScope(new Vector3f(0, 85.5f, -975f), 400) && ball.getPos().z > -975f)
+				{
+					animate1 = true;
+					ball.clearHolder();
+					shootAnimator1.initiate();
+				}
 				else
-					ball.setVelocity(0.8f*vel.x/mod, 0.8f*vel.y/mod, 0.8f*vel.z/mod);
-				ball.clearHolder();
+				{
+					Vector3f vel = currentPlayer.getVelocity();
+					Vector3f rot = currentPlayer.getRot();
+					float mod = vel.length();
+					if(vel.x == 0 && vel.y == 0 && vel.z == 0)
+						ball.setVelocity(2*rot.x, 2*rot.y, 2*rot.z);
+					else
+						ball.setVelocity(0.8f*vel.x/mod, 0.8f*vel.y/mod, 0.8f*vel.z/mod);
+					ball.clearHolder();
+				}
 			}
 			else
 			{
@@ -743,5 +757,29 @@ public class PlayScreen extends Screen
 		v2 = Vector3f.sub(v2, norm, v2);
 		player1.setVelocity(v1);
 		player2.setVelocity(v2);
+	}
+
+	public int getTeamUser() {
+		return teamUser;
+	}
+
+	public void setTeamUser(int teamUser) {
+		this.teamUser = teamUser;
+		for (Player player : playersUser)
+		{
+			player.setTeam(teamUser);
+		}
+	}
+
+	public int getTeamComputer() {
+		return teamComputer;
+	}
+
+	public void setTeamComputer(int teamComputer) {
+		this.teamComputer = teamComputer;
+		for (Player player : playersComputer)
+		{
+			player.setTeam(teamComputer);
+		}
 	}
 }

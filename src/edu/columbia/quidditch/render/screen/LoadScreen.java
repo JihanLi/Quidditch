@@ -15,12 +15,12 @@ import edu.columbia.quidditch.basic.Texture;
 /**
  * Loading screen, executed in a separated new thread
  * 
- * @author Yuqing Guan, Yilin Xiong
+ * @author Yilin Xiong, Yuqing Guan
  * 
  */
 public class LoadScreen extends Screen implements Runnable
 {
-	private static final float ALL_LOAD_COUNT = 144;
+	private static final float ALL_LOAD_COUNT = 160.5f;
 	
 	private static final long INTERVAL = 100;
 	
