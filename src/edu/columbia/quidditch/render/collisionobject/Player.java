@@ -23,6 +23,11 @@ import edu.columbia.quidditch.render.link.Link;
 import edu.columbia.quidditch.render.screen.PlayScreen;
 import edu.columbia.quidditch.util.IQELoader;
 
+/**
+ * 
+ * @author Yuqing Guan
+ *
+ */
 public class Player extends CollisionObject
 {
 	public static final int TEAM_GRYFFINDOR = 0;
@@ -542,7 +547,7 @@ public class Player extends CollisionObject
 
 		glDisable(GL_LIGHTING);
 
-		glColor4f(1, 0, 0, 0.2f);
+		glColor4f(1, 0, 0, 0.02f);
 
 		new Sphere().draw(32, 64, 64);
 		
@@ -628,19 +633,7 @@ public class Player extends CollisionObject
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
-		
-		if (newPos.y < PlayScreen.BOTTOM)
-		{
-			controllable = true;
-		} 
-		else
-		{
-			controllable = false;
-		}
-		
-		velocity.y = 0;
-		speed = 0;
-		rot.x = 0;
+		rot.x = -rot.x * 0.25f;
 	}
 
 	@Override
