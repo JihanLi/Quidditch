@@ -9,7 +9,6 @@ import edu.columbia.quidditch.basic.Texture;
 import edu.columbia.quidditch.interact.ButtonListener;
 import edu.columbia.quidditch.render.Button;
 
-
 /**
  * Modal
  * 
