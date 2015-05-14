@@ -51,6 +51,7 @@ public class MainGame
 	private static final int STATUS_START = 0;
 	private static final int STATUS_RUNNING = 1;
 	private static final int STATUS_LOADING = 2;
+	private static final int STATUS_EXIT = 3;
 
 	private static final int BYTES_PER_PIXEL = 4;
 
@@ -76,7 +77,6 @@ public class MainGame
 	private ButtonListener closeListener, cancelListener, returnListener;
 
 	private PlayScreen playScreen;
-    
 
 	public MainGame()
 	{
@@ -114,7 +114,7 @@ public class MainGame
 	private void createWindow()
 	{
 		try
-		{	
+		{
 			windowed = new DisplayMode(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 			fullscreen = Display.getDesktopDisplayMode();
 
@@ -180,7 +180,7 @@ public class MainGame
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_COLOR_MATERIAL);
-		
+
 	}
 
 	/**
@@ -190,6 +190,15 @@ public class MainGame
 	{
 		try
 		{
+			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					status = STATUS_EXIT;
+				}
+			}));
+
 			LoadScreen loadingScreen = new LoadScreen(this);
 			Thread loadingThread = new Thread(loadingScreen);
 			loadingThread.start();
@@ -248,7 +257,7 @@ public class MainGame
 			}
 
 		};
-		
+
 		returnListener = new ButtonListener()
 		{
 			@Override
@@ -259,7 +268,7 @@ public class MainGame
 				showModal = false;
 			}
 		};
-		
+
 		playScreen = new PlayScreen(this);
 
 		status = STATUS_START;
@@ -296,7 +305,7 @@ public class MainGame
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		
+
 		if (status == STATUS_RUNNING)
 		{
 			playScreen.render();
@@ -344,7 +353,7 @@ public class MainGame
 	private void moveAndInput()
 	{
 		float delta = getDeltaTime();
-		
+
 		Screen screen = getActiveScreen();
 		if (screen != null)
 		{
@@ -352,7 +361,7 @@ public class MainGame
 			screen.checkMouseInput(delta);
 			screen.move(delta);
 		}
-		
+
 		if (Display.isCloseRequested())
 		{
 			requestClose();
@@ -409,8 +418,7 @@ public class MainGame
 
 		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height
 				* BYTES_PER_PIXEL);
-		glReadPixels(0, 0, width, height, GL_RGBA,
-				GL_UNSIGNED_BYTE, buffer);
+		glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
 		BufferedImage image = new BufferedImage(width, height,
 				BufferedImage.TYPE_INT_RGB);
@@ -525,12 +533,12 @@ public class MainGame
 			}
 		}
 	}
-	
+
 	public void terminate()
 	{
 		status = STATUS_START;
 	}
-	
+
 	public static void main(String[] args)
 	{
 		new MainGame().run();

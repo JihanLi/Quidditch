@@ -15,7 +15,7 @@ import edu.columbia.quidditch.basic.Texture;
 /**
  * Loading screen, executed in a separated new thread
  * 
- * @author Yilin Xiong
+ * @author Yuqing Guan, Yilin Xiong
  * 
  */
 public class LoadScreen extends Screen implements Runnable
