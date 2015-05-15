@@ -220,7 +220,7 @@ public class PlayScreen extends Screen
 			}
 		}
 
-		if (score1 > 0 || score2 > 0)
+		if (score1 > 140 || score2 > 140)
 		{
 			gameOff = true;
 		}
@@ -229,17 +229,19 @@ public class PlayScreen extends Screen
 		{
 			if (score1 > score2)
 			{
-				gameOff = winAnimator.animate(camera);
+				if (!winAnimator.animate(camera))
+				{
+					resetGame();
+					game.stopGame();
+				}
 			}
 			else
 			{
-				gameOff = loseAnimator.animate(camera);
-			}
-
-			if (!gameOff)
-			{
-				resetGame();
-				game.stopGame();
+				if (!loseAnimator.animate(camera))
+				{
+					resetGame();
+					game.stopGame();
+				}
 			}
 		}
 
@@ -485,56 +487,8 @@ public class PlayScreen extends Screen
 		return keyReleased;
 	}
 
-	@Override
-	public boolean checkMouseInput(float delta)
-	{
-		/*
-		 * if (super.checkMouseInput(delta)) { return true; }
-		 * 
-		 * // Rotate the camera by mouse if (Display.isActive()) {
-		 * if(Mouse.isInsideWindow() && Mouse.isButtonDown(0)) { flag = true; }
-		 * 
-		 * if(!Mouse.isButtonDown(0) && flag) { flag = false;
-		 * camera.setRotation(character.getRotation());
-		 * camera.setPosition(character.getPosition()); } }
-		 */
-
-		if (super.checkMouseInput(delta))
-		{
-			return true;
-		}
-
-		/*
-		 * // Rotate the camera by mouse if (Display.isActive()) { if
-		 * (camera.isSwinging()) { float mouseDX = Mouse.getDX(); float mouseDY
-		 * = -Mouse.getDY();
-		 * 
-		 * camera.rotY(mouseDX * MOUSE_SENSITIVITY * delta); camera.rotX(mouseDY
-		 * * MOUSE_SENSITIVITY * delta); } else { Mouse.getDX(); Mouse.getDY();
-		 * 
-		 * camera.startSwing(); } } else { camera.stopSwing(); }
-		 */
-
-		return false;
-	}
-
 	public void checkCollision()
 	{
-		// for(int i = 0; i < 3; i++)
-		// {
-		// if(!ball.isHold())
-		// {
-		// if(ball.checkCollision(AWAY_DOORS[i], DOOR_RADIUS))
-		// {
-		// score1 += 10;
-		// }
-		// if(ball.checkCollision(HOME_DOORS[i], DOOR_RADIUS))
-		// {
-		// score2 += 10;
-		// }
-		// }
-		// }
-
 		for (int i = 0; i < players.size(); i++)
 		{
 			Player tempPlayer1 = players.get(i);
@@ -657,7 +611,10 @@ public class PlayScreen extends Screen
 			}
 		}
 
-		AI.playerControl();
+		if (!gameOff)
+		{
+			AI.playerControl();
+		}
 
 		for (int i = 0; i < numberOfMember; i++)
 		{
