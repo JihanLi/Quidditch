@@ -26,8 +26,8 @@ public class StartScreen extends Screen
 		bg = Texture.createFromFile("res/start/main.png");
 		title = Texture.createFromFile("res/title/title.png");
 
-		Button button0 = new Button(game, "Green", 355, 200, "Start Game", 18);
-		Button button1 = new Button(game, "Green", 355, 120, "Quit", 18);
+		Button button0 = new Button(game, "Green", 355, 170, "Start Game", 18);
+		Button button1 = new Button(game, "Green", 355, 70, "Quit", 18);
 
 		button0.setListener(new ButtonListener()
 		{

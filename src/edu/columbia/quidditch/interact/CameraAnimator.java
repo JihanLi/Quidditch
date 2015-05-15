@@ -35,11 +35,7 @@ public class CameraAnimator
 			"s 0 0 0 10 180 0 20", "t 0 0 0 0 -45 0 300",
 			"s 0 -45 0 10 180 0 20", "s 100 -45 50 0 180 0 20",
 			"r 0 180 0 0 90 0 300", "s 100 -45 50 0 0 0 20", "f 0 0 0 0 0 0 0" };
-	public static String[] animation4 =
-	{ "s 0 -200 -1000 30 0 0 10", "t 0 -200 -1000 0 -100 -500 200",
-			"s 0 0 0 10 180 0 20", "t 0 0 0 0 -45 0 300",
-			"s 0 -45 0 10 180 0 20", "s 100 -45 50 0 180 0 20",
-			"r 0 180 0 0 90 0 300", "s 100 -45 50 0 0 0 20", "f 0 0 0 0 0 0 0" };
+
 
 	public CameraAnimator(int index)
 	{
@@ -53,9 +49,6 @@ public class CameraAnimator
 			break;
 		case 3:
 			current = animation3;
-			break;
-		case 4:
-			current = animation4;
 			break;
 		}
 	}

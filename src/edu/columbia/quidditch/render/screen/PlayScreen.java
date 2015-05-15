@@ -329,7 +329,15 @@ public class PlayScreen extends Screen
 			if (camera.getCameraPos().z >= -1400
 					&& camera.getCameraPos().z <= 400)
 			{
-				if (currentPlayer != null)
+				if(animate2)
+				{
+					camera.setPosition(
+							camera.getGlobalPos().x - ball.getPos().x
+									/ 2, camera.getGlobalPos().y
+									- ball.getPos().y,
+							-(ball.getPos().z + offset));
+				}
+				else if (currentPlayer != null)
 				{
 					camera.setPosition(
 							camera.getGlobalPos().x - currentPlayer.getPos().x
