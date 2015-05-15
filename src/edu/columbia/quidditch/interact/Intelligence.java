@@ -33,8 +33,10 @@ public class Intelligence {
 	{
 		for(Player player : playersUser)
 		{
-			if(!playscreen.getCurrentPlayer().equals(player))
+			if (!playscreen.getCurrentPlayer().equals(player))
+			{
 				nonHolderControl(player);
+			}
 		}
 		
 		if(!playscreen.getBall().isHold() || playscreen.isHeldByUser())
@@ -84,6 +86,10 @@ public class Intelligence {
 	private void holderControl(Player player) {
 
 		player.accelerate(ATTACKER);
+		if (player.avoidOval())
+		{
+			return;
+		}
 		
 		if(checkComingCollision(player))
 		{
@@ -162,6 +168,10 @@ public class Intelligence {
 	private void nonHolderControl(Player player) {
 		
 		player.accelerate(OTHER);
+		if (player.avoidOval())
+		{
+			return;
+		}
 		
 		if(checkComingCollision(player))
 		{
@@ -184,6 +194,10 @@ public class Intelligence {
 	private void attackerControl(Player player) {
 		
 		player.accelerate(ATTACKER);
+		if (player.avoidOval())
+		{
+			return;
+		}
 		
 		if(checkComingCollision(player))
 		{

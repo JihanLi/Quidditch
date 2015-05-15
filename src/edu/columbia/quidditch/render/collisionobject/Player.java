@@ -807,5 +807,25 @@ public class Player extends CollisionObject
 		rot.y += w;
 	}
 	
+	public boolean avoidOval()
+	{
+		float dis = checkOval(pos);
+		
+		if (dis > 0.9)
+		{
+			float dx = (float) (-Math.sin(Math.toRadians(rot.y)) * speed);
+			float dz = (float) (-Math.cos(Math.toRadians(rot.y)) * speed);
+			Vector3f newPos = new Vector3f(pos.x + dx, pos.y, pos.z + dz);
+			
+			if (checkOval(newPos) > dis)
+			{
+				rot.y += 180;
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
 	
 }
