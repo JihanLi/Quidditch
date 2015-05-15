@@ -95,8 +95,8 @@ public class Ball extends CollisionObject
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
-		System.out.println(newPos);
-		System.out.println(velocity);
+		//System.out.println(newPos);
+		//System.out.println(velocity);
 		if (!isHold)
 		{
 			velocity.y *= -BETA;

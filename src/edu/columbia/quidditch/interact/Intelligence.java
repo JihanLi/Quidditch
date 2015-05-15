@@ -95,7 +95,7 @@ public class Intelligence {
 			return;
 		}
 		
-		if(checkComingCollision(player))
+		if(checkComingCollision(player, false))
 		{
 			float rand = (float) Math.random();
 			
@@ -133,34 +133,38 @@ public class Intelligence {
 			return;
 		}
 		
-		if(sleep > 300)
+		if(sleep > 200)
 		{
 			Vector3f dx = new Vector3f();
 			Vector3f.sub(new Vector3f(0, 75.5f, 990f), player.getPos(), dx);
 			player.setRotBasedOnDX(dx);
 		}
+		//System.out.println(sleep);
 		sleep++;
 		
 	}
 		
-	private boolean checkComingCollision(Player player) {
+	private boolean checkComingCollision(Player player, boolean containPartner) {
 		
 		Player againstPlayer = null;
 		float max = Float.MAX_VALUE;
 		
-		for (Player other : playersComputer)
+		if (containPartner)
 		{
-			if (other.equals(playscreen.getBall().getHolder()))
+			for (Player other : playersComputer)
 			{
-				continue;
-			}
-			if (player.checkCollision(other, RADIUS))
-			{
-				float dis = player.distance(other);
-				if (max > dis)
+				if (other.equals(playscreen.getBall().getHolder()))
 				{
-					max = dis;
-					againstPlayer = other;
+					continue;
+				}
+				if (player.checkCollision(other, RADIUS))
+				{
+					float dis = player.distance(other);
+					if (max > dis)
+					{
+						max = dis;
+						againstPlayer = other;
+					}
 				}
 			}
 		}
@@ -200,7 +204,7 @@ public class Intelligence {
 			return;
 		}
 		
-		if(checkComingCollision(player))
+		if(checkComingCollision(player, true))
 		{
 			return;
 		}
@@ -222,7 +226,7 @@ public class Intelligence {
 			return;
 		}
 		
-		if(checkComingCollision(player))
+		if(checkComingCollision(player, true))
 		{
 			return;
 		}
