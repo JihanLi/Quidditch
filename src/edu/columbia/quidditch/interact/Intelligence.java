@@ -9,6 +9,13 @@ import edu.columbia.quidditch.render.collisionobject.Ball;
 import edu.columbia.quidditch.render.collisionobject.Player;
 import edu.columbia.quidditch.render.screen.PlayScreen;
 
+/**
+ * Playscreen class
+ * 
+ * @author Jihan Li && Yilin Xiong
+ * 
+ */
+
 public class Intelligence {
 	
 	private static final float RADIUS = 100f;

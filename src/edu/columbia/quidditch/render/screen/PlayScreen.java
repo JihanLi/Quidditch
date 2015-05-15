@@ -27,7 +27,7 @@ import edu.columbia.quidditch.render.collisionobject.Player;
 /**
  * Playscreen class
  * 
- * @author Yuqing Guan, Jihan Li, Yilin Xiong
+ * @author Jihan Li, Yilin Xiong, Yuqing Guan
  * 
  */
 
@@ -70,8 +70,7 @@ public class PlayScreen extends Screen
 	private boolean gameOn = false; // TODO
 	private boolean gameOff = false;
 	private float offset = 500;
-	private CameraAnimator startAnimator, winAnimator, loseAnimator,
-			drawAnimator;
+	private CameraAnimator startAnimator, winAnimator, loseAnimator;
 	private int score1, score2;
 	private ModelAnimator shootAnimator1, shootAnimator2;
 	private boolean animate1 = false, animate2 = false;
@@ -105,8 +104,7 @@ public class PlayScreen extends Screen
 
 		startAnimator = new CameraAnimator(1);
 		winAnimator = new CameraAnimator(2);
-		drawAnimator = new CameraAnimator(3);
-		loseAnimator = new CameraAnimator(4);
+		loseAnimator = new CameraAnimator(3);
 
 		setScore1(0);
 		setScore2(0);
@@ -175,28 +173,6 @@ public class PlayScreen extends Screen
 				camera.setRotation(30, 0, 0);
 		}
 
-		if (gameOff)
-		{
-			if (score1 > score2)
-			{
-				gameOff = winAnimator.animate(camera);
-			}
-			else if (score1 == score2)
-			{
-				gameOff = drawAnimator.animate(camera);
-			}
-			else
-			{
-				gameOff = loseAnimator.animate(camera);
-			}
-
-			if (!gameOff)
-			{
-				resetGame();
-				game.terminate();
-			}
-		}
-
 		if (animate1)
 		{
 			animate1 = shootAnimator1.animate();
@@ -253,6 +229,29 @@ public class PlayScreen extends Screen
 				AI.setWake(0);
 			}
 		}
+		
+		if(score1 > 0 || score2 > 0)
+		{
+			gameOff = true;
+		}
+		
+		if(gameOff) 
+		{ 
+			if(score1 > score2)
+			{
+				gameOff = winAnimator.animate(camera); 
+			}
+			else
+			{
+				gameOff = loseAnimator.animate(camera); 
+			}
+			
+			if(!gameOff)
+			{
+				resetGame();
+				game.terminate();
+			}
+		}
 
 		camera.applyRotation();
 		sky.render();
@@ -266,13 +265,25 @@ public class PlayScreen extends Screen
 		{
 			radar.render();
 
-			Fonts.draw(120, 500, teamName[teamUser] + "(You): " + score1,
+			Fonts.draw(120, 500, teamName[teamUser] + " (You): " + score1,
 					"Times New Roman", Color.white, 20);
-			Fonts.draw(800, 500, teamName[teamComputer] + "(Computer): "
+			Fonts.draw(800, 500, teamName[teamComputer] + " (Computer): "
 					+ score2, "Times New Roman", Color.white, 20);
 		}
+		
+		if(gameOff) 
+		{ 
+			if(score1 > score2)
+			{
+				Fonts.draw(450 , 300, "You Win!", "Gungsuh", Color.yellow, 40);
+			}
+			else
+			{
+				Fonts.draw(450 , 300, "You Lose!", "Cooper Black", Color.white, 40);
+			}
+		}
 
-		if (ball.isHold() && ball.getHolder().equals(currentPlayer))
+		if (ball.isHold() && ball.getHolder().equals(currentPlayer) && !gameOff)
 		{
 			if (ball.checkScope(new Vector3f(0, 85.5f, -975f), 400)
 					&& ball.getPos().z > -975f)
@@ -740,8 +751,7 @@ public class PlayScreen extends Screen
 
 		startAnimator = new CameraAnimator(1);
 		winAnimator = new CameraAnimator(2);
-		drawAnimator = new CameraAnimator(3);
-		loseAnimator = new CameraAnimator(4);
+		loseAnimator = new CameraAnimator(3);
 
 		shootAnimator1 = new ModelAnimator(1, ball);
 		shootAnimator2 = new ModelAnimator(2, ball);
