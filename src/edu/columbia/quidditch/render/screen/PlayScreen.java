@@ -189,7 +189,20 @@ public class PlayScreen extends Screen
 			if(!animate1)
 			{
 				shootAnimator1.reset();
-				ball.setHolder(playersComputer.get(0));
+				
+				int far = 0;
+				for (int i = 1; i < playersComputer.size(); ++i)
+				{
+					if (playersComputer.get(i).getPos().z < playersComputer.get(far).getPos().z)
+					{
+						far = i;
+					}
+				}
+				
+				Player farPlayer= playersComputer.get(far);
+				ball.setHolder(farPlayer);
+				farPlayer.handUp();
+				
 				score1 += 10;
 			}
 		}
@@ -200,7 +213,20 @@ public class PlayScreen extends Screen
 			if(!animate2)
 			{
 				shootAnimator2.reset();
-				ball.setHolder(playersUser.get(0));
+
+				int far = 0;
+				for (int i = 1; i < playersUser.size(); ++i)
+				{
+					if (playersUser.get(i).getPos().z > playersUser.get(far).getPos().z)
+					{
+						far = i;
+					}
+				}
+				
+				Player farPlayer= playersUser.get(far);
+				ball.setHolder(farPlayer);
+				farPlayer.handUp();
+								
 				score2 += 10;
 			}
 		}
