@@ -73,8 +73,13 @@ public class Fonts
 		UnicodeFont font = createFont(fontStyle, color, size);
 
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+
 		glLoadIdentity();
+
 		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+
 		glLoadIdentity();
 
 		glDisable(GL_DEPTH_TEST);
@@ -82,17 +87,17 @@ public class Fonts
 
 		gluOrtho2D(0, MainGame.DEFAULT_WIDTH, 0, MainGame.DEFAULT_HEIGHT);
 
-		glPushMatrix();
-		{
-			glRotatef(180, 1, 0, 0);
-			font.drawString(x - font.getWidth(text) / 2,
-					-y - font.getHeight(text), text);
-		}
-		glPopMatrix();
+		glRotatef(180, 1, 0, 0);
+		font.drawString(x - font.getWidth(text) / 2, -y - font.getHeight(text),
+				text);
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_LIGHTING);
 
+		glPopMatrix();
+
 		glMatrixMode(GL_MODELVIEW);
+
+		glPopMatrix();
 	}
 }

@@ -15,6 +15,7 @@ import edu.columbia.quidditch.basic.Fonts;
 import edu.columbia.quidditch.interact.CameraAnimator;
 import edu.columbia.quidditch.interact.ModelAnimator;
 import edu.columbia.quidditch.render.Model;
+import edu.columbia.quidditch.render.Radar;
 import edu.columbia.quidditch.render.Sky;
 import edu.columbia.quidditch.render.Stadium;
 import edu.columbia.quidditch.render.Terra;
@@ -73,7 +74,7 @@ public class PlayScreen extends Screen
 	private boolean animate1 = false, animate2 = false;
 	private int count = 0;
 
-	private Model sky, terra, stadium;
+	private Model sky, terra, stadium, radar;
 	private Player currentPlayer;
 	private int currentIndex;
 	
@@ -106,8 +107,8 @@ public class PlayScreen extends Screen
 		sky = new Sky(game);
 		terra = Terra.create(game);
 		stadium = Stadium.create(game);
-		
-		
+		radar = new Radar(game, this);
+				
 		for (int i = 0; i < numberOfMember; i++) {
 			playersUser.add(new Player(game, this, teamUser, true, new Vector3f(100 - i * 100, 0, 200)));
 			playersComputer.add(new Player(game, this, teamComputer, false, new Vector3f(100 - i * 100, 0, -200)));
@@ -118,7 +119,7 @@ public class PlayScreen extends Screen
 		
 		ball = new Ball(game, this, 0, new Vector3f(0, 200, 0));
 
-		currentIndex = 0;
+		currentIndex = 1;
 		currentPlayer = playersUser.get(currentIndex);
 		
 		shootAnimator1 = new ModelAnimator(1, ball);
@@ -239,10 +240,10 @@ public class PlayScreen extends Screen
 
 		super.render();
 
-		glDisable(GL_LIGHTING);
-		
 		if(!gameOn && !gameOff)
 		{
+			radar.render();
+			
 			Fonts.draw(120 , 500, teamName[teamUser] + "(You): " + score1, "Times New Roman", Color.white, 20);
 			Fonts.draw(800 , 500, teamName[teamComputer] + "(Computer): " + score2, "Times New Roman", Color.white, 20);
 		}
@@ -258,8 +259,6 @@ public class PlayScreen extends Screen
 					count = 0;
 			}
 		}
-
-		glEnable(GL_LIGHTING);
 	}
 
 	@Override
@@ -773,5 +772,38 @@ public class PlayScreen extends Screen
 		{
 			player.setTeam(teamComputer);
 		}
+	}
+	
+	public Vector3f[] getUserPositions()
+	{
+		Vector3f[] positions = new Vector3f[numberOfMember];
+		
+		for (int i = 0; i < numberOfMember; ++i)
+		{
+			positions[i] = new Vector3f();
+			positions[i].set(playersUser.get(i).getPos());
+		}
+		
+		return positions;
+	}
+	
+	public Vector3f[] getComputerPositions()
+	{
+		Vector3f[] positions = new Vector3f[numberOfMember];
+
+		for (int i = 0; i < numberOfMember; ++i)
+		{
+			positions[i] = new Vector3f();
+			positions[i].set(playersComputer.get(i).getPos());
+		}
+		
+		return positions;
+	}
+	
+	public Vector3f getBallPosition()
+	{
+		Vector3f position = new Vector3f();
+		position.set(ball.getPos());
+		return position;
 	}
 }
