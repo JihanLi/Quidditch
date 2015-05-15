@@ -508,6 +508,7 @@ public class PlayScreen extends Screen
 						isHeldByUser = false;
 					}
 					tempPlayer1.setCollided(false);
+					tempPlayer1.handUp();
 				}
 			}
 
@@ -695,7 +696,7 @@ public class PlayScreen extends Screen
 		camera.setPosition(camera.getGlobalPos());
 		camera.setRotation(camera.getGlobalRot());
 
-		currentIndex = 0;
+		currentIndex = 1;
 		currentPlayer = playersUser.get(currentIndex);
 
 		startAnimator = new CameraAnimator(1);
