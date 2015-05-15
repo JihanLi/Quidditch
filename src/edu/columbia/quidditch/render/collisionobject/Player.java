@@ -866,4 +866,16 @@ public class Player extends CollisionObject
 		return false;
 	}
 	
+	public void swapScaleSpeed(Player other, float alpha)
+	{
+		float tmp;
+		
+		tmp = rot.y;
+		rot.y = other.rot.y;
+		other.rot.y = tmp;
+		
+		tmp = speed;
+		speed = other.speed * alpha;
+		other.speed = tmp * alpha;		
+	}
 }
