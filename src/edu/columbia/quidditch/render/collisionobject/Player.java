@@ -759,6 +759,7 @@ public class Player extends CollisionObject
 		rot.set(0, inUserTeam ? 0 : 180, 0);
 		isCollided = false;
 		controllable = true;
+		handDown = true;
 	}
 
 	public void fall()

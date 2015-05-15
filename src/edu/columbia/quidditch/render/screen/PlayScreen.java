@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -298,8 +297,28 @@ public class PlayScreen extends Screen
 
 		if (gameOn || gameOff)
 		{
-			while (Keyboard.next() || Mouse.next())
-				;
+			while (Keyboard.next())
+			{
+				if (!Keyboard.getEventKeyState())
+				{
+					switch (Keyboard.getEventKey())
+					{
+					case Keyboard.KEY_Q:
+					case Keyboard.KEY_ESCAPE:
+						game.requestReturn();
+						break;
+					case Keyboard.KEY_F2:
+					case Keyboard.KEY_F12:
+					case Keyboard.KEY_P:
+						game.screenshot();
+						break;
+					case Keyboard.KEY_F11:
+						game.toggleFullscreen();
+						break;
+					}
+				}
+			}
+			
 			return true;
 		}
 
