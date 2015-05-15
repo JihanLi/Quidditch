@@ -132,7 +132,7 @@ public abstract class CollisionObject extends Model
 	
 	public void setPos(Vector3f newPos)
 	{
-		pos.set(newPos);
+		pos.set(newPos.x, newPos.y, newPos.z);
 	}
 	
 	public void setPos(float x, float y, float z)

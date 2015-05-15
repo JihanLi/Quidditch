@@ -2,6 +2,8 @@ package edu.columbia.quidditch.interact;
 
 import java.util.ArrayList;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.render.collisionobject.Ball;
 import edu.columbia.quidditch.render.collisionobject.Player;
@@ -75,18 +77,29 @@ public class Intelligence {
 		
 	}
 
-	private void holderControl(Player player) {
-		// TODO Auto-generated method stub
+	private void holderControl(Player player) 
+	{
+		
 		
 	}
 
-	private void nonHolderControl(Player player) {
-		// TODO Auto-generated method stub
-		
+	private void nonHolderControl(Player player) 
+	{
+		Ball ball = playscreen.getBall();
+		if(ball.isHold())
+		{
+			player.setRot(ball.getHolder().getRot());
+		}
+		else
+		{
+			Vector3f sub = new Vector3f();
+			Vector3f.sub(ball.getPos(), player.getPos(), sub);
+			player.setRot(sub);
+		}
 	}
 
-	private void attackerControl(Player player) {
-		// TODO Auto-generated method stub
+	private void attackerControl(Player player) 
+	{
 		
 	}
 }
