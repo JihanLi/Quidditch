@@ -731,7 +731,7 @@ public class PlayScreen extends Screen
 			return;
 		}
 		
-		float max = 30000f;
+		float max = Float.MAX_VALUE;
 		for (int i = 0; i < numberOfMember; i++)
 		{
 			float dis = playersUser.get(i).distance(ball);

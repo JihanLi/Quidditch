@@ -37,7 +37,7 @@ public class Intelligence {
 			float minDist = Float.MAX_VALUE;
 			for(Player player : playersComputer)
 			{
-				float dist = getDistance(player, playscreen.getBall());
+				float dist = player.distance(playscreen.getBall());
 				if(dist < minDist)
 				{
 					minDist = dist;
@@ -89,10 +89,4 @@ public class Intelligence {
 		// TODO Auto-generated method stub
 		
 	}
-
-	private float getDistance(Player player, Ball ball) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
 }
