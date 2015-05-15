@@ -43,13 +43,14 @@ public class Player extends CollisionObject
 	private static final float SECOND_RADIUS = 32;
 
 	private static final float W = 0.25f;
-	private static final float DY = 0.1f;
+	private static final float DY = 2f;
+	private static final float DR = 5f;
 	private static final float BETA = 0.1f;
 	private static final float ACCELERATOR = 0.002f;
 	private static final float GRAVITY = -0.02f;
 
 	private static final float MIN_V = 0.01f;
-	private static final float MAX_V = 0.2f;
+	private static final float MAX_V = 0.5f;
 
 	private static final String MODEL_NAME = "res/char/char.iqe";
 
@@ -630,9 +631,9 @@ public class Player extends CollisionObject
 		return dPos.length() < radius + other.radius;
 	}
 
-	public void moveY(int sign, float delta)
+	public void moveY(int sign)
 	{
-		pos.y += sign * delta * DY;
+		pos.y += sign * DY;
 
 		if (pos.y > PlayScreen.TOP)
 		{
@@ -668,6 +669,18 @@ public class Player extends CollisionObject
 		if (speed < MAX_V)
 		{
 			speed += ACCELERATOR;
+		}
+	}
+	
+	public void accelerate(float alpha)
+	{
+		if (speed <= MAX_V * alpha)
+		{
+			speed += ACCELERATOR;
+		}
+		else
+		{
+			speed = MAX_V * alpha;
 		}
 	}
 
@@ -751,18 +764,47 @@ public class Player extends CollisionObject
 	
 	public void setRotBasedOnDX(Vector3f dx)
 	{
-		rot.y = (float) Math.asin(dx.x / dx.length());
+		float roty = (float) Math.asin(dx.x / dx.length());
 
 		if (dx.z > 0)
 		{
-			rot.y -= Math.PI;
+			roty -= Math.PI;
 		}
 		else
 		{
-			rot.y *= -1;
+			roty *= -1;
 		}
-
-		rot.y = (float) Math.toDegrees(rot.y);
+		
+		roty = (float) Math.toDegrees(rot.y);
+		
+		rotYToValue(roty);
+		
+		if (dx.z > DY)
+		{
+			moveY(1);
+		}
+		else if (dx.z < DY)
+		{
+			moveY(-1);
+		}
+	}
+	
+	public void rotYToValue(float roty)
+	{
+		float w = roty - rot.y;
+		
+		while (w > 180) {
+			w -= 360;
+		}
+		while (w <= -180) {
+			w += 360;
+		}
+		
+		if (Math.abs(w) > DR) {
+			w = Math.signum(w)*DR;
+		}
+		
+		rot.y += w;
 	}
 	
 	

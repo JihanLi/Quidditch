@@ -13,6 +13,7 @@ import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.Camera;
 import edu.columbia.quidditch.basic.Fonts;
 import edu.columbia.quidditch.interact.CameraAnimator;
+import edu.columbia.quidditch.interact.Intelligence;
 import edu.columbia.quidditch.interact.ModelAnimator;
 import edu.columbia.quidditch.render.Model;
 import edu.columbia.quidditch.render.Radar;
@@ -65,7 +66,7 @@ public class PlayScreen extends Screen
 
 	private Camera camera;
 	private boolean globalView = true;
-	private boolean gameOn = true;
+	private boolean gameOn = false; //TODO
 	private boolean gameOff = false;
 	private float offset = 500;
 	private CameraAnimator startAnimator, winAnimator, loseAnimator, drawAnimator;
@@ -86,6 +87,8 @@ public class PlayScreen extends Screen
 	private ArrayList<Player> playersUser = new ArrayList<Player>();
 	private ArrayList<Player> playersComputer = new ArrayList<Player>();
 	private ArrayList<Player> players = new ArrayList<Player>();
+	
+	private Intelligence AI;
 	
 	private Ball ball;
 
@@ -146,6 +149,8 @@ public class PlayScreen extends Screen
 			children.add(playersUser.get(i));
 			children.add(playersComputer.get(i));
 		}
+		
+		AI = new Intelligence(game, this);
 	}
 
 	public Player getCurrentPlayer()
@@ -386,13 +391,13 @@ public class PlayScreen extends Screen
 		// Turn up myself
 		if (keyUp)
 		{
-			currentPlayer.moveY(1, delta);
+			currentPlayer.moveY(1);
 		}
 
 		// Turn down myself
 		if (keyDown)
 		{
-			currentPlayer.moveY(-1, delta);
+			currentPlayer.moveY(-1);
 		}
 
 		// Reset myself to a horizontal direction
@@ -619,6 +624,8 @@ public class PlayScreen extends Screen
 			return;
 		}
 		
+		AI.playerControl();
+		
 		for (int i = 0; i < numberOfMember; i++) 
 		{	
 			playersUser.get(i).move(delta);
@@ -703,7 +710,7 @@ public class PlayScreen extends Screen
 		
 		setScore1(0);
 		setScore2(0);
-		gameOn = true;
+		gameOn = false; //TODO
 		gameOff = false;
 		animate1 = false;
 		animate2 = false;
