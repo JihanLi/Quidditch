@@ -26,7 +26,7 @@ import edu.columbia.quidditch.util.IQELoader;
  * Player class
  * 
  * @author Yuqing Guan, Yilin Xiong, Jihan Li
- *
+ * 
  */
 
 public class Player extends CollisionObject
@@ -35,7 +35,7 @@ public class Player extends CollisionObject
 	public static final int TEAM_SLYTHERIN = 1;
 	public static final int TEAM_RAVENCLAW = 2;
 	public static final int TEAM_HUFFLEPUFF = 3;
-	
+
 	private static final float SHINE = 25;
 	private static final float SCALE = 21;
 
@@ -47,7 +47,7 @@ public class Player extends CollisionObject
 	private static final float BETA = 0.1f;
 	private static final float ACCELERATOR = 0.002f;
 	private static final float GRAVITY = -0.02f;
-	
+
 	private static final float MIN_V = 0.01f;
 	private static final float MAX_V = 0.2f;
 
@@ -67,12 +67,14 @@ public class Player extends CollisionObject
 	private static int linksize, verSize;
 
 	private static FloatBuffer specularBuffer;
-	
+
 	private boolean controllable = true;
 	private boolean inUserTeam = true;
-	
+
 	private static HashMap<String, Material[]> mutableMtls;
-	
+
+	private static int triangleList;
+
 	static
 	{
 		try
@@ -99,102 +101,135 @@ public class Player extends CollisionObject
 
 			specularBuffer = BufferUtils.createFloatBuffer(4);
 			specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
-			
+
 			Texture[] coats, emblems, shirts;
-			
+
 			coats = new Texture[4];
 			emblems = new Texture[4];
 			shirts = new Texture[4];
-			
+
 			for (int i = 0; i < 4; ++i)
 			{
-				coats[i] = Texture.createFromFile("res/char/textures/coat" + i + ".png");
-				emblems[i] = Texture.createFromFile("res/char/textures/emblem" + i + ".png");
-				shirts[i] = Texture.createFromFile("res/char/textures/shirt" + i + ".png");
+				coats[i] = Texture.createFromFile("res/char/textures/coat" + i
+						+ ".png");
+				emblems[i] = Texture.createFromFile("res/char/textures/emblem"
+						+ i + ".png");
+				shirts[i] = Texture.createFromFile("res/char/textures/shirt"
+						+ i + ".png");
 			}
-			
+
 			mutableMtls = new HashMap<String, Material[]>();
-			
+
 			Material[] mutableMtl;
 			String mtlName;
 			Material originMtl;
-			
+
 			mutableMtl = new Material[4];
 			mtlName = "Material7";
 			originMtl = mtlMap.get(mtlName);
 			mutableMtls.put(mtlName, mutableMtl);
-			
+
 			for (int i = 0; i < 4; ++i)
 			{
 				mutableMtl[i] = originMtl.copy();
 				mutableMtl[i].setTexture(coats[i]);
 			}
-			
+
 			mutableMtl = new Material[4];
 			mtlName = "Material8";
 			originMtl = mtlMap.get(mtlName);
 			mutableMtls.put(mtlName, mutableMtl);
-			
+
 			for (int i = 0; i < 4; ++i)
 			{
 				mutableMtl[i] = originMtl.copy();
 				mutableMtl[i].setTexture(coats[i]);
 			}
-			
+
 			mutableMtl = new Material[4];
 			mtlName = "Material9";
 			originMtl = mtlMap.get(mtlName);
 			mutableMtls.put(mtlName, mutableMtl);
-			
+
 			for (int i = 0; i < 4; ++i)
 			{
 				mutableMtl[i] = originMtl.copy();
 				mutableMtl[i].setTexture(coats[i]);
 			}
-			
+
 			mutableMtl = new Material[4];
 			mtlName = "Material10";
 			originMtl = mtlMap.get(mtlName);
 			mutableMtls.put(mtlName, mutableMtl);
-			
+
 			for (int i = 0; i < 4; ++i)
 			{
 				mutableMtl[i] = originMtl.copy();
 				mutableMtl[i].setTexture(emblems[i]);
 			}
-			
+
 			mutableMtl = new Material[4];
 			mtlName = "Material11";
 			originMtl = mtlMap.get(mtlName);
 			mutableMtls.put(mtlName, mutableMtl);
-			
+
 			for (int i = 0; i < 4; ++i)
 			{
 				mutableMtl[i] = originMtl.copy();
 				mutableMtl[i].setTexture(coats[i]);
 			}
-			
+
 			mutableMtl = new Material[4];
 			mtlName = "Material12";
 			originMtl = mtlMap.get(mtlName);
 			mutableMtls.put(mtlName, mutableMtl);
-			
+
 			for (int i = 0; i < 4; ++i)
 			{
 				mutableMtl[i] = originMtl.copy();
 				mutableMtl[i].setTexture(coats[i]);
 			}
-			
+
 			mutableMtl = new Material[4];
 			mtlName = "Material13";
 			originMtl = mtlMap.get(mtlName);
 			mutableMtls.put(mtlName, mutableMtl);
-			
+
 			for (int i = 0; i < 4; ++i)
 			{
 				mutableMtl[i] = originMtl.copy();
 				mutableMtl[i].setTexture(shirts[i]);
 			}
+
+			triangleList = glGenLists(1);
+
+			glNewList(triangleList, GL_COMPILE);
+
+			glDisable(GL_LIGHTING);
+
+			glColor3f(0, 0, 0.9f);
+
+			glBegin(GL_TRIANGLES);
+			{
+				glVertex3d(-6, 70, 0);
+				glVertex3d(6, 70, 0);
+				glVertex3d(0, 60, 0);
+			}
+			glEnd();
+
+			glColor3f(0, 0, 0);
+
+			glBegin(GL_LINE_LOOP);
+			{
+				glVertex3d(-6, 70, 0);
+				glVertex3d(6, 70, 0);
+				glVertex3d(0, 60, 0);
+			}
+			glEnd();
+
+			glEnable(GL_LIGHTING);
+
+			glEndList();
 		}
 		catch (IOException e)
 		{
@@ -210,25 +245,27 @@ public class Player extends CollisionObject
 
 	private Link[] links;
 	private Model broom;
-	
+
 	private int team, handUpList;
 	private boolean handDown;
-	
-	public Player(MainGame game, PlayScreen screen, int team, boolean inUserTeam, Vector3f defaultPos)
+
+	public Player(MainGame game, PlayScreen screen, int team,
+			boolean inUserTeam, Vector3f defaultPos)
 	{
 		super(game, screen, RADIUS, defaultPos);
-		
+
 		this.inUserTeam = inUserTeam;
 
 		broom = Broom.create(game);
 
-		if(!inUserTeam) {
+		if (!inUserTeam)
+		{
 			rot.y = 180;
 		}
-		
+
 		handDown = true;
 		this.team = team;
-		
+
 		handUpList = glGenLists(1);
 
 		links = new Link[linksize];
@@ -264,7 +301,7 @@ public class Player extends CollisionObject
 		list = glGenLists(1);
 		createList();
 	}
-	
+
 	public int getTeam()
 	{
 		return team;
@@ -299,18 +336,18 @@ public class Player extends CollisionObject
 	{
 		handDown = false;
 	}
-	
+
 	public void setTeam(int team)
 	{
 		this.team = team;
 		createList();
 	}
-	
+
 	@Override
 	protected void createList()
 	{
 		links[60].setTheta(0);
-		draw(list);		
+		draw(list);
 		links[60].setTheta(90);
 		draw(handUpList);
 	}
@@ -477,9 +514,9 @@ public class Player extends CollisionObject
 			for (ArrayList<ArrayList<Integer>> mesh : meshList)
 			{
 				String mtlName = mtlList.get(idx);
-				
+
 				Material material;
-				
+
 				if (mutableMtls.containsKey(mtlName))
 				{
 					material = mutableMtls.get(mtlName)[team];
@@ -488,7 +525,7 @@ public class Player extends CollisionObject
 				{
 					material = mtlMap.get(mtlName);
 				}
-				
+
 				material.bind();
 				shaderProgram.setUniformi("hasTex", material.hasTexture() ? 1
 						: 0);
@@ -537,15 +574,20 @@ public class Player extends CollisionObject
 		glTranslatef(pos.x, pos.y, pos.z);
 
 		glRotatef(rot.y, 0, 1, 0);
-		glRotatef(rot.x, 1, 0, 0);
 
 		glCallList(handDown ? list : handUpList);
 
 		broom.render();
 
+		if (this == screen.getCurrentPlayer())
+		{
+			glRotatef(-rot.y, 0, 1, 0);
+			glCallList(triangleList);
+		}
+
 		glPopMatrix();
 	}
-	
+
 	@Override
 	public boolean checkCollision(CollisionObject other)
 	{
@@ -555,12 +597,12 @@ public class Player extends CollisionObject
 		Vector3f.sub(velocity, other.velocity, dVel);
 
 		float dotPro = Vector3f.dot(dPos, dVel);
-		
+
 		if (dotPro >= -0.01f)
 		{
 			return false;
 		}
-		
+
 		if (other instanceof Player)
 		{
 			return dPos.length() < 2 * SECOND_RADIUS + COLLISION_DELTA;
@@ -570,11 +612,11 @@ public class Player extends CollisionObject
 			return dPos.length() < radius + other.radius + COLLISION_DELTA;
 		}
 	}
-	
+
 	public void moveY(int sign, float delta)
 	{
 		pos.y += sign * delta * DY;
-		
+
 		if (pos.y > PlayScreen.TOP)
 		{
 			pos.y = PlayScreen.TOP;
@@ -642,13 +684,13 @@ public class Player extends CollisionObject
 		{
 			controllable = true;
 			newPos.y = PlayScreen.BOTTOM;
-		} 
-		
+		}
+
 		if (newPos.y > PlayScreen.TOP)
 		{
 			newPos.y = PlayScreen.TOP;
 		}
-		
+
 	}
 
 	@Override
@@ -660,29 +702,26 @@ public class Player extends CollisionObject
 		fall();
 	}
 
-	
-	public boolean isControllable() {
+	public boolean isControllable()
+	{
 		return controllable;
 	}
-	
+
 	@Override
 	public void reset()
 	{
 		super.reset();
-		rot.set(0, 0, 0);
-		if(!inUserTeam) 
-		{
-			rot.y = 180;
-		}
+		rot.set(0, inUserTeam ? 0 : 180, 0);
 	}
-	
-	public void fall() {
-		
+
+	public void fall()
+	{
+
 		speed = 0;
-		
+
 		controllable = false;
 	}
-	
+
 	public void setBasedOnV()
 	{
 		speed = velocity.length();
@@ -690,18 +729,18 @@ public class Player extends CollisionObject
 		{
 			return;
 		}
-		
-		rot.y = (float) Math.asin( velocity.x / speed);
-		
+
+		rot.y = (float) Math.asin(velocity.x / speed);
+
 		if (velocity.z > 0)
 		{
 			rot.y -= Math.PI;
-		} 
+		}
 		else
 		{
 			rot.y *= -1;
 		}
-		
+
 		rot.y = (float) Math.toDegrees(rot.y);
 	}
 }
