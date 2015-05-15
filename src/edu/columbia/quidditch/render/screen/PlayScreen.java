@@ -3,12 +3,9 @@ package edu.columbia.quidditch.render.screen;
 import java.awt.Color;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -39,8 +36,6 @@ public class PlayScreen extends Screen
 	public static final float TOP = 250.0f;
 	public static final float BOTTOM = -50.0f;
 
-	private static final float MOUSE_SENSITIVITY = 0.05f;
-
 	// Position of light source
 	private static final float[] LIGHT_POS =
 	{ 3.73f, 5.0f, -1.0f, 0.0f };
@@ -64,7 +59,6 @@ public class PlayScreen extends Screen
 			new Vector3f(73, 74, 990) };
 
 	private static final float DOOR_RADIUS = 16.0f;
-	private static final float DOOR_EXT_RADIUS = 19.0f;
 
 	private FloatBuffer lightPosBuffer;
 
@@ -237,34 +231,6 @@ public class PlayScreen extends Screen
 				if(count == 60)
 					count = 0;
 			}
-		}
-		
-		glColor4f(0, 0, 1, 0.5f);
-
-		for (Vector3f door : HOME_DOORS)
-		{
-			glBegin(GL_QUADS);
-			{
-				glVertex3f(door.x - DOOR_RADIUS, door.y - DOOR_RADIUS, door.z);
-				glVertex3f(door.x - DOOR_RADIUS, door.y + DOOR_RADIUS, door.z);
-				glVertex3f(door.x + DOOR_RADIUS, door.y + DOOR_RADIUS, door.z);
-				glVertex3f(door.x + DOOR_RADIUS, door.y - DOOR_RADIUS, door.z);
-			}
-			glEnd();
-		}
-
-		glColor4f(1, 0, 0, 0.5f);
-
-		for (Vector3f door : AWAY_DOORS)
-		{
-			glBegin(GL_QUADS);
-			{
-				glVertex3f(door.x - DOOR_RADIUS, door.y - DOOR_RADIUS, door.z);
-				glVertex3f(door.x - DOOR_RADIUS, door.y + DOOR_RADIUS, door.z);
-				glVertex3f(door.x + DOOR_RADIUS, door.y + DOOR_RADIUS, door.z);
-				glVertex3f(door.x + DOOR_RADIUS, door.y - DOOR_RADIUS, door.z);
-			}
-			glEnd();
 		}
 
 		glEnable(GL_LIGHTING);

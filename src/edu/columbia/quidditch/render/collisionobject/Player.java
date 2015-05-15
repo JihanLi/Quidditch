@@ -8,7 +8,6 @@ import java.util.HashMap;
 import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.util.glu.Sphere;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -51,8 +50,6 @@ public class Player extends CollisionObject
 	
 	private static final float MIN_V = 0.01f;
 	private static final float MAX_V = 0.2f;
-
-	private static final float MAX_LOOK = 60;
 
 	private static final String MODEL_NAME = "res/char/char.iqe";
 
@@ -546,14 +543,6 @@ public class Player extends CollisionObject
 
 		broom.render();
 
-		glDisable(GL_LIGHTING);
-
-		glColor4f(1, 0, 0, 0.02f);
-
-		new Sphere().draw(32, 64, 64);
-		
-		glEnable(GL_LIGHTING);
-
 		glPopMatrix();
 	}
 	
@@ -581,12 +570,6 @@ public class Player extends CollisionObject
 			return dPos.length() < radius + other.radius + COLLISION_DELTA;
 		}
 	}
-
-//	public void rotX(int sign, float delta)
-//	{
-//		rot.x += sign * delta * W;
-//		rot.x = Math.max(-MAX_LOOK, Math.min(MAX_LOOK, rot.x));
-//	}
 	
 	public void moveY(int sign, float delta)
 	{
@@ -642,11 +625,6 @@ public class Player extends CollisionObject
 	{
 		if (controllable)
 		{
-//			velocity.x = (float) (-Math.sin(Math.toRadians(rot.y))
-//					* Math.cos(Math.toRadians(rot.x)) * speed);
-//			velocity.y = (float) (Math.sin(Math.toRadians(rot.x)) * speed);
-//			velocity.z = (float) (-Math.cos(Math.toRadians(rot.y))
-//					* Math.cos(Math.toRadians(rot.x)) * speed);
 			velocity.x = (float) (-Math.sin(Math.toRadians(rot.y)) * speed);
 			velocity.z = (float) (-Math.cos(Math.toRadians(rot.y)) * speed);
 			velocity.y = 0;
