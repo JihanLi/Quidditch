@@ -19,54 +19,54 @@ import edu.columbia.quidditch.render.Button;
 public class Modal extends Screen
 {
 	private static Modal singleton;
-	
+
 	public static Modal create(MainGame game)
 	{
 		if (singleton == null)
 		{
 			singleton = new Modal(game);
 		}
-		
+
 		return singleton;
 	}
-	
+
 	private Texture bg, textRunning, textStart;
-	private Boolean modalType; // True for modal in start. False for modal in running.
-	
+	private Boolean modalType; // True for modal in start. False for modal in
+								// running.
+
 	private int textRunningList, textStartList;
-	
+
 	private Modal(MainGame game)
 	{
 		super(game);
-		
+
 		bg = Texture.createFromFile("res/modal/modalBg.png");
 		textRunning = Texture.createFromFile("res/title/pause.png");
 		textStart = Texture.createFromFile("res/title/quit.png");
-		
+
 		modalType = true;
 		Button button0 = new Button(game, "Wood", 380, 150, "Confirm", 12);
 		Button button1 = new Button(game, "Wood", 500, 150, "Cancel", 12);
-		
+
 		addButton(button0);
 		addButton(button1);
 	}
-	
+
 	public void setModalInRunning()
 	{
 		modalType = false;
 	}
-	
+
 	public void setModalInStart()
 	{
 		modalType = true;
 	}
-	
-	
+
 	public void setButtonText(int idx, String text)
 	{
 		buttons.get(idx).setText(text);
 	}
-	
+
 	public void setListener(int idx, ButtonListener listener)
 	{
 		buttons.get(idx).setListener(listener);
@@ -76,26 +76,26 @@ public class Modal extends Screen
 	protected void createList()
 	{
 		LoadScreen.log("Creating display lists for modal");
-		
+
 		list = glGenLists(1);
 
 		glNewList(list, GL_COMPILE);
 		{
 			glColor4f(0, 0, 0, 0.5f);
-			
+
 			glBegin(GL_QUADS);
-			
+
 			glVertex2f(0, 0);
 			glVertex2f(0, 540);
 			glVertex2f(960, 540);
 			glVertex2f(960, 0);
-			
+
 			glEnd();
-			
+
 			bg.drawRectangle(280, 130, 400, 280);
 		}
 		glEndList();
-		
+
 		textStartList = glGenLists(1);
 
 		glNewList(textStartList, GL_COMPILE);
@@ -103,7 +103,7 @@ public class Modal extends Screen
 			textStart.drawRectangle(345, 230, 270, 81);
 		}
 		glEndList();
-		
+
 		textRunningList = glGenLists(1);
 
 		glNewList(textRunningList, GL_COMPILE);
@@ -117,7 +117,7 @@ public class Modal extends Screen
 	public boolean checkKeyboardInput(float delta)
 	{
 		boolean keyReleased = false;
-		
+
 		while (Keyboard.next())
 		{
 			if (!Keyboard.getEventKeyState())
@@ -145,15 +145,15 @@ public class Modal extends Screen
 				}
 			}
 		}
-		
+
 		return keyReleased;
 	}
-	
+
 	@Override
 	public void render()
 	{
-		super.render();	
-		glCallList(modalType ? textStartList : textRunningList);		
+		super.render();
+		glCallList(modalType ? textStartList : textRunningList);
 	}
 
 }

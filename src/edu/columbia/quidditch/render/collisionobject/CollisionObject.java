@@ -17,50 +17,50 @@ import edu.columbia.quidditch.render.screen.PlayScreen;
  * @author Yuqing Guan, Yilin Xiong, Jihan Li
  * 
  */
-
 public abstract class CollisionObject extends Model
 {
 	protected static final float COLLISION_DELTA = 1e-3f;
-	
+
 	protected PlayScreen screen;
-	
+
 	protected float radius, speed;
 	protected Vector3f defaultPos, lastPos, pos, velocity;
 	protected Vector3f rot;
 	protected static final float COFF = 0.8f;
-	
-	public CollisionObject(MainGame game, PlayScreen screen, float radius, Vector3f defaultPos)
+
+	public CollisionObject(MainGame game, PlayScreen screen, float radius,
+			Vector3f defaultPos)
 	{
 		super(game);
-		
+
 		this.radius = radius;
 		this.defaultPos = defaultPos;
-		
+
 		lastPos = new Vector3f();
 		pos = new Vector3f(defaultPos);
 		velocity = new Vector3f();
 		rot = new Vector3f();
-		
+
 		this.screen = screen;
 	}
-	
+
 	@Override
 	public void render()
 	{
 		glPushMatrix();
-		
+
 		glTranslatef(pos.x, pos.y, pos.z);
-		
+
 		if (list == NO_LIST)
 		{
 			createList();
 		}
-		
+
 		glCallList(list);
-		
+
 		glPopMatrix();
 	}
-	
+
 	public boolean checkCollision(CollisionObject other)
 	{
 		Vector3f dPos = new Vector3f();
@@ -69,56 +69,57 @@ public abstract class CollisionObject extends Model
 		Vector3f.sub(velocity, other.velocity, dVel);
 
 		float dotPro = Vector3f.dot(dPos, dVel);
-		
-		return ((dotPro < -0.001f) && (dPos.length() < radius + other.radius + COLLISION_DELTA)); 
+
+		return ((dotPro < -0.001f) && (dPos.length() < radius + other.radius
+				+ COLLISION_DELTA));
 	}
-	
+
 	public boolean checkCollision(Vector3f other, float rad)
 	{
 		Vector3f vec = new Vector3f();
 		Vector3f.sub(pos, other, vec);
-		
+
 		return vec.length() < radius + rad + COLLISION_DELTA;
 	}
-	
+
 	public boolean checkScope(Vector3f other, float rad)
 	{
 		Vector3f vec = new Vector3f();
 		Vector3f.sub(pos, other, vec);
-		
+
 		return vec.length() < rad;
 	}
-	
+
 	public void move(float delta)
 	{
 		lastPos.set(pos);
-		
+
 		Vector3f newPos = new Vector3f();
 
 		refreshVelocity();
 		newPos.set(pos);
-		
+
 		newPos.x += velocity.x * delta;
 		newPos.y += velocity.y * delta;
 		newPos.z += velocity.z * delta;
-		
-		//float newOvalVal = checkOval(newPos);
-		
+
+		// float newOvalVal = checkOval(newPos);
+
 		if (!checkOval(newPos))
 		{
 			doOutOval(newPos, delta);
 			return;
 		}
-		
+
 		if (!checkHeight(newPos))
 		{
 			doOutHeight(newPos);
 			return;
 		}
-		
+
 		pos.set(newPos);
 	}
-	
+
 	protected abstract void refreshVelocity();
 
 	private float normalizeAngle(float angle)
@@ -136,62 +137,60 @@ public abstract class CollisionObject extends Model
 
 		return angle;
 	}
-	
+
 	protected boolean checkOval(Vector3f pos)
 	{
-		//return (float) (Math.pow(pos.x / PlayScreen.SHORT_AXIS, 2) + Math.pow(pos.z / PlayScreen.LONG_AXIS, 2));
 		rot.y = normalizeAngle(rot.y);
-		if (rot.y > 0 && pos.x < - PlayScreen.SHORT_AXIS * COFF)
+		if (rot.y > 0 && pos.x < -PlayScreen.SHORT_AXIS * COFF)
 		{
 			return false;
 		}
-		
+
 		if (rot.y < 0 && pos.x > PlayScreen.SHORT_AXIS * COFF)
 		{
 			return false;
 		}
-		
-		if (Math.abs(rot.y) < 90 && pos.z < - PlayScreen.LONG_AXIS * COFF)
+
+		if (Math.abs(rot.y) < 90 && pos.z < -PlayScreen.LONG_AXIS * COFF)
 		{
 			return false;
 		}
-		
+
 		if (Math.abs(rot.y) > 90 && pos.z > PlayScreen.LONG_AXIS * COFF)
 		{
 			return false;
 		}
-		
-		//return (Math.abs(pos.x) < PlayScreen.SHORT_AXIS*0.9) && (Math.abs(pos.z) < PlayScreen.LONG_AXIS*0.9);
+
 		return true;
 	}
-	
+
 	protected boolean checkHeight(Vector3f pos)
 	{
 		return (pos.y <= PlayScreen.TOP && pos.y >= PlayScreen.BOTTOM);
 	}
-	
+
 	public void setPos(Vector3f newPos)
 	{
 		pos.set(newPos.x, newPos.y, newPos.z);
 	}
-	
+
 	public void setPos(float x, float y, float z)
 	{
 		pos.set(x, y, z);
 	}
-	
+
 	public Vector3f getPos()
 	{
 		return pos;
 	}
-	
+
 	public void setRot(float x, float y, float z)
 	{
 		rot.x = x;
 		rot.y = y;
 		rot.z = z;
 	}
-	
+
 	public void setRot(Vector3f val)
 	{
 		rot.x = val.x;
@@ -203,26 +202,26 @@ public abstract class CollisionObject extends Model
 	{
 		return rot;
 	}
-	
+
 	public void setVelocity(Vector3f vec)
 	{
 		velocity.x = vec.x;
 		velocity.y = vec.y;
 		velocity.z = vec.z;
 	}
-	
+
 	public void setVelocity(float x, float y, float z)
 	{
 		velocity.x = x;
 		velocity.y = y;
 		velocity.z = z;
 	}
-	
+
 	public Vector3f getVelocity()
 	{
 		return velocity;
 	}
-	
+
 	public void reset()
 	{
 		pos.set(defaultPos);
@@ -231,7 +230,7 @@ public abstract class CollisionObject extends Model
 		rot.set(0, 0, 0);
 		speed = 0;
 	}
-	
+
 	public float distance(CollisionObject object)
 	{
 		Vector3f dis = new Vector3f();
@@ -240,5 +239,6 @@ public abstract class CollisionObject extends Model
 	}
 
 	protected abstract void doOutHeight(Vector3f newPos);
+
 	protected abstract void doOutOval(Vector3f newPos, float delta);
 }

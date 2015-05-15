@@ -504,7 +504,7 @@ public class MainGame
 	{
 		status = STATUS_RUNNING;
 	}
-	
+
 	public void chooseTeam()
 	{
 		status = STATUS_TEAM;
@@ -548,15 +548,20 @@ public class MainGame
 		}
 	}
 
-	public PlayScreen getPlayScreen() {
+	public PlayScreen getPlayScreen()
+	{
 		return playScreen;
 	}
 
-	public void setPlayScreen(PlayScreen playScreen) {
+	public void setPlayScreen(PlayScreen playScreen)
+	{
 		this.playScreen = playScreen;
 	}
 
-	public void terminate()
+	/**
+	 * Return to start screen
+	 */
+	public void stopGame()
 	{
 		status = STATUS_START;
 	}

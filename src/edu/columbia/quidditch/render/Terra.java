@@ -204,7 +204,7 @@ public class Terra extends Model
 	}
 
 	/**
-	 * Get element in an infinitely extended and repeated map
+	 * Get element in map
 	 * 
 	 * @param src
 	 * @param row
@@ -406,13 +406,14 @@ public class Terra extends Model
 	}
 
 	/**
-	 * Create 49 different display list, so that the program can select one from
-	 * them based on the position of myself
+	 * Create display list
 	 */
 	@Override
 	protected void createList()
 	{
-		list = glGenLists(1);
+		LoadScreen.log("Create display list for terrain");
+		
+		list = glGenLists(1);		
 		glNewList(list, GL_COMPILE);
 		{
 			shaderProgram.bind();

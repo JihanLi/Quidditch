@@ -53,21 +53,11 @@ public class PlayScreen extends Screen
 	private static final float[] SPECULAR =
 	{ 1.0f, 1.0f, 1.0f, 1.0f };
 
-	private static final Vector3f[] HOME_DOORS =
-	{ new Vector3f(5, 171, -975), new Vector3f(-71, 97, -975),
-			new Vector3f(79, 132, -975) };
-
-	private static final Vector3f[] AWAY_DOORS =
-	{ new Vector3f(0, 151, 990), new Vector3f(-75, 117, 990),
-			new Vector3f(73, 74, 990) };
-
-	private static final float DOOR_RADIUS = 16.0f;
-
 	private FloatBuffer lightPosBuffer;
 
 	private Camera camera;
 	private boolean globalView = true;
-	private boolean gameOn = false; // TODO
+	private boolean gameOn = true;
 	private boolean gameOff = false;
 	private float offset = 500;
 	private CameraAnimator startAnimator, winAnimator, loseAnimator;
@@ -98,7 +88,7 @@ public class PlayScreen extends Screen
 	{
 		super(game);
 
-		camera = new Camera(game, this);
+		camera = new Camera(this);
 		camera.setPosition(camera.getGlobalPos());
 		camera.setRotation(camera.getGlobalRot());
 
@@ -155,7 +145,7 @@ public class PlayScreen extends Screen
 			children.add(playersComputer.get(i));
 		}
 
-		AI = new Intelligence(game, this);
+		AI = new Intelligence(this);
 	}
 
 	public Player getCurrentPlayer()
@@ -196,9 +186,9 @@ public class PlayScreen extends Screen
 				farPlayer.handUp();
 
 				score1 += 10;
-				
+
 				changeDefender();
-				
+
 				AI.setSleep(0);
 			}
 		}
@@ -229,27 +219,27 @@ public class PlayScreen extends Screen
 				AI.setWake(0);
 			}
 		}
-		
-		if(score1 > 0 || score2 > 0)
+
+		if (score1 > 0 || score2 > 0)
 		{
 			gameOff = true;
 		}
-		
-		if(gameOff) 
-		{ 
-			if(score1 > score2)
+
+		if (gameOff)
+		{
+			if (score1 > score2)
 			{
-				gameOff = winAnimator.animate(camera); 
+				gameOff = winAnimator.animate(camera);
 			}
 			else
 			{
-				gameOff = loseAnimator.animate(camera); 
+				gameOff = loseAnimator.animate(camera);
 			}
-			
-			if(!gameOff)
+
+			if (!gameOff)
 			{
 				resetGame();
-				game.terminate();
+				game.stopGame();
 			}
 		}
 
@@ -270,16 +260,17 @@ public class PlayScreen extends Screen
 			Fonts.draw(800, 500, teamName[teamComputer] + " (Computer): "
 					+ score2, "Times New Roman", Color.white, 20);
 		}
-		
-		if(gameOff) 
-		{ 
-			if(score1 > score2)
+
+		if (gameOff)
+		{
+			if (score1 > score2)
 			{
-				Fonts.draw(450 , 300, "You Win!", "Gungsuh", Color.yellow, 40);
+				Fonts.draw(450, 300, "You Win!", "Gungsuh", Color.yellow, 40);
 			}
 			else
 			{
-				Fonts.draw(450 , 300, "You Lose!", "Cooper Black", Color.white, 40);
+				Fonts.draw(450, 300, "You Lose!", "Cooper Black", Color.white,
+						40);
 			}
 		}
 
@@ -320,8 +311,9 @@ public class PlayScreen extends Screen
 				if (currentPlayer != null)
 				{
 					camera.setPosition(
-							camera.getGlobalPos().x - currentPlayer.getPos().x / 2,
-							camera.getGlobalPos().y - currentPlayer.getPos().y,
+							camera.getGlobalPos().x - currentPlayer.getPos().x
+									/ 2, camera.getGlobalPos().y
+									- currentPlayer.getPos().y,
 							-(currentPlayer.getPos().z + offset));
 				}
 			}
@@ -758,7 +750,7 @@ public class PlayScreen extends Screen
 
 		setScore1(0);
 		setScore2(0);
-		gameOn = false; // TODO
+		gameOn = true;
 		gameOff = false;
 		animate1 = false;
 		animate2 = false;

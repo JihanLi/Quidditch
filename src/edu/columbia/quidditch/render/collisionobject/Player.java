@@ -28,7 +28,6 @@ import edu.columbia.quidditch.util.IQELoader;
  * @author Yuqing Guan, Yilin Xiong, Jihan Li
  * 
  */
-
 public class Player extends CollisionObject
 {
 	public static final int TEAM_GRYFFINDOR = 0;
@@ -615,7 +614,7 @@ public class Player extends CollisionObject
 			return dPos.length() < radius + other.radius + COLLISION_DELTA;
 		}
 	}
-	
+
 	public boolean checkCollision(Player other, float radius)
 	{
 		Vector3f dPos = new Vector3f();
@@ -629,7 +628,7 @@ public class Player extends CollisionObject
 		{
 			return false;
 		}
-		
+
 		return dPos.length() < radius + other.radius;
 	}
 
@@ -673,7 +672,7 @@ public class Player extends CollisionObject
 			speed += ACCELERATOR;
 		}
 	}
-	
+
 	public void accelerate(float alpha)
 	{
 		if (speed <= MAX_V * alpha)
@@ -728,17 +727,20 @@ public class Player extends CollisionObject
 	@Override
 	protected void doOutOval(Vector3f newPos, float delta)
 	{
-		if (Math.abs(newPos.x) > PlayScreen.SHORT_AXIS * COFF * 0.9 && Math.abs(newPos.z) > PlayScreen.LONG_AXIS * COFF * 0.9)
+		if (Math.abs(newPos.x) > PlayScreen.SHORT_AXIS * COFF * 0.9
+				&& Math.abs(newPos.z) > PlayScreen.LONG_AXIS * COFF * 0.9)
 		{
 			setRotBasedOnDX(Vector3f.sub(new Vector3f(0, 0, 0), newPos, null));
 			fall();
 			return;
 		}
-		if ((newPos.x >= PlayScreen.SHORT_AXIS * COFF) || (newPos.x <= -PlayScreen.SHORT_AXIS * COFF))
+		if ((newPos.x >= PlayScreen.SHORT_AXIS * COFF)
+				|| (newPos.x <= -PlayScreen.SHORT_AXIS * COFF))
 		{
 			rot.y = -1 * rot.y;
 		}
-		if ((newPos.z >= PlayScreen.LONG_AXIS * COFF) || (newPos.z <= -PlayScreen.LONG_AXIS * COFF))
+		if ((newPos.z >= PlayScreen.LONG_AXIS * COFF)
+				|| (newPos.z <= -PlayScreen.LONG_AXIS * COFF))
 		{
 			rot.y = 180 - rot.y;
 		}
@@ -777,7 +779,7 @@ public class Player extends CollisionObject
 		}
 		setRotBasedOnDX(velocity);
 	}
-	
+
 	public void setRotBasedOnDX(Vector3f dx)
 	{
 		float roty = (float) Math.asin(dx.x / dx.length());
@@ -790,11 +792,11 @@ public class Player extends CollisionObject
 		{
 			roty *= -1;
 		}
-		
+
 		roty = (float) Math.toDegrees(roty);
-		
+
 		rotYToValue(roty);
-		
+
 		if (dx.y > DY)
 		{
 			moveY(1);
@@ -804,33 +806,38 @@ public class Player extends CollisionObject
 			moveY(-1);
 		}
 	}
-	
+
 	public void rotYToValue(float roty)
 	{
 		float w = roty - rot.y;
-		
-		while (w > 180) {
+
+		while (w > 180)
+		{
 			w -= 360;
 		}
-		while (w <= -180) {
+		while (w <= -180)
+		{
 			w += 360;
 		}
-		
-		if (Math.abs(w) > DR) {
-			w = Math.signum(w)*DR;
+
+		if (Math.abs(w) > DR)
+		{
+			w = Math.signum(w) * DR;
 		}
-		
+
 		rot.y += w;
 	}
-	
+
 	public boolean avoidOval()
 	{
-		if ((pos.x >= PlayScreen.SHORT_AXIS * COFF * 0.9) || (pos.x <= -PlayScreen.SHORT_AXIS * COFF * 0.9))
+		if ((pos.x >= PlayScreen.SHORT_AXIS * COFF * 0.9)
+				|| (pos.x <= -PlayScreen.SHORT_AXIS * COFF * 0.9))
 		{
-			rotYToValue(- rot.y);
+			rotYToValue(-rot.y);
 			return true;
 		}
-		if ((pos.z >= PlayScreen.LONG_AXIS * COFF * 0.9) || (pos.z <= -PlayScreen.LONG_AXIS * COFF * 0.9))
+		if ((pos.z >= PlayScreen.LONG_AXIS * COFF * 0.9)
+				|| (pos.z <= -PlayScreen.LONG_AXIS * COFF * 0.9))
 		{
 			rotYToValue(180 - rot.y);
 			return true;
@@ -838,44 +845,51 @@ public class Player extends CollisionObject
 		return false;
 	}
 
-	public boolean isCollided() {
+	public boolean isCollided()
+	{
 		return isCollided;
 	}
 
-	public void setCollided(boolean isCollided) {
+	public void setCollided(boolean isCollided)
+	{
 		this.isCollided = isCollided;
 	}
 
-	public int getInterval() {
+	public int getInterval()
+	{
 		return interval;
 	}
 
-	public void setInterval(int interval) {
+	public void setInterval(int interval)
+	{
 		this.interval = interval;
 	}
 
-	public boolean checkBoundary() {
-		if ((pos.x >= PlayScreen.SHORT_AXIS * COFF * 0.9) || (pos.x <= -PlayScreen.SHORT_AXIS * COFF * 0.9))
+	public boolean checkBoundary()
+	{
+		if ((pos.x >= PlayScreen.SHORT_AXIS * COFF * 0.9)
+				|| (pos.x <= -PlayScreen.SHORT_AXIS * COFF * 0.9))
 		{
 			return true;
 		}
-		if ((pos.z >= PlayScreen.LONG_AXIS * COFF * 0.9) || (pos.z <= -PlayScreen.LONG_AXIS * COFF * 0.9))
+		if ((pos.z >= PlayScreen.LONG_AXIS * COFF * 0.9)
+				|| (pos.z <= -PlayScreen.LONG_AXIS * COFF * 0.9))
 		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	public void swapScaleSpeed(Player other, float alpha)
 	{
 		float tmp;
-		
+
 		tmp = rot.y;
 		rot.y = other.rot.y;
 		other.rot.y = tmp;
-		
+
 		tmp = speed;
 		speed = other.speed * alpha;
-		other.speed = tmp * alpha;		
+		other.speed = tmp * alpha;
 	}
 }

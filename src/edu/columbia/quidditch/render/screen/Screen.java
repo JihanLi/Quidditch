@@ -8,19 +8,25 @@ import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.render.Button;
 import edu.columbia.quidditch.render.Model;
 
+/**
+ * Screen class
+ * 
+ * @author Yuqing Guan
+ * 
+ */
 public abstract class Screen extends Model
 {
 	protected Vector<Model> children;
 	protected Vector<Button> buttons;
-	
+
 	public Screen(MainGame game)
 	{
 		super(game);
-		
+
 		children = new Vector<Model>();
 		buttons = new Vector<Button>();
 	}
-	
+
 	public void addButton(Button button)
 	{
 		children.add(button);
@@ -39,10 +45,16 @@ public abstract class Screen extends Model
 		}
 	}
 
+	/**
+	 * Control mouse's response
+	 * 
+	 * @param delta
+	 * @return
+	 */
 	public boolean checkMouseInput(float delta)
 	{
 		boolean click = false;
-		
+
 		while (Mouse.next())
 		{
 			if (!Mouse.getEventButtonState() && Mouse.getEventButton() == 0)
@@ -58,14 +70,14 @@ public abstract class Screen extends Model
 				}
 			}
 		}
-		
+
 		return click;
 	}
-	
+
 	public abstract boolean checkKeyboardInput(float delta);
-	
+
 	public void move(float delta)
 	{
-		
+
 	}
 }

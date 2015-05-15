@@ -54,19 +54,19 @@ public class Button extends Model
 		widths.put("Wood", 100.0f);
 		heights.put("Wood", 50.0f);
 		textCenterHeights.put("Wood", -4.0f);
-		
+
 		widths.put("Gryffindor", 200.0f);
 		heights.put("Gryffindor", 250.0f);
 		textCenterHeights.put("Gryffindor", 0.0f);
-		
+
 		widths.put("Ravenclaw", 200.0f);
 		heights.put("Ravenclaw", 250.0f);
 		textCenterHeights.put("Ravenclaw", 0.0f);
-		
+
 		widths.put("Hufflepuff", 200.0f);
 		heights.put("Hufflepuff", 250.0f);
 		textCenterHeights.put("Hufflepuff", 0.0f);
-		
+
 		widths.put("Slytherin", 200.0f);
 		heights.put("Slytherin", 250.0f);
 		textCenterHeights.put("Slytherin", 0.0f);
@@ -160,8 +160,9 @@ public class Button extends Model
 		{
 			glCallList(pressedBgList);
 		}
-		
-		Fonts.draw(x + width / 2, y + height / 2 + textCenterHeight, text, "Castellar", Color.yellow, fontSize);
+
+		Fonts.draw(x + width / 2, y + height / 2 + textCenterHeight, text,
+				"Castellar", Color.yellow, fontSize);
 	}
 
 	/**

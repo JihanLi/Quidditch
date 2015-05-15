@@ -17,7 +17,7 @@ import edu.columbia.quidditch.render.screen.LoadScreen;
 /**
  * Texture class
  * 
- * @author Jihan Li
+ * @author Yuqing Guan, Jihan Li
  * 
  */
 public class Texture
@@ -158,6 +158,14 @@ public class Texture
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	/**
+	 * Draw a rectangle filled by this texture
+	 * 
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public void drawRectangle(float x, float y, float width, float height)
 	{
 		bind();

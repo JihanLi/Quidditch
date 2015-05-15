@@ -10,7 +10,7 @@ import edu.columbia.quidditch.render.screen.LoadScreen;
 import edu.columbia.quidditch.render.screen.PlayScreen;
 
 /**
- * Radar with positions of all planes
+ * Radar with positions of all players and the ball
  * 
  * @author Yuqing Guan
  * 
@@ -33,7 +33,7 @@ public class Radar extends Model
 	}
 
 	/**
-	 * Create two display lists
+	 * Create the background of the radar
 	 */
 	@Override
 	protected void createList()
@@ -88,6 +88,9 @@ public class Radar extends Model
 		glEndList();
 	}
 
+	/**
+	 * Draw the radar and indicators of players and the ball
+	 */
 	@Override
 	public void render()
 	{
@@ -114,17 +117,17 @@ public class Radar extends Model
 			pos.x = pos.x / 8 + 852.5f;
 			pos.z = 270 - pos.z / 8;
 		}
-		
+
 		Vector3f[] userPositions = screen.getUserPositions();
 		for (Vector3f pos : userPositions)
 		{
 			pos.x = pos.x / 8 + 852.5f;
 			pos.z = 270 - pos.z / 8;
 		}
-		
+
 		glPointSize(12.0f);
 		glColor3f(0, 0, 0);
-		
+
 		glBegin(GL_POINTS);
 		{
 			for (Vector3f pos : computerPositions)
@@ -150,7 +153,7 @@ public class Radar extends Model
 
 		glPointSize(12.0f);
 		glColor3f(0, 0, 0);
-		
+
 		glBegin(GL_POINTS);
 		{
 			for (Vector3f pos : userPositions)
@@ -175,10 +178,10 @@ public class Radar extends Model
 		glEnd();
 
 		Vector3f pos = screen.getBallPosition();
-		
+
 		pos.x = pos.x / 8 + 852.5f;
 		pos.z = 270 - pos.z / 8;
-		
+
 		glPointSize(10.0f);
 		glColor3f(0, 0, 0);
 
@@ -189,7 +192,7 @@ public class Radar extends Model
 		glEnd();
 
 		glPointSize(8.0f);
-		
+
 		color = BALL_COLOR;
 		glColor3f(color.x, color.y, color.z);
 

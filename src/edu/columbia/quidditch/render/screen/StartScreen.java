@@ -25,10 +25,9 @@ public class StartScreen extends Screen
 
 		bg = Texture.createFromFile("res/start/main.png");
 		title = Texture.createFromFile("res/title/title.png");
-		
+
 		Button button0 = new Button(game, "Green", 355, 200, "Start Game", 18);
-		Button button1 = new Button(game, "Green", 355, 120, "Music On/Off", 18);
-		Button button2 = new Button(game, "Green", 355, 40, "Quit", 18);
+		Button button1 = new Button(game, "Green", 355, 120, "Quit", 18);
 
 		button0.setListener(new ButtonListener()
 		{
@@ -39,7 +38,7 @@ public class StartScreen extends Screen
 			}
 		});
 
-		button2.setListener(new ButtonListener()
+		button1.setListener(new ButtonListener()
 		{
 			@Override
 			public void onClick()
@@ -47,10 +46,9 @@ public class StartScreen extends Screen
 				game.requestClose();
 			}
 		});
-		
+
 		addButton(button0);
 		addButton(button1);
-		addButton(button2);
 	}
 
 	@Override
@@ -70,7 +68,7 @@ public class StartScreen extends Screen
 	public boolean checkKeyboardInput(float delta)
 	{
 		boolean keyReleased = false;
-				
+
 		while (Keyboard.next())
 		{
 			if (!Keyboard.getEventKeyState())
@@ -98,7 +96,7 @@ public class StartScreen extends Screen
 				}
 			}
 		}
-		
+
 		return keyReleased;
 	}
 }

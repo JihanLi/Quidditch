@@ -12,6 +12,12 @@ import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.basic.ShaderProgram;
 import edu.columbia.quidditch.render.screen.PlayScreen;
 
+/**
+ * Ball model
+ * 
+ * @author Yuqing Guan, Jihan Li, Yilin Xiong
+ * 
+ */
 public class Ball extends CollisionObject
 {
 	private static FloatBuffer specularBuffer;
@@ -26,7 +32,7 @@ public class Ball extends CollisionObject
 	private int type;
 	private boolean isHold = false;
 	private Player holder;
-	private float BETA = 0.8f; //Lost energy during collision.
+	private float BETA = 0.8f; // Lost energy during collision.
 
 	public Ball(MainGame game, PlayScreen screen, int type, Vector3f defaultPos)
 	{
@@ -57,10 +63,10 @@ public class Ball extends CollisionObject
 			velocity.y += GRAVITY;
 		}
 	}
-	
+
 	public void move(float delta)
 	{
-		if(isHold)
+		if (isHold)
 		{
 			Matrix4f ballPos = new Matrix4f();
 			ballPos.setIdentity();
@@ -68,13 +74,14 @@ public class Ball extends CollisionObject
 			ballPos.m03 = -10;
 			ballPos.m13 = 30;
 			ballPos.m23 = -25;
-			
-			Matrix4f.rotate((float) Math.toRadians(-holder.getRot().x), new Vector3f(1, 0, 0), ballPos, ballPos);
-			//Matrix4f.rotate((float) Math.toRadians(holder.getRot().z), new Vector3f(0, 0, 1), ballPos, ballPos);
-			Matrix4f.rotate((float) Math.toRadians(-holder.getRot().y), new Vector3f(0, 1, 0), ballPos, ballPos);
-			
 
-			setPos(holder.getPos().x + ballPos.m03, holder.getPos().y + ballPos.m13, holder.getPos().z + ballPos.m23);
+			Matrix4f.rotate((float) Math.toRadians(-holder.getRot().x),
+					new Vector3f(1, 0, 0), ballPos, ballPos);
+			Matrix4f.rotate((float) Math.toRadians(-holder.getRot().y),
+					new Vector3f(0, 1, 0), ballPos, ballPos);
+
+			setPos(holder.getPos().x + ballPos.m03, holder.getPos().y
+					+ ballPos.m13, holder.getPos().z + ballPos.m23);
 		}
 		else
 		{
@@ -95,30 +102,30 @@ public class Ball extends CollisionObject
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
-		//System.out.println(newPos);
-		//System.out.println(velocity);
 		if (!isHold)
 		{
 			velocity.y *= -BETA;
 		}
 	}
-	
+
 	@Override
 	protected boolean checkOval(Vector3f pos)
 	{
-		if (pos.x < - PlayScreen.SHORT_AXIS * COFF || pos.x > PlayScreen.SHORT_AXIS * COFF)
+		if (pos.x < -PlayScreen.SHORT_AXIS * COFF
+				|| pos.x > PlayScreen.SHORT_AXIS * COFF)
 		{
 			return false;
 		}
-		
-		if (pos.z > PlayScreen.LONG_AXIS * COFF || pos.z < - PlayScreen.LONG_AXIS * COFF)
+
+		if (pos.z > PlayScreen.LONG_AXIS * COFF
+				|| pos.z < -PlayScreen.LONG_AXIS * COFF)
 		{
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	protected void doOutOval(Vector3f newPos, float delta)
 	{
@@ -180,19 +187,18 @@ public class Ball extends CollisionObject
 		isHold = true;
 		this.holder = holder;
 	}
-	
+
 	public void clearHolder()
 	{
 		isHold = false;
 		this.holder = null;
 	}
-	
+
 	@Override
 	public void reset()
 	{
 		super.reset();
 		isHold = false;
 	}
-
 
 }

@@ -12,14 +12,13 @@ import edu.columbia.quidditch.basic.Texture;
 import edu.columbia.quidditch.interact.ButtonListener;
 import edu.columbia.quidditch.render.Button;
 
-
 /**
  * Team screen
  * 
  * @author Jihan Li
  * 
  */
-public class TeamScreen extends Screen 
+public class TeamScreen extends Screen
 {
 	private Texture bg, title;
 
@@ -29,7 +28,7 @@ public class TeamScreen extends Screen
 
 		bg = Texture.createFromFile("res/loading/loadScreen.png");
 		title = Texture.createFromFile("res/title/team.png");
-		
+
 		Button button0 = new Button(game, "Gryffindor", 50, 80, "", 18);
 		Button button1 = new Button(game, "Ravenclaw", 270, 80, "", 18);
 		Button button2 = new Button(game, "Hufflepuff", 490, 80, "", 18);
@@ -41,21 +40,25 @@ public class TeamScreen extends Screen
 			@Override
 			public void onClick()
 			{
-				int[] teamNum = {1, 2, 3};
+				int[] teamNum =
+				{ 1, 2, 3 };
 				game.getPlayScreen().setTeamUser(0);
-				game.getPlayScreen().setTeamComputer(teamNum[(int) Math.floor(Math.random()*3)]);
+				game.getPlayScreen().setTeamComputer(
+						teamNum[(int) Math.floor(Math.random() * 3)]);
 				game.startGame();
 			}
 		});
-		
+
 		button1.setListener(new ButtonListener()
 		{
 			@Override
 			public void onClick()
 			{
-				int[] teamNum = {0, 1, 3};
+				int[] teamNum =
+				{ 0, 1, 3 };
 				game.getPlayScreen().setTeamUser(2);
-				game.getPlayScreen().setTeamComputer(teamNum[(int) Math.floor(Math.random()*3)]);
+				game.getPlayScreen().setTeamComputer(
+						teamNum[(int) Math.floor(Math.random() * 3)]);
 				game.startGame();
 			}
 		});
@@ -65,21 +68,25 @@ public class TeamScreen extends Screen
 			@Override
 			public void onClick()
 			{
-				int[] teamNum = {0, 1, 2};
+				int[] teamNum =
+				{ 0, 1, 2 };
 				game.getPlayScreen().setTeamUser(3);
-				game.getPlayScreen().setTeamComputer(teamNum[(int) Math.floor(Math.random()*3)]);
+				game.getPlayScreen().setTeamComputer(
+						teamNum[(int) Math.floor(Math.random() * 3)]);
 				game.startGame();
 			}
 		});
-		
+
 		button3.setListener(new ButtonListener()
 		{
 			@Override
 			public void onClick()
 			{
-				int[] teamNum = {0, 2, 3};
+				int[] teamNum =
+				{ 0, 2, 3 };
 				game.getPlayScreen().setTeamUser(1);
-				game.getPlayScreen().setTeamComputer(teamNum[(int) Math.floor(Math.random()*3)]);
+				game.getPlayScreen().setTeamComputer(
+						teamNum[(int) Math.floor(Math.random() * 3)]);
 				game.startGame();
 			}
 		});
@@ -89,10 +96,10 @@ public class TeamScreen extends Screen
 			@Override
 			public void onClick()
 			{
-				game.terminate();
+				game.stopGame();
 			}
 		});
-		
+
 		addButton(button0);
 		addButton(button1);
 		addButton(button2);
@@ -117,7 +124,7 @@ public class TeamScreen extends Screen
 	public boolean checkKeyboardInput(float delta)
 	{
 		boolean keyReleased = false;
-				
+
 		while (Keyboard.next())
 		{
 			if (!Keyboard.getEventKeyState())
@@ -142,7 +149,7 @@ public class TeamScreen extends Screen
 				}
 			}
 		}
-		
+
 		return keyReleased;
 	}
 }

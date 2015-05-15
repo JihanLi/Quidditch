@@ -18,7 +18,7 @@ import edu.columbia.quidditch.util.ObjLoader;
 import edu.columbia.quidditch.util.Vector3i;
 
 /**
- * Characters
+ * Broom
  * 
  * @author Yuqing Guan
  * 
@@ -65,12 +65,12 @@ public class Broom extends Model
 
 		specularBuffer = BufferUtils.createFloatBuffer(4);
 		specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
-		
+
 		createDefaultList();
 	}
 
 	/**
-	 * Create display lists for the stadium
+	 * Create display list for the broom
 	 */
 	private static void createDefaultList()
 	{
@@ -80,14 +80,14 @@ public class Broom extends Model
 		glNewList(defaultList, GL_COMPILE);
 		{
 			glPushMatrix();
-			
+
 			shaderProgram.bind();
 			shaderProgram.setUniformi("tex", 0);
 
 			glScalef(SCALE, SCALE, SCALE);
 			glTranslatef(0, 0, 7.5f);
 			glRotatef(-90, 1, 0, 0);
-			
+
 			glMaterial(GL_FRONT, GL_SPECULAR, specularBuffer);
 			glMaterialf(GL_FRONT, GL_SHININESS, SHINE);
 
@@ -135,12 +135,17 @@ public class Broom extends Model
 
 			Texture.unbind();
 			ShaderProgram.unbind();
-			
+
 			glPopMatrix();
 		}
 		glEndList();
 	}
 
+	/**
+	 * Singleton mode
+	 * @param game
+	 * @return
+	 */
 	public static Broom create(MainGame game)
 	{
 		if (singleton == null)

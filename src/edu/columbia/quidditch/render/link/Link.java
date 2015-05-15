@@ -17,7 +17,7 @@ public class Link
 {
 	private Matrix4f transform;
 	private FloatBuffer transBuffer;
-	
+
 	private Vector3f axis;
 
 	private LinkedList<Link> children;
@@ -25,7 +25,8 @@ public class Link
 
 	private float theta, radius;
 
-	public Link(float px, float py, float pz, float qx, float qy, float qz, float qw)
+	public Link(float px, float py, float pz, float qx, float qy, float qz,
+			float qw)
 	{
 		transform = new Matrix4f();
 		Matrix4f.setIdentity(transform);
@@ -68,28 +69,28 @@ public class Link
 	private void updateTrans()
 	{
 		// Compute new rotation component
-		
+
 		float radTheta = (float) Math.toRadians(theta);
 		float radHalfTheta = radTheta / 2;
-		
+
 		float sinHalfTheta = (float) Math.sin(radHalfTheta);
 		float cosHalfTheta = (float) Math.cos(radHalfTheta);
-		
+
 		float qx, qy, qz, qw;
-		
+
 		qx = sinHalfTheta * axis.x;
 		qy = sinHalfTheta * axis.y;
 		qz = sinHalfTheta * axis.z;
 		qw = cosHalfTheta;
-		
+
 		transform.m00 = 1 - 2 * qy * qy - 2 * qz * qz;
 		transform.m10 = 2 * qx * qy - 2 * qz * qw;
 		transform.m20 = 2 * qx * qz + 2 * qy * qw;
-		
+
 		transform.m01 = 2 * qx * qy + 2 * qz * qw;
 		transform.m11 = 1 - 2 * qx * qx - 2 * qz * qz;
 		transform.m21 = 2 * qy * qz - 2 * qx * qw;
-		
+
 		transform.m02 = 2 * qx * qz - 2 * qy * qw;
 		transform.m12 = 2 * qy * qz + 2 * qx * qw;
 		transform.m22 = 1 - 2 * qx * qx - 2 * qy * qy;

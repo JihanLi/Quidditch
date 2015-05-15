@@ -18,7 +18,7 @@ import edu.columbia.quidditch.util.ObjLoader;
 import edu.columbia.quidditch.util.Vector3i;
 
 /**
- * Characters
+ * Stadium
  * 
  * @author Yuqing Guan
  * 
@@ -64,12 +64,12 @@ public class Stadium extends Model
 
 		specularBuffer = BufferUtils.createFloatBuffer(4);
 		specularBuffer.put(0.6f).put(0.6f).put(0.6f).put(0.6f).flip();
-		
+
 		createDefaultList();
 	}
 
 	/**
-	 * Create display lists for the stadium
+	 * Create display list for the stadium
 	 */
 	private static void createDefaultList()
 	{
@@ -79,10 +79,10 @@ public class Stadium extends Model
 		glNewList(defaultList, GL_COMPILE);
 		{
 			glPushMatrix();
-			
+
 			glTranslatef(5, -200, -22);
 			glRotatef(59.4f, 0, 1, 0);
-			
+
 			shaderProgram.bind();
 			shaderProgram.setUniformi("tex", 0);
 
@@ -133,12 +133,17 @@ public class Stadium extends Model
 
 			Texture.unbind();
 			ShaderProgram.unbind();
-			
+
 			glPopMatrix();
 		}
 		glEndList();
 	}
 
+	/**
+	 * Singleton mode
+	 * @param game
+	 * @return
+	 */
 	public static Stadium create(MainGame game)
 	{
 		if (singleton == null)

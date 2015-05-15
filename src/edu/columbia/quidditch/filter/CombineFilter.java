@@ -2,8 +2,9 @@ package edu.columbia.quidditch.filter;
 
 /**
  * Combine different kinds of filters
+ * 
  * @author Yuqing Guan
- *
+ * 
  */
 public class CombineFilter extends Filter
 {
@@ -11,7 +12,7 @@ public class CombineFilter extends Filter
 	{
 		super(halfWidth, halfHeight);
 	}
-	
+
 	public void addFilter(Filter otherFilter, float weight)
 	{
 		for (int j = 0; j < height; ++j)

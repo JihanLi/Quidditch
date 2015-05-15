@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.render.collisionobject.Ball;
 import edu.columbia.quidditch.render.collisionobject.Player;
 import edu.columbia.quidditch.render.screen.PlayScreen;
@@ -12,100 +11,99 @@ import edu.columbia.quidditch.render.screen.PlayScreen;
 /**
  * Playscreen class
  * 
- * @author Jihan Li && Yilin Xiong
+ * @author Jihan Li, Yilin Xiong
  * 
  */
 
-public class Intelligence {
-	
+public class Intelligence
+{
+
 	private static final float RADIUS = 100f;
 	private static final float ATTACKER = 0.5f;
 	private static final float OTHER = 0.4f;
-	private MainGame game;
 	private PlayScreen playscreen;
 	private int timer = 0;
 	private int wake = 0;
 	private int sleep = 500;
 	private ArrayList<Player> playersUser = new ArrayList<Player>();
 	private ArrayList<Player> playersComputer = new ArrayList<Player>();
-	
-	
-	public Intelligence(MainGame game, PlayScreen playscreen)
+
+	public Intelligence(PlayScreen playscreen)
 	{
-		this.game = game;
 		this.playscreen = playscreen;
-		
+
 		playersUser = playscreen.getPlayersUser();
 		playersComputer = playscreen.getPlayersComputer();
 	}
-	
+
 	public void playerControl()
 	{
 		timer++;
-		for(Player player : playersUser)
+		for (Player player : playersUser)
 		{
 			if (!playscreen.getCurrentPlayer().equals(player))
 			{
 				nonHolderControl(player);
 			}
 		}
-		
-		if(!playscreen.getBall().isHold() || playscreen.isHeldByUser())
+
+		if (!playscreen.getBall().isHold() || playscreen.isHeldByUser())
 		{
 			Player minPlayer = null;
 			float minDist = Float.MAX_VALUE;
-			for(Player player : playersComputer)
+			for (Player player : playersComputer)
 			{
 				float dist = player.distance(playscreen.getBall());
-				if(dist < minDist)
+				if (dist < minDist)
 				{
 					minDist = dist;
 					minPlayer = player;
 				}
 			}
-			
-			for(Player player : playersComputer)
+
+			for (Player player : playersComputer)
 			{
-				 if(player.equals(minPlayer))
-				 {
-					 attackerControl(player);
-				 }
-				 else
-				 {
-					 nonHolderControl(player);
-				 }
-			}
-		}
-		else
-		{
-			for(Player player : playersComputer)
-			{
-				if(playscreen.getBall().isHold() && playscreen.getBall().getHolder().equals(player))
+				if (player.equals(minPlayer))
 				{
-					holderControl(player);
+					attackerControl(player);
 				}
-				else 
+				else
 				{
 					nonHolderControl(player);
 				}
 			}
 		}
-		
-		
+		else
+		{
+			for (Player player : playersComputer)
+			{
+				if (playscreen.getBall().isHold()
+						&& playscreen.getBall().getHolder().equals(player))
+				{
+					holderControl(player);
+				}
+				else
+				{
+					nonHolderControl(player);
+				}
+			}
+		}
+
 	}
 
-	private void holderControl(Player player) {
+	private void holderControl(Player player)
+	{
 
 		player.accelerate(ATTACKER);
 		if (player.isCollided() || player.checkBoundary() || player.avoidOval())
 		{
 			return;
 		}
-		
-		if(checkComingCollision(player, false))
+
+		if (checkComingCollision(player, false))
 		{
 			float rand = (float) Math.random();
-			
+
 			if (rand < 0.3f) // Pass the ball to nearest team mate.
 			{
 				float max = Float.MAX_VALUE;
@@ -116,46 +114,51 @@ public class Intelligence {
 					{
 						continue;
 					}
-					
+
 					float dis = player.distance(teammate);
-					if (dis < max) {
+					if (dis < max)
+					{
 						nearMate = teammate;
 					}
-					
+
 				}
-				Vector3f dx = Vector3f.sub(nearMate.getPos(), player.getPos(), null);
+				Vector3f dx = Vector3f.sub(nearMate.getPos(), player.getPos(),
+						null);
 				player.setRotBasedOnDX(dx);
-				
+
 				player.handDown();
 				Vector3f vel = player.getVelocity();
 				Vector3f rot = player.getRot();
 				float mod = vel.length();
-				if(vel.x == 0 && vel.y == 0 && vel.z == 0)
-					playscreen.getBall().setVelocity(2*rot.x, 2*rot.y, 2*rot.z);
+				if (vel.x == 0 && vel.y == 0 && vel.z == 0)
+					playscreen.getBall().setVelocity(2 * rot.x, 2 * rot.y,
+							2 * rot.z);
 				else
-					playscreen.getBall().setVelocity(0.8f*vel.x/mod, 0.8f*vel.y/mod, 0.8f*vel.z/mod);
+					playscreen.getBall().setVelocity(0.8f * vel.x / mod,
+							0.8f * vel.y / mod, 0.8f * vel.z / mod);
 				playscreen.getBall().clearHolder();
 			}
-			
+
 			return;
 		}
-		
-		if(sleep > 200)
+
+		if (sleep > 200)
 		{
 			Vector3f dx = new Vector3f();
 			Vector3f.sub(new Vector3f(0, 75.5f, 990f), player.getPos(), dx);
 			player.setRotBasedOnDX(dx);
 		}
-		//System.out.println(sleep);
+		// System.out.println(sleep);
 		sleep++;
-		
+
 	}
-		
-	private boolean checkComingCollision(Player player, boolean containPartner) {
-		
+
+	private boolean checkComingCollision(Player player, boolean containPartner)
+	{
+
 		Player againstPlayer = null;
 		float max = Float.MAX_VALUE;
-		
+
 		if (containPartner)
 		{
 			for (Player other : playersComputer)
@@ -175,7 +178,7 @@ public class Intelligence {
 				}
 			}
 		}
-		
+
 		for (Player other : playersUser)
 		{
 			if (other.equals(playscreen.getBall().getHolder()))
@@ -192,31 +195,33 @@ public class Intelligence {
 				}
 			}
 		}
-		
+
 		if (againstPlayer == null)
 		{
 			return false;
 		}
-		
-		Vector3f dx = Vector3f.sub(player.getPos(), againstPlayer.getPos(), null);
+
+		Vector3f dx = Vector3f.sub(player.getPos(), againstPlayer.getPos(),
+				null);
 		player.setRotBasedOnDX(dx);
 		return true;
 	}
 
-	private void nonHolderControl(Player player) {
-		
+	private void nonHolderControl(Player player)
+	{
+
 		player.accelerate(OTHER);
 		if (player.checkBoundary() || player.isCollided() || player.avoidOval())
 		{
 			return;
 		}
-		
-		if(checkComingCollision(player, true))
+
+		if (checkComingCollision(player, true))
 		{
 			return;
 		}
-		
-		if(timer % player.getInterval() == 0)
+
+		if (timer % player.getInterval() == 0)
 		{
 			Ball ball = playscreen.getBall();
 			Vector3f sub = new Vector3f();
@@ -225,20 +230,21 @@ public class Intelligence {
 		}
 	}
 
-	private void attackerControl(Player player) {
-		
+	private void attackerControl(Player player)
+	{
+
 		player.accelerate(ATTACKER);
 		if (player.isCollided() || player.checkBoundary() || player.avoidOval())
 		{
 			return;
 		}
-		
-		if(checkComingCollision(player, true))
+
+		if (checkComingCollision(player, true))
 		{
 			return;
 		}
-		
-		if(wake > 200)
+
+		if (wake > 200)
 		{
 			Ball ball = playscreen.getBall();
 			Vector3f sub = new Vector3f();
@@ -248,19 +254,23 @@ public class Intelligence {
 		wake++;
 	}
 
-	public int getWake() {
+	public int getWake()
+	{
 		return wake;
 	}
 
-	public void setWake(int wake) {
+	public void setWake(int wake)
+	{
 		this.wake = wake;
 	}
 
-	public int getSleep() {
+	public int getSleep()
+	{
 		return sleep;
 	}
 
-	public void setSleep(int sleep) {
+	public void setSleep(int sleep)
+	{
 		this.sleep = sleep;
 	}
 }

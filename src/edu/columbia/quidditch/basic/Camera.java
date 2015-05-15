@@ -8,7 +8,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import edu.columbia.quidditch.MainGame;
 import edu.columbia.quidditch.render.collisionobject.Player;
 import edu.columbia.quidditch.render.screen.LoadScreen;
 import edu.columbia.quidditch.render.screen.PlayScreen;
@@ -41,14 +40,11 @@ public class Camera
 	 */
 	private Matrix4f matrix;
 
-	private MainGame game;
-
 	private PlayScreen screen;
 
-	public Camera(MainGame game, PlayScreen screen)
+	public Camera(PlayScreen screen)
 	{
 		LoadScreen.increaseLoadCount();
-		this.game = game;
 
 		cameraRot = new Vector3f(0, 0, 0);
 		cameraPos = new Vector3f(0, 0, 0);
@@ -57,7 +53,7 @@ public class Camera
 
 		swing = false;
 		matrix = new Matrix4f();
-		
+
 		this.screen = screen;
 	}
 
@@ -66,7 +62,7 @@ public class Camera
 	 */
 	public void applyRotation()
 	{
-		if(screen.isGlobalView())
+		if (screen.isGlobalView())
 		{
 			glRotatef(cameraRot.x, 1, 0, 0);
 			glRotatef(cameraRot.y, 0, 1, 0);
@@ -74,17 +70,17 @@ public class Camera
 		else
 		{
 			Player player = screen.getCurrentPlayer();
-			
+
 			glRotatef(cameraRot.x, 1, 0, 0);
 			glRotatef(cameraRot.y, 0, 1, 0);
-			
+
 			if (player == null)
 			{
 				return;
 			}
-	
+
 			Vector3f playerRot = player.getRot();
-	
+
 			glRotatef(-playerRot.x - 30, 1, 0, 0);
 			glRotatef(-playerRot.y, 0, 1, 0);
 		}
@@ -92,26 +88,14 @@ public class Camera
 
 	public void rotate(float x, float y)
 	{
-		// Vector3f myselfRot = myself.getRot();
-
 		rotX(x);
 		rotY(y);
-		// applyRotation();
-
-		// glRotatef(-myselfRot.x, 1, 0, 0);
-		// glRotatef(-myselfRot.y, 0, 1, 0);
 	}
 
 	public void rotate(Vector3f rot)
 	{
-		// Vector3f myselfRot = myself.getRot();
-
 		rotX(rot.x);
 		rotY(rot.y);
-		// applyRotation();
-
-		// glRotatef(-myselfRot.x, 1, 0, 0);
-		// glRotatef(-myselfRot.y, 0, 1, 0);
 	}
 
 	public void setRotation(float x, float y, float z)
@@ -133,7 +117,7 @@ public class Camera
 	 */
 	public void applyTranslation()
 	{
-		if(screen.isGlobalView())
+		if (screen.isGlobalView())
 		{
 			glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
 		}
@@ -143,20 +127,20 @@ public class Camera
 			if (player == null)
 			{
 				glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
-	
+
 				return;
 			}
 			Vector3f playerPos = player.getPos();
-	
+
 			glTranslatef(-playerPos.x, -playerPos.y, -playerPos.z);
-	
+
 			Vector3f playerRot = player.getRot();
-	
+
 			glRotatef(playerRot.y, 0, 1, 0);
 			glRotatef(playerRot.x, 1, 0, 0);
-	
+
 			glTranslatef(0, -40, -30);
-			
+
 			glRotatef(-playerRot.x, 1, 0, 0);
 			glRotatef(-playerRot.y, 0, 1, 0);
 		}
@@ -167,7 +151,6 @@ public class Camera
 		transX(x);
 		transY(y);
 		transZ(z);
-		// applyTranslation();
 	}
 
 	public void translate(Vector3f pos)
@@ -175,7 +158,6 @@ public class Camera
 		transX(pos.x);
 		transY(pos.y);
 		transZ(pos.z);
-		// applyTranslation();
 	}
 
 	public void setPosition(float x, float y, float z)
@@ -311,7 +293,10 @@ public class Camera
 	{
 		return cameraPos;
 	}
-	
+
+	/**
+	 * Reset to the initial state when game begins
+	 */
 	public void reset()
 	{
 		cameraRot.set(0, 0, 0);

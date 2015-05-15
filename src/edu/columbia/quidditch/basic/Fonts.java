@@ -29,6 +29,14 @@ public class Fonts
 		fontMap = new Hashtable<String, UnicodeFont>();
 	}
 
+	/**
+	 * Create a font and save it to map, if the font exists, just load it
+	 * 
+	 * @param fontStyle
+	 * @param color
+	 * @param size
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	private static UnicodeFont createFont(String fontStyle, Color color,
 			int size)
@@ -67,6 +75,16 @@ public class Fonts
 				+ Integer.toString(size);
 	}
 
+	/**
+	 * Create / load a font and then draw string
+	 * 
+	 * @param x
+	 * @param y
+	 * @param text
+	 * @param fontStyle
+	 * @param color
+	 * @param size
+	 */
 	public static void draw(float x, float y, String text, String fontStyle,
 			Color color, int size)
 	{

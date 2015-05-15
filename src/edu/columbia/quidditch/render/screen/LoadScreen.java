@@ -3,6 +3,7 @@ package edu.columbia.quidditch.render.screen;
 import java.awt.Color;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.Drawable;
 
@@ -21,43 +22,43 @@ import edu.columbia.quidditch.basic.Texture;
 public class LoadScreen extends Screen implements Runnable
 {
 	private static final float ALL_LOAD_COUNT = 161.5f;
-	
+
 	private static final long INTERVAL = 100;
-	
+
 	private static LoadScreen singleton = null;
-		
+
 	public static void log(String text)
 	{
 		System.out.println(text);
-		
+
 		if (singleton == null)
 		{
 			return;
 		}
-		
+
 		singleton.lastLog = text;
 		++singleton.loadCount;
 	}
-	
+
 	public static void increaseLoadCount()
 	{
 		if (singleton == null)
 		{
 			return;
 		}
-		
+
 		++singleton.loadCount;
 	}
-	
+
 	private String lastLog;
-	private int loadCount;	
-	
+	private int loadCount;
+
 	private Texture bg, barBg, barContent, emblem;
-	
+
 	public LoadScreen(MainGame game)
 	{
 		super(game);
-		
+
 		loadCount = 1;
 		lastLog = "";
 		singleton = this;
@@ -115,7 +116,7 @@ public class LoadScreen extends Screen implements Runnable
 		glEnd();
 
 		Texture.unbind();
-		
+
 		Fonts.draw(480, 150, lastLog, "Times New Roman", Color.white, 20);
 	}
 
@@ -173,13 +174,12 @@ public class LoadScreen extends Screen implements Runnable
 			// If all models are loaded, the loop will be terminated
 			while (game.isLoading())
 			{
-				glClear(GL_COLOR_BUFFER_BIT
-						| GL_DEPTH_BUFFER_BIT);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 				glDisable(GL_DEPTH_TEST);
-				
+
 				render();
-				
+
 				glEnable(GL_DEPTH_TEST);
 
 				Display.update();
@@ -202,6 +202,7 @@ public class LoadScreen extends Screen implements Runnable
 	@Override
 	public boolean checkKeyboardInput(float delta)
 	{
+		while (Keyboard.next());
 		return false;
 	}
 }
