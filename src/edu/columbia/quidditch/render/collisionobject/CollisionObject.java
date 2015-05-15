@@ -27,6 +27,7 @@ public abstract class CollisionObject extends Model
 	protected float radius, speed;
 	protected Vector3f defaultPos, lastPos, pos, velocity;
 	protected Vector3f rot;
+	protected static final float COFF = 0.8f;
 	
 	public CollisionObject(MainGame game, PlayScreen screen, float radius, Vector3f defaultPos)
 	{
@@ -101,12 +102,6 @@ public abstract class CollisionObject extends Model
 		newPos.y += velocity.y * delta;
 		newPos.z += velocity.z * delta;
 		
-		if (!checkHeight(newPos))
-		{
-			doOutHeight(newPos);
-			return;
-		}
-		
 		//float newOvalVal = checkOval(newPos);
 		
 		if (!checkOval(newPos))
@@ -115,31 +110,53 @@ public abstract class CollisionObject extends Model
 			return;
 		}
 		
+		if (!checkHeight(newPos))
+		{
+			doOutHeight(newPos);
+			return;
+		}
+		
 		pos.set(newPos);
 	}
 	
 	protected abstract void refreshVelocity();
 
+	private float normalizeAngle(float angle)
+	{
+		angle %= 360.0f;
+
+		if (angle < -180.0f)
+		{
+			angle += 360.0f;
+		}
+		else if (angle > 180.0f)
+		{
+			angle -= 360.0f;
+		}
+
+		return angle;
+	}
+	
 	protected boolean checkOval(Vector3f pos)
 	{
 		//return (float) (Math.pow(pos.x / PlayScreen.SHORT_AXIS, 2) + Math.pow(pos.z / PlayScreen.LONG_AXIS, 2));
-		
-		if (rot.y > 0 && pos.x < - PlayScreen.SHORT_AXIS*0.9)
+		rot.y = normalizeAngle(rot.y);
+		if (rot.y > 0 && pos.x < - PlayScreen.SHORT_AXIS * COFF)
 		{
 			return false;
 		}
 		
-		if (rot.y < 0 && pos.x > PlayScreen.SHORT_AXIS*0.9)
+		if (rot.y < 0 && pos.x > PlayScreen.SHORT_AXIS * COFF)
 		{
 			return false;
 		}
 		
-		if (Math.abs(rot.y) < 90 && pos.z < - PlayScreen.LONG_AXIS*0.9)
+		if (Math.abs(rot.y) < 90 && pos.z < - PlayScreen.LONG_AXIS * COFF)
 		{
 			return false;
 		}
 		
-		if (Math.abs(rot.y) > 90 && pos.z > PlayScreen.LONG_AXIS*0.9)
+		if (Math.abs(rot.y) > 90 && pos.z > PlayScreen.LONG_AXIS * COFF)
 		{
 			return false;
 		}

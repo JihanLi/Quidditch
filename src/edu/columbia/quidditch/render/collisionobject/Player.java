@@ -45,12 +45,11 @@ public class Player extends CollisionObject
 	private static final float W = 0.25f;
 	private static final float DY = 2f;
 	private static final float DR = 5f;
-	private static final float BETA = 0.1f;
 	private static final float ACCELERATOR = 0.002f;
 	private static final float GRAVITY = -0.02f;
 
 	private static final float MIN_V = 0.01f;
-	private static final float MAX_V = 0.5f;
+	private static final float MAX_V = 0.3f;
 
 	private static final String MODEL_NAME = "res/char/char.iqe";
 
@@ -258,7 +257,7 @@ public class Player extends CollisionObject
 		super(game, screen, RADIUS, defaultPos);
 
 		this.inUserTeam = inUserTeam;
-		setInterval((int) Math.floor(Math.random() * 300));
+		setInterval((int) Math.floor(Math.random() * 300) + 1);
 
 		broom = Broom.create(game);
 
@@ -729,15 +728,20 @@ public class Player extends CollisionObject
 	@Override
 	protected void doOutOval(Vector3f newPos, float delta)
 	{
-		if ((Math.abs(newPos.x) >= PlayScreen.SHORT_AXIS*0.9))
+		if (Math.abs(newPos.x) > PlayScreen.SHORT_AXIS * COFF * 0.9 && Math.abs(newPos.z) > PlayScreen.LONG_AXIS * COFF * 0.9)
+		{
+			setRotBasedOnDX(Vector3f.sub(new Vector3f(0, 0, 0), newPos, null));
+			fall();
+			return;
+		}
+		if ((newPos.x >= PlayScreen.SHORT_AXIS * COFF) || (newPos.x <= -PlayScreen.SHORT_AXIS * COFF))
 		{
 			rot.y = -1 * rot.y;
 		}
-		if (Math.abs(newPos.z) >= PlayScreen.LONG_AXIS*0.9)
+		if ((newPos.z >= PlayScreen.LONG_AXIS * COFF) || (newPos.z <= -PlayScreen.LONG_AXIS * COFF))
 		{
 			rot.y = 180 - rot.y;
 		}
-		
 		fall();
 	}
 
@@ -765,6 +769,7 @@ public class Player extends CollisionObject
 
 	public void setBasedOnV()
 	{
+		velocity.y = 0;
 		speed = velocity.length();
 		if (speed < 0.001f)
 		{
@@ -790,11 +795,11 @@ public class Player extends CollisionObject
 		
 		rotYToValue(roty);
 		
-		if (dx.z > DY)
+		if (dx.y > DY)
 		{
 			moveY(1);
 		}
-		else if (dx.z < DY)
+		else if (dx.y < -DY)
 		{
 			moveY(-1);
 		}
@@ -818,49 +823,18 @@ public class Player extends CollisionObject
 		rot.y += w;
 	}
 	
-	private float normalizeAngle(float angle)
-	{
-		angle %= 360.0f;
-
-		if (angle < -180.0f)
-		{
-			angle += 360.0f;
-		}
-		else if (angle > 180.0f)
-		{
-			angle -= 360.0f;
-		}
-
-		return angle;
-	}
-	
 	public boolean avoidOval()
 	{
-		
-		/*if (!checkOval(pos))
+		if ((pos.x >= PlayScreen.SHORT_AXIS * COFF * 0.9) || (pos.x <= -PlayScreen.SHORT_AXIS * COFF * 0.9))
 		{
-			float dx = (float) (-Math.sin(Math.toRadians(rot.y)) * speed);
-			float dz = (float) (-Math.cos(Math.toRadians(rot.y)) * speed);
-			Vector3f newPos = new Vector3f(pos.x + dx, pos.y, pos.z + dz);
-			
-			if (!checkOval(newPos))
-			{
-//				float tangent = (float) Math.toDegrees(Math.atan2(newPos.z * PlayScreen.SHORT_AXIS * PlayScreen.SHORT_AXIS, newPos.x * PlayScreen.LONG_AXIS * PlayScreen.LONG_AXIS));
-//				tangent = normalizeAngle(tangent);
-//				rot.y = normalizeAngle(2 * tangent - rot.y);
-				if ((Math.abs(pos.x) < PlayScreen.SHORT_AXIS*0.9))
-				{
-					rot.y = -1 * rot.y;
-				}
-				if (Math.abs(pos.z) < PlayScreen.LONG_AXIS*0.9)
-				{
-					rot.y = 180 - rot.y;
-				}
-			}
-			
+			rotYToValue(- rot.y);
 			return true;
 		}
-		*/
+		if ((pos.z >= PlayScreen.LONG_AXIS * COFF * 0.9) || (pos.z <= -PlayScreen.LONG_AXIS * COFF * 0.9))
+		{
+			rotYToValue(180 - rot.y);
+			return true;
+		}
 		return false;
 	}
 
@@ -878,6 +852,18 @@ public class Player extends CollisionObject
 
 	public void setInterval(int interval) {
 		this.interval = interval;
+	}
+
+	public boolean checkBoundary() {
+		if ((pos.x >= PlayScreen.SHORT_AXIS * COFF * 0.9) || (pos.x <= -PlayScreen.SHORT_AXIS * COFF * 0.9))
+		{
+			return true;
+		}
+		if ((pos.z >= PlayScreen.LONG_AXIS * COFF * 0.9) || (pos.z <= -PlayScreen.LONG_AXIS * COFF * 0.9))
+		{
+			return true;
+		}
+		return false;
 	}
 	
 }

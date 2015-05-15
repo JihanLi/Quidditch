@@ -95,18 +95,35 @@ public class Ball extends CollisionObject
 	@Override
 	protected void doOutHeight(Vector3f newPos)
 	{
+		System.out.println(newPos);
+		System.out.println(velocity);
 		if (!isHold)
 		{
 			velocity.y *= -BETA;
 		}
 	}
-
+	
+	@Override
+	protected boolean checkOval(Vector3f pos)
+	{
+		if (pos.x < - PlayScreen.SHORT_AXIS * COFF || pos.x > PlayScreen.SHORT_AXIS * COFF)
+		{
+			return false;
+		}
+		
+		if (pos.z > PlayScreen.LONG_AXIS * COFF || pos.z < - PlayScreen.LONG_AXIS * COFF)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
 	@Override
 	protected void doOutOval(Vector3f newPos, float delta)
 	{
 		if (isHold)
 		{
-			isHold = false;
 			velocity.x *= -BETA;
 			velocity.z *= -BETA;
 			velocity.y += GRAVITY;

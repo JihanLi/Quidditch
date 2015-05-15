@@ -212,6 +212,7 @@ public class PlayScreen extends Screen
 				farPlayer.handUp();
 				
 				score1 += 10;
+				AI.setSleep(0);
 			}
 		}
 		
@@ -237,6 +238,7 @@ public class PlayScreen extends Screen
 				farPlayer.handUp();
 								
 				score2 += 10;
+				AI.setWake(0);
 			}
 		}
 		
@@ -504,26 +506,26 @@ public class PlayScreen extends Screen
 	
 	public void checkCollision()
 	{
-		for(int i = 0; i < 3; i++)
-		{
-			if(!ball.isHold())
-			{
-				if(ball.checkCollision(AWAY_DOORS[i], DOOR_RADIUS))
-				{
-					score1 += 10;
-				}
-				if(ball.checkCollision(HOME_DOORS[i], DOOR_RADIUS))
-				{
-					score2 += 10;
-				}
-			}
-		}
-		
+//		for(int i = 0; i < 3; i++)
+//		{
+//			if(!ball.isHold())
+//			{
+//				if(ball.checkCollision(AWAY_DOORS[i], DOOR_RADIUS))
+//				{
+//					score1 += 10;
+//				}
+//				if(ball.checkCollision(HOME_DOORS[i], DOOR_RADIUS))
+//				{
+//					score2 += 10;
+//				}
+//			}
+//		}	
 		
 		for(int i = 0; i < players.size(); i++)
 		{
 			Player tempPlayer1 = players.get(i);
 			boolean collision1 = false;
+			
 			
 			if(!ball.isHold())
 			{
@@ -538,19 +540,27 @@ public class PlayScreen extends Screen
 					{
 						isHeldByUser = false;
 					}
+					tempPlayer1.setCollided(false);
 				}
 			}
 			
 			for(int j = 0; j < players.size(); j++)
 			{
 				Player tempPlayer2 = players.get(j);
-				if (tempPlayer1.equals(tempPlayer2))
+				if (i == j)
 				{
 					continue;
 				}
 
 				if(tempPlayer1.checkCollision(tempPlayer2))
 				{
+					collision1 = true;
+					
+					if(j < i)
+					{
+						continue;
+					}
+					
 					setVAfterCollision(tempPlayer1, tempPlayer2);
 					if (!ball.isHold())
 					{
@@ -604,8 +614,6 @@ public class PlayScreen extends Screen
 						tempPlayer1.fall();
 						tempPlayer2.fall();
 					}
-
-					collision1 = true;
 				}
 			}
 			
@@ -617,14 +625,14 @@ public class PlayScreen extends Screen
 	@Override
 	public void move(float delta)
 	{
-		if (gameOn || gameOff) 
+		if (gameOn) 
 		{
 			return;
 		}
 		
-		if(!isHeldByUser)
+		if(!isHeldByUser && ball.isHold())
 		{
-			if(ball.checkScope(new Vector3f(0, 75.5f, 990f), 400) && ball.getPos().z < 990f)
+			if(AI.getSleep() > 500 && ball.checkScope(new Vector3f(0, 75.5f, 990f), 200) && ball.getPos().z < 990f)
 			{
 				animate2 = true;
 				ball.getHolder().handDown();
