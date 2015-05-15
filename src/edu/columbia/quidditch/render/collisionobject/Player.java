@@ -612,6 +612,23 @@ public class Player extends CollisionObject
 			return dPos.length() < radius + other.radius + COLLISION_DELTA;
 		}
 	}
+	
+	public boolean checkCollision(Player other, float radius)
+	{
+		Vector3f dPos = new Vector3f();
+		Vector3f dVel = new Vector3f();
+		Vector3f.sub(pos, other.pos, dPos);
+		Vector3f.sub(velocity, other.velocity, dVel);
+
+		float dotPro = Vector3f.dot(dPos, dVel);
+
+		if (dotPro >= -0.01f)
+		{
+			return false;
+		}
+		
+		return dPos.length() < radius + other.radius;
+	}
 
 	public void moveY(int sign, float delta)
 	{
@@ -729,10 +746,14 @@ public class Player extends CollisionObject
 		{
 			return;
 		}
+		setRotBasedOnDX(velocity);
+	}
+	
+	public void setRotBasedOnDX(Vector3f dx)
+	{
+		rot.y = (float) Math.asin(dx.x / dx.length());
 
-		rot.y = (float) Math.asin(velocity.x / speed);
-
-		if (velocity.z > 0)
+		if (dx.z > 0)
 		{
 			rot.y -= Math.PI;
 		}
@@ -743,4 +764,6 @@ public class Player extends CollisionObject
 
 		rot.y = (float) Math.toDegrees(rot.y);
 	}
+	
+	
 }
