@@ -71,6 +71,8 @@ public class Player extends CollisionObject
 
 	private boolean controllable = true;
 	private boolean inUserTeam = true;
+	private boolean isCollided = false;
+	private int interval;
 
 	private static HashMap<String, Material[]> mutableMtls;
 
@@ -256,6 +258,7 @@ public class Player extends CollisionObject
 		super(game, screen, RADIUS, defaultPos);
 
 		this.inUserTeam = inUserTeam;
+		setInterval((int) Math.floor(Math.random() * 300));
 
 		broom = Broom.create(game);
 
@@ -724,11 +727,17 @@ public class Player extends CollisionObject
 	}
 
 	@Override
-	protected void doOutOval(Vector3f newPos, float newOvalVal, float delta)
+	protected void doOutOval(Vector3f newPos, float delta)
 	{
-		velocity.x *= -BETA;
-		velocity.y = 0;
-		velocity.z *= -BETA;
+		if ((Math.abs(newPos.x) >= PlayScreen.SHORT_AXIS*0.9))
+		{
+			rot.y = -1 * rot.y;
+		}
+		if (Math.abs(newPos.z) >= PlayScreen.LONG_AXIS*0.9)
+		{
+			rot.y = 180 - rot.y;
+		}
+		
 		fall();
 	}
 
@@ -742,6 +751,8 @@ public class Player extends CollisionObject
 	{
 		super.reset();
 		rot.set(0, inUserTeam ? 0 : 180, 0);
+		isCollided = false;
+		controllable = true;
 	}
 
 	public void fall()
@@ -775,7 +786,7 @@ public class Player extends CollisionObject
 			roty *= -1;
 		}
 		
-		roty = (float) Math.toDegrees(rot.y);
+		roty = (float) Math.toDegrees(roty);
 		
 		rotYToValue(roty);
 		
@@ -807,25 +818,66 @@ public class Player extends CollisionObject
 		rot.y += w;
 	}
 	
+	private float normalizeAngle(float angle)
+	{
+		angle %= 360.0f;
+
+		if (angle < -180.0f)
+		{
+			angle += 360.0f;
+		}
+		else if (angle > 180.0f)
+		{
+			angle -= 360.0f;
+		}
+
+		return angle;
+	}
+	
 	public boolean avoidOval()
 	{
-		float dis = checkOval(pos);
 		
-		if (dis > 0.9)
+		/*if (!checkOval(pos))
 		{
 			float dx = (float) (-Math.sin(Math.toRadians(rot.y)) * speed);
 			float dz = (float) (-Math.cos(Math.toRadians(rot.y)) * speed);
 			Vector3f newPos = new Vector3f(pos.x + dx, pos.y, pos.z + dz);
 			
-			if (checkOval(newPos) > dis)
+			if (!checkOval(newPos))
 			{
-				rot.y += 180;
+//				float tangent = (float) Math.toDegrees(Math.atan2(newPos.z * PlayScreen.SHORT_AXIS * PlayScreen.SHORT_AXIS, newPos.x * PlayScreen.LONG_AXIS * PlayScreen.LONG_AXIS));
+//				tangent = normalizeAngle(tangent);
+//				rot.y = normalizeAngle(2 * tangent - rot.y);
+				if ((Math.abs(pos.x) < PlayScreen.SHORT_AXIS*0.9))
+				{
+					rot.y = -1 * rot.y;
+				}
+				if (Math.abs(pos.z) < PlayScreen.LONG_AXIS*0.9)
+				{
+					rot.y = 180 - rot.y;
+				}
 			}
 			
 			return true;
 		}
-		
+		*/
 		return false;
+	}
+
+	public boolean isCollided() {
+		return isCollided;
+	}
+
+	public void setCollided(boolean isCollided) {
+		this.isCollided = isCollided;
+	}
+
+	public int getInterval() {
+		return interval;
+	}
+
+	public void setInterval(int interval) {
+		this.interval = interval;
 	}
 	
 }

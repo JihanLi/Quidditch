@@ -107,11 +107,11 @@ public abstract class CollisionObject extends Model
 			return;
 		}
 		
-		float newOvalVal = checkOval(newPos);
+		//float newOvalVal = checkOval(newPos);
 		
-		if (newOvalVal > 1)
+		if (!checkOval(newPos))
 		{
-			doOutOval(newPos, newOvalVal, delta);
+			doOutOval(newPos, delta);
 			return;
 		}
 		
@@ -120,9 +120,32 @@ public abstract class CollisionObject extends Model
 	
 	protected abstract void refreshVelocity();
 
-	protected float checkOval(Vector3f pos)
+	protected boolean checkOval(Vector3f pos)
 	{
-		return (float) (Math.pow(pos.x / PlayScreen.SHORT_AXIS, 2) + Math.pow(pos.z / PlayScreen.LONG_AXIS, 2));
+		//return (float) (Math.pow(pos.x / PlayScreen.SHORT_AXIS, 2) + Math.pow(pos.z / PlayScreen.LONG_AXIS, 2));
+		
+		if (rot.y > 0 && pos.x < - PlayScreen.SHORT_AXIS*0.9)
+		{
+			return false;
+		}
+		
+		if (rot.y < 0 && pos.x > PlayScreen.SHORT_AXIS*0.9)
+		{
+			return false;
+		}
+		
+		if (Math.abs(rot.y) < 90 && pos.z < - PlayScreen.LONG_AXIS*0.9)
+		{
+			return false;
+		}
+		
+		if (Math.abs(rot.y) > 90 && pos.z > PlayScreen.LONG_AXIS*0.9)
+		{
+			return false;
+		}
+		
+		//return (Math.abs(pos.x) < PlayScreen.SHORT_AXIS*0.9) && (Math.abs(pos.z) < PlayScreen.LONG_AXIS*0.9);
+		return true;
 	}
 	
 	protected boolean checkHeight(Vector3f pos)
@@ -200,5 +223,5 @@ public abstract class CollisionObject extends Model
 	}
 
 	protected abstract void doOutHeight(Vector3f newPos);
-	protected abstract void doOutOval(Vector3f newPos, float newOvalVal, float delta);
+	protected abstract void doOutOval(Vector3f newPos, float delta);
 }
