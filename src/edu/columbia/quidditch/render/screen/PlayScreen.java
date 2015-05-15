@@ -332,12 +332,6 @@ public class PlayScreen extends Screen
 				case Keyboard.KEY_C:
 					globalView = !globalView;
 					break;
-				case Keyboard.KEY_N:
-					animate2 = true;
-					ball.getHolder().handDown();
-					ball.clearHolder();
-					shootAnimator2.initiate();
-					break;
 				}
 			}
 		}
@@ -529,7 +523,7 @@ public class PlayScreen extends Screen
 		for(int i = 0; i < players.size(); i++)
 		{
 			Player tempPlayer1 = players.get(i);
-			boolean currentCollision = false;
+			boolean collision1 = false;
 			
 			if(!ball.isHold())
 			{
@@ -547,9 +541,13 @@ public class PlayScreen extends Screen
 				}
 			}
 			
-			for(int j = i+1; j < players.size(); j++)
+			for(int j = 0; j < players.size(); j++)
 			{
 				Player tempPlayer2 = players.get(j);
+				if (tempPlayer1.equals(tempPlayer2))
+				{
+					continue;
+				}
 
 				if(tempPlayer1.checkCollision(tempPlayer2))
 				{
@@ -563,7 +561,7 @@ public class PlayScreen extends Screen
 					
 					if(ball.getHolder().equals(tempPlayer1))
 					{
-						if (!ball.isHolderCollided())
+						if (!tempPlayer1.isCollided() && !tempPlayer2.isCollided())
 						{
 							ball.setHolder(tempPlayer2);
 							if(j < numberOfMember)
@@ -580,11 +578,10 @@ public class PlayScreen extends Screen
 
 						tempPlayer1.setBasedOnV();
 						tempPlayer2.setBasedOnV();
-						currentCollision = true;
 					}
 					else if(ball.getHolder().equals(tempPlayer2))
 					{
-						if (!ball.isHolderCollided())
+						if (!tempPlayer1.isCollided() && !tempPlayer2.isCollided())
 						{
 							ball.setHolder(tempPlayer1);
 							if(i < numberOfMember)
@@ -601,17 +598,18 @@ public class PlayScreen extends Screen
 
 						tempPlayer1.setBasedOnV();
 						tempPlayer2.setBasedOnV();
-						currentCollision = true;
 					}
 					else
 					{
 						tempPlayer1.fall();
 						tempPlayer2.fall();
 					}
+
+					collision1 = true;
 				}
 			}
 			
-			ball.setHolderCollided(currentCollision);
+			tempPlayer1.setCollided(collision1);
 		}
 	}
 		
@@ -619,9 +617,20 @@ public class PlayScreen extends Screen
 	@Override
 	public void move(float delta)
 	{
-		if (gameOn) 
+		if (gameOn || gameOff) 
 		{
 			return;
+		}
+		
+		if(!isHeldByUser)
+		{
+			if(ball.checkScope(new Vector3f(0, 75.5f, 990f), 400) && ball.getPos().z < 990f)
+			{
+				animate2 = true;
+				ball.getHolder().handDown();
+				ball.clearHolder();
+				shootAnimator2.initiate();
+			}
 		}
 		
 		AI.playerControl();

@@ -12,10 +12,11 @@ import edu.columbia.quidditch.render.screen.PlayScreen;
 public class Intelligence {
 	
 	private static final float RADIUS = 100f;
-	private static final float ATTACKER = 0.9f;
-	private static final float OTHER = 0.8f;
+	private static final float ATTACKER = 0.5f;
+	private static final float OTHER = 0.4f;
 	private MainGame game;
 	private PlayScreen playscreen;
+	private int timer = 0;
 	private ArrayList<Player> playersUser = new ArrayList<Player>();
 	private ArrayList<Player> playersComputer = new ArrayList<Player>();
 	
@@ -31,6 +32,7 @@ public class Intelligence {
 	
 	public void playerControl()
 	{
+		timer++;
 		for(Player player : playersUser)
 		{
 			if (!playscreen.getCurrentPlayer().equals(player))
@@ -86,7 +88,7 @@ public class Intelligence {
 	private void holderControl(Player player) {
 
 		player.accelerate(ATTACKER);
-		if (player.avoidOval())
+		if (player.avoidOval() || player.isCollided())
 		{
 			return;
 		}
@@ -168,7 +170,7 @@ public class Intelligence {
 	private void nonHolderControl(Player player) {
 		
 		player.accelerate(OTHER);
-		if (player.avoidOval())
+		if (player.avoidOval() || player.isCollided())
 		{
 			return;
 		}
@@ -178,13 +180,9 @@ public class Intelligence {
 			return;
 		}
 		
-		Ball ball = playscreen.getBall();
-		if(ball.isHold())
+		if(timer % player.getInterval() == 0)
 		{
-			player.setRot(ball.getHolder().getRot());
-		}
-		else
-		{
+			Ball ball = playscreen.getBall();
 			Vector3f sub = new Vector3f();
 			Vector3f.sub(ball.getPos(), player.getPos(), sub);
 			player.setRotBasedOnDX(sub);
@@ -194,7 +192,7 @@ public class Intelligence {
 	private void attackerControl(Player player) {
 		
 		player.accelerate(ATTACKER);
-		if (player.avoidOval())
+		if (player.avoidOval() || player.isCollided())
 		{
 			return;
 		}

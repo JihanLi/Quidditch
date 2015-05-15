@@ -26,7 +26,6 @@ public class Ball extends CollisionObject
 	private int type;
 	private boolean isHold = false;
 	private Player holder;
-	private boolean holderCollided = false;
 	private float BETA = 0.8f; //Lost energy during collision.
 
 	public Ball(MainGame game, PlayScreen screen, int type, Vector3f defaultPos)
@@ -103,7 +102,7 @@ public class Ball extends CollisionObject
 	}
 
 	@Override
-	protected void doOutOval(Vector3f newPos, float newOvalVal, float delta)
+	protected void doOutOval(Vector3f newPos, float delta)
 	{
 		if (isHold)
 		{
@@ -176,15 +175,7 @@ public class Ball extends CollisionObject
 	{
 		super.reset();
 		isHold = false;
-		holderCollided = false;
-	}
-	
-	public boolean isHolderCollided() {
-		return holderCollided;
 	}
 
-	public void setHolderCollided(boolean holderCollided) {
-		this.holderCollided = holderCollided;
-	}
 
 }
