@@ -76,6 +76,7 @@ public class PlayScreen extends Screen
 
 	private Model sky, terra, stadium, radar;
 	private Player currentPlayer;
+	private boolean isHeldByUser = false;
 	private int currentIndex;
 	
 	private int numberOfMember = 3;
@@ -202,6 +203,7 @@ public class PlayScreen extends Screen
 				
 				Player farPlayer= playersComputer.get(far);
 				ball.setHolder(farPlayer);
+				isHeldByUser = false;
 				farPlayer.handUp();
 				
 				score1 += 10;
@@ -226,6 +228,7 @@ public class PlayScreen extends Screen
 				
 				Player farPlayer= playersUser.get(far);
 				ball.setHolder(farPlayer);
+				isHeldByUser = true;
 				farPlayer.handUp();
 								
 				score2 += 10;
@@ -528,6 +531,14 @@ public class PlayScreen extends Screen
 				if(ball.checkCollision(tempPlayer1))
 				{
 					ball.setHolder(tempPlayer1);
+					if(i < numberOfMember)
+					{
+						isHeldByUser = true;
+					}
+					else
+					{
+						isHeldByUser = false;
+					}
 				}
 			}
 			
@@ -550,6 +561,14 @@ public class PlayScreen extends Screen
 						if (!ball.isHolderCollided())
 						{
 							ball.setHolder(tempPlayer2);
+							if(j < numberOfMember)
+							{
+								isHeldByUser = true;
+							}
+							else
+							{
+								isHeldByUser = false;
+							}
 							tempPlayer2.handUp();
 							tempPlayer1.handDown();
 						}
@@ -563,6 +582,14 @@ public class PlayScreen extends Screen
 						if (!ball.isHolderCollided())
 						{
 							ball.setHolder(tempPlayer1);
+							if(i < numberOfMember)
+							{
+								isHeldByUser = true;
+							}
+							else
+							{
+								isHeldByUser = false;
+							}
 							tempPlayer1.handUp();
 							tempPlayer2.handDown();
 						}
@@ -703,7 +730,7 @@ public class PlayScreen extends Screen
 			return;
 		}
 		
-		float max = 30000f;
+		float max = Float.MAX_VALUE;
 		for (int i = 0; i < numberOfMember; i++)
 		{
 			float dis = playersUser.get(i).distance(ball);
@@ -805,5 +832,29 @@ public class PlayScreen extends Screen
 		Vector3f position = new Vector3f();
 		position.set(ball.getPos());
 		return position;
+	}
+
+	public ArrayList<Player> getPlayersUser() {
+		return playersUser;
+	}
+
+	public void setPlayersUser(ArrayList<Player> playersUser) {
+		this.playersUser = playersUser;
+	}
+
+	public ArrayList<Player> getPlayersComputer() {
+		return playersComputer;
+	}
+
+	public void setPlayersComputer(ArrayList<Player> playersComputer) {
+		this.playersComputer = playersComputer;
+	}
+
+	public Ball getBall() {
+		return ball;
+	}
+
+	public boolean isHeldByUser() {
+		return isHeldByUser;
 	}
 }
