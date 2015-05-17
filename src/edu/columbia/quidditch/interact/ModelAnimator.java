@@ -54,6 +54,10 @@ public class ModelAnimator
 		}
 	}
 
+	
+	/**
+	 * Model Animation.
+	 */
 	public boolean animate()
 	{
 		String[] motion = current[iterator].split(" ");

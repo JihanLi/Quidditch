@@ -53,6 +53,10 @@ public class CameraAnimator
 		}
 	}
 
+	
+	/**
+	 * Camera Animation.
+	 */
 	public boolean animate(Camera camera)
 	{
 		String[] motion = current[iterator].split(" ");

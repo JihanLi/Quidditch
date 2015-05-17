@@ -19,6 +19,9 @@ public class StartScreen extends Screen
 {
 	private Texture bg, title;
 
+	/**
+	 * Start screen
+	 */
 	public StartScreen(final MainGame game)
 	{
 		super(game);
@@ -51,6 +54,9 @@ public class StartScreen extends Screen
 		addButton(button1);
 	}
 
+	/**
+	 * Create list of start screen.
+	 */
 	@Override
 	protected void createList()
 	{
@@ -64,6 +70,10 @@ public class StartScreen extends Screen
 		glEndList();
 	}
 
+	
+	/**
+	 * Check keyboard input.
+	 */
 	@Override
 	public boolean checkKeyboardInput(float delta)
 	{

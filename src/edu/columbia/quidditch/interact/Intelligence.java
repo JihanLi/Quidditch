@@ -36,6 +36,10 @@ public class Intelligence
 		playersComputer = playscreen.getPlayersComputer();
 	}
 
+	
+	/**
+	 * Control the players by AI.
+	 */
 	public void playerControl()
 	{
 		timer++;
@@ -91,6 +95,10 @@ public class Intelligence
 
 	}
 
+	
+	/**
+	 * AI of holder.
+	 */
 	private void holderControl(Player player)
 	{
 
@@ -153,6 +161,10 @@ public class Intelligence
 
 	}
 
+	
+	/**
+	 * Check the coming collision.
+	 */
 	private boolean checkComingCollision(Player player, boolean containPartner)
 	{
 
@@ -207,6 +219,10 @@ public class Intelligence
 		return true;
 	}
 
+	
+	/**
+	 * AI of non-holders.
+	 */
 	private void nonHolderControl(Player player)
 	{
 
@@ -230,6 +246,10 @@ public class Intelligence
 		}
 	}
 
+	
+	/**
+	 * AI of attacker.
+	 */
 	private void attackerControl(Player player)
 	{
 

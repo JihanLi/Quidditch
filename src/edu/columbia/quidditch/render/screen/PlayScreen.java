@@ -152,6 +152,9 @@ public class PlayScreen extends Screen
 		return currentPlayer;
 	}
 
+	/**
+	 * Render the play screen
+	 */
 	@Override
 	public void render()
 	{
@@ -219,7 +222,7 @@ public class PlayScreen extends Screen
 			}
 		}
 
-		if (score1 > 140 || score2 > 140)
+		if (score1 > 0 || score2 > 0)
 		{
 			gameOff = true;
 		}
@@ -290,6 +293,9 @@ public class PlayScreen extends Screen
 		}
 	}
 
+	/**
+	 * Check the keyboard input.
+	 */
 	@Override
 	public boolean checkKeyboardInput(float delta)
 	{
@@ -514,6 +520,10 @@ public class PlayScreen extends Screen
 		return keyReleased;
 	}
 
+	
+	/**
+	 * Check collision of different models.
+	 */
 	public void checkCollision()
 	{
 		for (int i = 0; i < players.size(); i++)
@@ -617,7 +627,10 @@ public class PlayScreen extends Screen
 			tempPlayer1.setCollided(collision1);
 		}
 	}
-
+	
+	/**
+	 * Move the models and check AIs.
+	 */
 	@Override
 	public void move(float delta)
 	{
@@ -710,6 +723,10 @@ public class PlayScreen extends Screen
 		this.gameOff = gameOff;
 	}
 
+	
+	/**
+	 * Reset the game.
+	 */
 	public void resetGame()
 	{
 		camera.reset();
@@ -742,6 +759,9 @@ public class PlayScreen extends Screen
 		globalView = true;
 	}
 
+	/**
+	 * Check the status of the players.
+	 */
 	private void checkPlayer()
 	{
 
@@ -764,6 +784,9 @@ public class PlayScreen extends Screen
 		}
 	}
 
+	/**
+	 * Change the current player.
+	 */
 	private void changeDefender()
 	{
 		float max = Float.MAX_VALUE;
