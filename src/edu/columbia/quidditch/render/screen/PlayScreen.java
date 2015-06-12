@@ -222,7 +222,7 @@ public class PlayScreen extends Screen
 			}
 		}
 
-		if (score1 > 0 || score2 > 0)
+		if (score1 > 40 || score2 > 40)
 		{
 			gameOff = true;
 		}
@@ -641,7 +641,7 @@ public class PlayScreen extends Screen
 
 		if (!isHeldByUser && ball.isHold())
 		{
-			if (AI.getSleep() > 500
+			if (AI.getSleep() > 200
 					&& ball.checkScope(new Vector3f(0, 75.5f, 990f), 200)
 					&& ball.getPos().z < 990f)
 			{
